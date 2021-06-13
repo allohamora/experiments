@@ -17,7 +17,7 @@ const workerPromise = (name) => new Promise((res, rej) => {
 });
 
 const syncWay = async () => {
-  // don't return because array with 10m length view too big in console.
+  // don't return because that array has too much space in console.log
   Array.from({ length: OPERATION_COUNT }, () => heavyOperation(MULTIPLIER));
 };
 
