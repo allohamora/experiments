@@ -1,10 +1,10 @@
 const { parentPort } = require('worker_threads');
+const { heavyOperation, getMemoryUsedMb } = require('./shared');
 
 parentPort.on('message', ({ multiplier = 1, name }) => {
-  Array.from({ length: 1000000 * multiplier }, () => null).map(value => ({ hello: '12' }));
+  heavyOperation(multiplier);
 
-  const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
-  const memoryUsedMb = Math.round(memoryUsed * 100) / 100;
+  const memoryUsed = getMemoryUsedMb(process);
 
-  parentPort.postMessage({ complete: true, name, used: `${name} ${memoryUsedMb} MB` });
+  parentPort.postMessage({ complete: true, name, memoryUsed: `${name} ${memoryUsed} MB` });
 })

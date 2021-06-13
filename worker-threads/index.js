@@ -1,37 +1,49 @@
 const path = require('path');
 const { Worker } = require('worker_threads');
 const { performance } = require('perf_hooks');
-
-const start = performance.now();
+const { heavyOperation, getMemoryUsedMb } = require('./shared');
 
 const workerPath = path.join(__dirname, 'worker.js');
-const millionWorker = new Worker(workerPath);
+const worker = new Worker(workerPath);
 
-const million = (multiplier, name) => new Promise((res, rej) => {
-  millionWorker.on('message', (data) => data.name === name && res(data));
-  millionWorker.on('error', (data) => data.name === name && rej(data));
+const MULTIPLIER = 10;
+const OPERATION_COUNT = 4;
 
-  millionWorker.postMessage({ multiplier, name });
+const workerPromise = (name) => new Promise((res, rej) => {
+  worker.on('message', (data) => data.name === name && res(data));
+  worker.on('error', (data) => data.name === name && rej(data));
+
+  worker.postMessage({ multiplier: MULTIPLIER, name });
 });
 
-// const singleMillion = multiplier => Array.from({ length: 1000000 * multiplier }, () => null).map(value => ({ hello: '12' }));
+const syncWay = async () => {
+  // don't return because array with 10m length view too big in console.
+  Array.from({ length: OPERATION_COUNT }, () => heavyOperation(MULTIPLIER));
+};
 
-// singleMillion(10);
-// singleMillion(10);
-// singleMillion(10);
+const workerWay = async () => {
+  const promises = Array.from({ length: OPERATION_COUNT }, (_,i) => workerPromise(`w-${i + 1}`));
+  const values = await Promise.all(promises);
 
-// const end = performance.now();
-// const dif = end - start;
-// const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
+  return values;
+};
 
-// console.log(`The script uses approximately ${Math.round(memoryUsed * 100) / 100} MB`);
-// console.log({ start, end, dif });
-
-Promise.all([million(10, 'w-1'), million(10, 'w-2'), million(10, 'w-3')]).then(async (values) => {
+const logWay = async (way) => {
+  const start = performance.now();
+  const values = await way();
   const end = performance.now();
-  const dif = end - start;
 
-  console.log({ start, end, dif, values });
-  await millionWorker.terminate();
-});
+  const memoryUsed = getMemoryUsedMb(process);
+  const usedTime = end - start;
 
+  console.log({ values, usedTime, memoryUsed });
+};
+
+const main = async() => {
+  await logWay(workerWay);
+  await worker.terminate();
+
+  await logWay(syncWay);
+};
+
+main();
