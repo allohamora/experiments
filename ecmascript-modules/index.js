@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 const { promises: fsp } = require('fs');
 
 const COUNT = 20;
+const RESULTS_PATH = path.join(__dirname, 'results.json');
 
 const exists = async (path) => {
   try {
@@ -59,12 +60,26 @@ const getResult = (resultState, name) => {
   return result;
 };
 
-const showResults = async () => {
+const getResults = async () => {
   const names = ['esm', 'mjs'];
 
   const results = await Promise.all(names.map(name => collectResults(name).then((result) => getResult(result, name))))
 
-  console.log(results);
+  return results;
 };
 
-showResults();
+const showResults = (results) => {
+  console.log(results);
+
+  return results;
+};
+
+const saveResults = async (results) => {
+  const finalResults = JSON.stringify(results, null, 2);
+
+  await fsp.writeFile(RESULTS_PATH, finalResults);
+
+  return results;
+};
+
+getResults().then(showResults).then(saveResults);
