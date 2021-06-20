@@ -10,8 +10,8 @@ const heavyOperation = (multiplier) => Array.from({ length: 1000000 * multiplier
  * @param {NodeJS.Process} process 
  */
 const getMemoryUsedMb = (process) => {
-  const memoryUsed = process.memoryUsage().heapUsed / 1024 / 1024;
-  const memoryUsedMb = Math.round(memoryUsed * 100) / 100;
+  const memoryUsed = process.memoryUsage().heapUsed;
+  const memoryUsedMb = Math.round(memoryUsed / 1024 / 1024 * 100) / 100;
 
   return memoryUsedMb;
 }
