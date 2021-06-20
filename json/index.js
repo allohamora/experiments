@@ -1,3 +1,5 @@
+const myJSON = require('./myJSON');
+
 const jsonReplacer = (key, value) => {
   switch (typeof value) {
     case 'bigint':
@@ -19,7 +21,7 @@ const parsers = {
     transform: value => Symbol(value.replace('symbol::', ''))
   },
   all: {
-    regexp: /.?/gm,
+    regexp: /.?/m,
     transform: value => value
   }
 };
@@ -43,7 +45,8 @@ const obj = {
   null: null, 
   // undefined: undefined
   undefined, 
-  object: {}, 
+  object: { e: 123, c: 321 }, 
+  array: [1, 2, 3], 
   symbol: Symbol('symbol'), 
   bigint: 12n 
 };
@@ -53,3 +56,16 @@ const json = JSON.stringify(obj, jsonReplacer, 2);
 const parsed = JSON.parse(json, jsonReviever);
 
 console.log({ obj, json, parsed });
+
+const copy = {...obj, bigint: undefined, symbol: undefined};
+
+const stringifyTest = (...args) => {
+  const baseResult = JSON.stringify(...args);
+  const myResult = myJSON.stringify(...args);
+
+  const success = baseResult === myResult;
+
+  return { baseResult, myResult, success };
+}
+
+console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 2), stringifyTest(obj, jsonReplacer));
