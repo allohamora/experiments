@@ -83,11 +83,117 @@ const toJSON = (key, rawValue, params) => {
   return primitiveToJSON(key, value);
 }
 
-const stringify = (obj, replacer = null, tabSize = 0) => toJSON(null, obj, { replacer, tabSize, initValue: obj });
-
-const parse = (json, reviever = null) => {
-
+const stringify = (obj, replacer = null, tabSize = 0) => {
+  return toJSON(null, obj, { replacer, tabSize, initValue: obj });
 };
+
+const isBracketsCloses = (brackets, close = '}') => {
+  if( brackets[0] === close ) return false;
+
+  let opened = 0;
+  let closed = 0;
+
+  for (let i = 0; i < brackets.length; i++) {
+    const bracket = brackets[i];
+    const isClose = bracket === close;
+
+    if( isClose && opened === closed ) {
+      return false;
+    }
+
+    if( isClose ) {
+      closed++;
+    } else {
+      opened++;
+    }
+  }
+
+  return opened === closed;
+}
+
+/**
+ * 
+ * @param {string} jsonData 
+ * @returns 
+ */
+const parseJSONPrimitive = (jsonData) => {
+  if( jsonData === 'true' ) return true;
+  if( jsonData === 'false' ) return false;
+  if( jsonData === 'null' ) return null;
+
+  const parsedNumber = parseInt(jsonData);
+  if( !isNaN(parsedNumber) ) return parsedNumber;
+
+  if( jsonData.startsWith('"') ) return jsonData.replace(/"/gm, '');
+
+  return jsonData;
+}
+
+const fromJSON = (json, params) => {
+  const parseParameters = (parameters) => {
+    const parameterRegexp = /"(?<key>.+?)": ?(?<value>(\{[^\}]+\})|(\[[^\]]+\])|("[^"]+\")|([^,]+))/gm;
+
+    const keysAndValues = Array.from(parameters.matchAll(parameterRegexp))
+      .map(({ groups: { key, value } }) => [key, fromJSON(value, params)]);
+    
+    return keysAndValues;
+  };
+
+  const parseStringParams = ([open, close], jsonObject) => {
+    let params = '';
+    const brackets = [];
+
+    for ( let index = 0; index < jsonObject.length; index++ ) {
+      const current = jsonObject[index];
+
+      if( current === open || current === close ) {
+        brackets.push(current);
+        
+        if( isBracketsCloses(brackets, close) ) {
+          break;
+        }
+
+        if( brackets.length === 1 ) {
+          continue;
+        }
+      }
+
+      params += current;
+    }
+
+    return params;
+  }
+
+  const parseArray = (jsonArray) => {
+    console.log(jsonArray);
+    return [];
+  }
+
+  const parseObject = (jsonObject) => {
+    const params = parseStringParams(['{', '}'], jsonObject);
+
+    const parameters = parseParameters(params);
+    const result = parameters.reduce((state, [key, value]) => {
+      state[key] = value;
+
+      return state;
+    }, {});
+
+    return result;
+  };
+
+  if( json[0] === '{' ) {
+    return parseObject(json);
+  }
+
+  if( json[0] === '[' ) {
+    return parseArray(json);
+  }
+
+  return parseJSONPrimitive(json);
+}
+
+const parse = (json, reviever = null) => fromJSON(json, { reviever });
 
 const myJSON = { stringify, parse };
 

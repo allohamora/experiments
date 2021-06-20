@@ -45,8 +45,8 @@ const obj = {
   null: null, 
   // undefined: undefined
   undefined, 
-  object: { e: 123, c: 321 }, 
-  array: [1, 2, 3], 
+  object: { a: 123, b: 321, c: 231, d: { a: 1, b: 2, c: 3 }  }, 
+  array: [1, 2, 3, [1, 2, 3]], 
   symbol: Symbol('symbol'), 
   bigint: 12n 
 };
@@ -55,7 +55,7 @@ const json = JSON.stringify(obj, jsonReplacer, 2);
 // if jsonRevier return undefined as value then set value operation will be ignored
 const parsed = JSON.parse(json, jsonReviever);
 
-console.log({ obj, json, parsed });
+// console.log({ obj, json, parsed });
 
 const copy = {...obj, bigint: undefined, symbol: undefined};
 
@@ -68,4 +68,6 @@ const stringifyTest = (...args) => {
   return { baseResult, myResult, success };
 }
 
-console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 2), stringifyTest(obj, jsonReplacer));
+// console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 2), stringifyTest(obj, jsonReplacer));
+
+console.log(myJSON.parse(myJSON.stringify(copy)));
