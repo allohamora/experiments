@@ -207,8 +207,6 @@ const fromJSON = (json, params) => {
       result.push([key, value]);
     }
 
-    console.log(keysAndValues);
-
     return result;
   };
 
