@@ -131,12 +131,85 @@ const parseJSONPrimitive = (jsonData) => {
 
 const fromJSON = (json, params) => {
   const parseParameters = (parameters) => {
-    const parameterRegexp = /"(?<key>.+?)": ?(?<value>(\{[^\}]+\})|(\[[^\]]+\])|("[^"]+\")|([^,]+))/gm;
-
-    const keysAndValues = Array.from(parameters.matchAll(parameterRegexp))
-      .map(({ groups: { key, value } }) => [key, fromJSON(value, params)]);
+    const keysAndValues = [];
     
-    return keysAndValues;
+    let isKey = true;
+    let isValue = false;
+  
+    let key = '';
+    let value = '';
+    let deep = 0;
+    let number = 0;
+  
+    const changeToValue = () => {
+      isKey = false;
+      isValue = true;
+    }
+  
+    const clear = () => {
+      keysAndValues.push([key, value]);
+  
+      key = '';
+      value = '';
+  
+      isKey = true;
+      isValue = false;
+    }
+  
+    for(let current of parameters) {
+      number++;
+  
+      if( current === '"' && isKey ) {
+        continue;
+      }
+  
+      if( current === '{' || current === '[' ) {
+        deep++;
+      }
+  
+      if( current === '}' || current === ']' ) {
+        deep--;
+      }
+  
+      if( current === ',' && deep === 0 ) {
+        clear();
+        continue;
+      }
+  
+      if( current === ':' && isKey ) {
+        changeToValue();
+        continue;
+      }
+  
+      if ( isKey ) {
+        key += current;
+      }
+  
+      if( isValue ) {
+        value += current;
+      }
+  
+      if( number === parameters.length ) {
+        clear();
+        break;
+      }
+    }
+  
+    const result = [];
+
+    for( let [key, jsonValue] of keysAndValues ) {
+      const value = fromJSON(jsonValue, params);
+
+      if( value === undefined ) {
+        continue;
+      }
+
+      result.push([key, value]);
+    }
+
+    console.log(keysAndValues);
+
+    return result;
   };
 
   const parseStringParams = ([open, close], jsonObject) => {
