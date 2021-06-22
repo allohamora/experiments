@@ -1,3 +1,5 @@
+const combine = (...funcs) => (value) => funcs.forEach(func => func(value));
+
 const primitiveToJSON = (key, value) => {
   switch (typeof value) {
     case 'string':
@@ -146,17 +148,21 @@ const fromJSON = (json, params) => {
       isValue = true;
     }
   
-    const clear = () => {
-      keysAndValues.push([key, value]);
-  
+    const reset = () => {
       key = '';
       value = '';
   
       isKey = true;
       isValue = false;
     }
+
+    const save = () => {
+      keysAndValues.push([key, value]);
+    }
+
+    const saveAndReset = combine(save, reset);
   
-    for(let current of parameters) {
+    for(const current of parameters) {
       number++;
   
       if( current === '"' && isKey ) {
@@ -172,7 +178,7 @@ const fromJSON = (json, params) => {
       }
   
       if( current === ',' && deep === 0 ) {
-        clear();
+        saveAndReset();
         continue;
       }
   
@@ -190,14 +196,14 @@ const fromJSON = (json, params) => {
       }
   
       if( number === parameters.length ) {
-        clear();
+        saveAndReset();
         break;
       }
     }
   
     const result = [];
 
-    for( let [key, jsonValue] of keysAndValues ) {
+    for( const [key, jsonValue] of keysAndValues ) {
       const value = fromJSON(jsonValue, params);
 
       if( value === undefined ) {
@@ -236,8 +242,50 @@ const fromJSON = (json, params) => {
   }
 
   const parseArray = (jsonArray) => {
-    console.log(jsonArray);
-    return [];
+    const params = parseStringParams(['[', ']'], jsonArray);
+
+    const values = [];
+
+    let value = '';
+    let deep = 0;
+    let number = 0;
+
+    const reset = () => {
+      value = '';
+    }
+
+    const save = () => {
+      values.push(value);
+    }
+
+    const saveAndReset = combine(save, reset);
+
+    for( const current of params ) {
+      number++;
+
+      if( current === ',' && deep === 0 ) {
+        saveAndReset();
+        continue;
+      }
+
+      if( current === '{' || current === '[' ) {
+        deep++;
+      }
+
+      if( current === '}' || current === '}' ) {
+        deep--;
+      }
+
+      value += current;
+
+      if( number === params.length ) {
+        saveAndReset();
+      }
+    }
+
+    const result = values.map(value => fromJSON(value, params));
+
+    return result;
   }
 
   const parseObject = (jsonObject) => {

@@ -71,3 +71,6 @@ const stringifyTest = (...args) => {
 // console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 2), stringifyTest(obj, jsonReplacer));
 
 console.log(myJSON.parse(myJSON.stringify(copy)));
+
+const arrayJSON = '1,2,3,[1,2,3]';
+
