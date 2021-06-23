@@ -24,26 +24,51 @@ const isBracketsCloses = (brackets, close = '}') => {
   return opened === closed;
 }
 
-/**
- * 
- * @param {string} jsonData 
- * @returns 
- */
-const parseJSONPrimitive = (jsonData) => {
-  if( jsonData === 'true' ) return true;
-  if( jsonData === 'false' ) return false;
-  if( jsonData === 'null' ) return null;
+const parseStringParams = ([open, close], jsonObject) => {
+  let params = '';
+  const brackets = [];
 
-  const parsedNumber = parseInt(jsonData);
-  if( !isNaN(parsedNumber) ) return parsedNumber;
+  for ( let index = 0; index < jsonObject.length; index++ ) {
+    const current = jsonObject[index];
 
-  if( jsonData.startsWith('"') ) return jsonData.replace(/"/gm, '');
+    if( current === open || current === close ) {
+      brackets.push(current);
+      
+      if( isBracketsCloses(brackets, close) ) {
+        break;
+      }
 
-  return jsonData;
+      if( brackets.length === 1 ) {
+        continue;
+      }
+    }
+
+    params += current;
+  }
+
+  if( !isBracketsCloses(brackets, close) ) {
+    throw new Error(`invalid json, target: ${jsonObject}`);
+  }
+
+  return params;
 }
 
-const fromJSON = (json, params) => {
-  const parseParameters = (parameters) => {
+class TypeFromJSON {
+  constructor(rootFromJSON){
+    this.rootFromJSON = rootFromJSON;
+  }
+
+  fromJSON(json, params){
+    throw new Error('override fromJSON method');
+  }
+
+  check(json){
+    throw new Error('override check method');
+  }
+}
+
+class ObjectFromJSON extends TypeFromJSON {
+  parseParameters = (parameters, params) => {
     const keysAndValues = [];
     
     let isKey = true;
@@ -115,7 +140,7 @@ const fromJSON = (json, params) => {
     const result = [];
 
     for( const [key, jsonValue] of keysAndValues ) {
-      const value = fromJSON(jsonValue, params);
+      const value = this.rootFromJSON(jsonValue, params);
 
       if( value === undefined ) {
         continue;
@@ -125,35 +150,29 @@ const fromJSON = (json, params) => {
     }
 
     return result;
-  };
-
-  const parseStringParams = ([open, close], jsonObject) => {
-    let params = '';
-    const brackets = [];
-
-    for ( let index = 0; index < jsonObject.length; index++ ) {
-      const current = jsonObject[index];
-
-      if( current === open || current === close ) {
-        brackets.push(current);
-        
-        if( isBracketsCloses(brackets, close) ) {
-          break;
-        }
-
-        if( brackets.length === 1 ) {
-          continue;
-        }
-      }
-
-      params += current;
-    }
-
-    return params;
   }
 
-  const parseArray = (jsonArray) => {
-    const params = parseStringParams(['[', ']'], jsonArray);
+  fromJSON(jsonObject, params){
+    const parsedParams = parseStringParams(['{', '}'], jsonObject);
+
+    const parameters = this.parseParameters(parsedParams, params);
+    const result = parameters.reduce((state, [key, value]) => {
+      state[key] = value;
+
+      return state;
+    }, {});
+
+    return result;
+  }
+
+  check(json){
+    return json[0] === '{';
+  }
+}
+
+class ArrayFromJSON extends TypeFromJSON {
+  fromJSON(jsonArray, params){
+    const parsedParams = parseStringParams(['[', ']'], jsonArray);
 
     const values = [];
 
@@ -171,7 +190,7 @@ const fromJSON = (json, params) => {
 
     const saveAndReset = combine(save, reset);
 
-    for( const current of params ) {
+    for( const current of parsedParams ) {
       number++;
 
       if( current === ',' && deep === 0 ) {
@@ -189,38 +208,87 @@ const fromJSON = (json, params) => {
 
       value += current;
 
-      if( number === params.length ) {
+      if( number === parsedParams.length ) {
         saveAndReset();
       }
     }
 
-    const result = values.map(value => fromJSON(value, params));
+    const result = values.map(value => this.rootFromJSON(value, params));
 
     return result;
   }
 
-  const parseObject = (jsonObject) => {
-    const params = parseStringParams(['{', '}'], jsonObject);
-
-    const parameters = parseParameters(params);
-    const result = parameters.reduce((state, [key, value]) => {
-      state[key] = value;
-
-      return state;
-    }, {});
-
-    return result;
-  };
-
-  if( json[0] === '{' ) {
-    return parseObject(json);
+  check(json){
+    return json[0] === '[';
   }
-
-  if( json[0] === '[' ) {
-    return parseArray(json);
-  }
-
-  return parseJSONPrimitive(json);
 }
+
+class StringFromJSON extends TypeFromJSON {
+  fromJSON(json){
+    return json.replace(/"/gm, '')
+  }
+
+  check(json){
+    return json.startsWith('"')
+  }
+}
+
+class NumberFromJSON extends TypeFromJSON {
+  fromJSON(json){
+    return parseInt(json);
+  }
+
+  check(json){
+    const parsedNumber = parseInt(json);
+    return !isNaN(parsedNumber);
+  }
+}
+
+const equalityCheckTypeFromJSON = (equalityItem, returnedValue) => {
+  return class ExactFromJSON extends TypeFromJSON {
+    fromJSON(){
+      return returnedValue;
+    }
+
+    check(json){
+      return json === equalityItem;
+    }
+  }
+}
+
+const FalseFromJSON = equalityCheckTypeFromJSON('false', false);
+const TrueFromJSON = equalityCheckTypeFromJSON('true', true);
+const NullFromJSON = equalityCheckTypeFromJSON('null', null);
+
+class FromJSON {
+  #fromJSONTypes = [];
+
+  constructor(...fromJSONTypes){
+    this.fromJSON = this.fromJSON.bind(this);
+
+    this.#fromJSONTypes = fromJSONTypes.map(type => new type(this.fromJSON));
+  }
+
+  fromJSON(json, params){
+    const finalJSON = params.reviever ? params.reviever(json) : json;
+    const handler = this.#fromJSONTypes.find(type => type.check(finalJSON));
+
+    if( !handler ) {
+      throw new Error(`not found handler for ${finalJSON} (${json})`);
+    }
+
+    return handler.fromJSON(finalJSON, params);
+  }
+}
+
+const fromJSON = new FromJSON(
+  ObjectFromJSON, 
+  ArrayFromJSON, 
+  StringFromJSON, 
+  NumberFromJSON, 
+  NullFromJSON, 
+  FalseFromJSON, 
+  TrueFromJSON
+);
 
 module.exports = { fromJSON };
