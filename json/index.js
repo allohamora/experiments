@@ -1,4 +1,4 @@
-const myJSON = require('./myJSON');
+const myJson = require('./myJSON');
 
 const jsonReplacer = (key, value) => {
   switch (typeof value) {
@@ -61,7 +61,7 @@ const copy = {...obj, bigint: undefined, symbol: undefined};
 
 const stringifyTest = (...args) => {
   const baseResult = JSON.stringify(...args);
-  const myResult = myJSON.stringify(...args);
+  const myResult = myJson.stringify(...args);
 
   const success = baseResult === myResult;
 
@@ -70,7 +70,7 @@ const stringifyTest = (...args) => {
 
 console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 0), stringifyTest(obj, jsonReplacer));
 
-// console.log(myJSON.parse(myJSON.stringify(copy)));
+console.log(myJson.parse(myJson.stringify(copy)));
 
 // const arrayJSON = '1,2,3,[1,2,3]';
 
