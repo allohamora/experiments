@@ -1,4 +1,4 @@
-const myJson = require('./myJSON');
+const myJSON = require('./myJSON');
 
 const jsonReplacer = (key, value) => {
   switch (typeof value) {
@@ -55,22 +55,52 @@ const json = JSON.stringify(obj, jsonReplacer, 2);
 // if jsonRevier return undefined as value then set value operation will be ignored
 const parsed = JSON.parse(json, jsonReviever);
 
-// console.log({ obj, json, parsed });
+console.log({ obj, json, parsed });
 
 const copy = {...obj, bigint: undefined, symbol: undefined};
 
 const stringifyTest = (...args) => {
   const baseResult = JSON.stringify(...args);
-  const myResult = myJson.stringify(...args);
+  const myResult = myJSON.stringify(...args);
 
   const success = baseResult === myResult;
 
-  return { baseResult, myResult, success };
+  // return { baseResult, myResult, success };
+  return { success };
+}
+
+const typeOfCheck = (a, b) => {
+  let result = true;
+
+  for( let key in a ) {
+    const aValue = a[key];
+    const bValue = b[key];
+
+    const aTypeof = typeof aValue;
+    const bTypeof = typeof bValue;
+
+    if( aTypeof !== bTypeof ) {
+      result = false;
+      break;
+    }
+  }
+
+  return result;
+}
+
+const parseTest = (...args) => {
+  const baseResult = JSON.parse(...args);
+  const myResult = myJSON.parse(...args);
+
+  const success = typeOfCheck(baseResult, myResult);
+
+  // return { baseResult, myResult, success };
+  return { success };
 }
 
 console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 0), stringifyTest(obj, jsonReplacer));
 
-console.log(myJson.parse(myJson.stringify(copy)));
+const appliedReplacerJSON = JSON.stringify(obj, jsonReplacer);
 
-// const arrayJSON = '1,2,3,[1,2,3]';
+console.log(parseTest(appliedReplacerJSON, jsonReviever));
 

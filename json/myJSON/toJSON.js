@@ -83,7 +83,7 @@ class ArrayToJSON extends TypeToJSON {
     return array.reduce((values, current, index) => {
       if( current === undefined ) return values;
 
-      values.push(this.rootToJSON(index, current, { ...params, tabSize: tabSize + tabSizeStep }));
+      values.push(this.rootToJSON(index.toString(), current, { ...params, tabSize: tabSize + tabSizeStep }));
 
       return values;
     }, []);
@@ -157,7 +157,7 @@ class ToJSON {
   toJSON(value, userParams = {}) {
     const params = this.getParams(userParams, value);
 
-    return this._toJSON(null, value, params);
+    return this._toJSON('', value, params);
   }
 }
 

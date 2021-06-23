@@ -140,7 +140,7 @@ class ObjectFromJSON extends TypeFromJSON {
     const result = [];
 
     for( const [key, jsonValue] of keysAndValues ) {
-      const value = this.rootFromJSON(jsonValue, params);
+      const value = this.rootFromJSON(jsonValue, {...params, key});
 
       if( value === undefined ) {
         continue;
@@ -213,7 +213,7 @@ class ArrayFromJSON extends TypeFromJSON {
       }
     }
 
-    const result = values.map(value => this.rootFromJSON(value, params));
+    const result = values.map((value, index) => this.rootFromJSON(value, {...params, key: index.toString()}));
 
     return result;
   }
@@ -270,14 +270,17 @@ class FromJSON {
   }
 
   fromJSON(json, params){
-    const finalJSON = params.reviever ? params.reviever(json) : json;
-    const handler = this.#fromJSONTypes.find(type => type.check(finalJSON));
+    const handler = this.#fromJSONTypes.find(type => type.check(json));
 
     if( !handler ) {
-      throw new Error(`not found handler for ${finalJSON} (${json})`);
+      throw new Error(`not found handler for ${json}`);
     }
 
-    return handler.fromJSON(finalJSON, params);
+    const valueAfterHandler = handler.fromJSON(json, params);
+    const key = params.key ?? '';
+    const result = params.reviever ? params.reviever(key, valueAfterHandler) : reviever;
+
+    return result;
   }
 }
 
