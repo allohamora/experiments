@@ -1,4 +1,5 @@
 const myJSON = require('./myJSON');
+const { performance } = require('perf_hooks');
 
 const jsonReplacer = (key, value) => {
   switch (typeof value) {
@@ -59,14 +60,32 @@ console.log({ obj, json, parsed });
 
 const copy = {...obj, bigint: undefined, symbol: undefined};
 
-const stringifyTest = (...args) => {
-  const baseResult = JSON.stringify(...args);
-  const myResult = myJSON.stringify(...args);
 
-  const success = baseResult === myResult;
+const getUsedMemoryInMb = () => {
+  return Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100;
+}
+
+const performanceTest = (fn) => {
+  const start = performance.now();
+
+  const result = fn();
+
+  const end = performance.now();
+
+  const time = end - start;
+  const memory = getUsedMemoryInMb();
+
+  return { time, memory, result }
+}
+
+const stringifyTest = (...args) => {
+  const baseResult = performanceTest(() => JSON.stringify(...args));
+  const myResult = performanceTest(() => myJSON.stringify(...args));
+
+  const success = baseResult.result === myResult.result;
 
   // return { baseResult, myResult, success };
-  return { success };
+  return { success, baseResult, myResult };
 }
 
 const typeOfCheck = (a, b) => {
@@ -89,13 +108,13 @@ const typeOfCheck = (a, b) => {
 }
 
 const parseTest = (...args) => {
-  const baseResult = JSON.parse(...args);
-  const myResult = myJSON.parse(...args);
+  const baseResult = performanceTest(() => JSON.parse(...args));
+  const myResult = performanceTest(() => myJSON.parse(...args));
 
-  const success = typeOfCheck(baseResult, myResult);
+  const success = typeOfCheck(baseResult.result, myResult.result);
 
   // return { baseResult, myResult, success };
-  return { success };
+  return { success, baseResult, myResult };
 }
 
 console.log(stringifyTest(copy, null, 2), stringifyTest(copy, null, 0), stringifyTest(obj, jsonReplacer));
