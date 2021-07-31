@@ -3,7 +3,7 @@
 ## goals:
 1. [x] create smooth-scroll
 2. [x] check scroll-behavior: smooth.
-3. [] check window.scrollTo({ behavior: 'smooth' }).
+3. [x] check window.scrollTo({ behavior: 'smooth' }).
 
 ## my smooth-scroll
 1. [x] vertical scroll
