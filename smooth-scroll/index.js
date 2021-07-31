@@ -210,10 +210,10 @@ const animate = (from, to) => new Promise((res, rej) => {
 
 /**
  * 
- * @param {HTMLAnchorElement} a 
+ * @param {HTMLAnchorElement} a,
+ * @param {string} hash 
  */
-const smoothScroll = (a) => {
-  const { hash, offsetTop: anchorOffsetTop } = a;
+const smoothScroll = (a, hash) => {
   const elementId = hash.slice(1);
   const element = document.getElementById(elementId);
   
@@ -228,7 +228,31 @@ const smoothScroll = (a) => {
     .then(() => replaceHash(hash), noop); // noop need for remove promise reject error on cancel animation 
 }
 
-document.addEventListener('click', e => {
+/**
+ * 
+ * @param {HTMLAnchorElement} a 
+ * @param {string} hash
+ */
+const smoothScrollPolyfill = (a, hash) => {
+  const id = hash.slice(1);
+
+  let scrollTimeout;
+
+  const onScroll = () => {
+    clearTimeout(scrollTimeout);
+    
+    scrollTimeout = setTimeout(() => {
+      location.replace(hash);
+      off(document, 'scroll', onScroll);
+    }, 100);
+  }
+
+  on(document, 'scroll', onScroll);
+
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+const createInit = (smoothScrollFn) => () => document.addEventListener('click', e => {
   const { target } = e;
 
   const { tagName } = target;
@@ -238,5 +262,10 @@ document.addEventListener('click', e => {
   if( hash === '' ) return;
 
   e.preventDefault();
-  smoothScroll(target);
+  smoothScrollFn(target, hash);
 });
+
+const mySmoothScrollInit = createInit(smoothScroll);
+const smoothScrollPolyfillInit = createInit(smoothScrollPolyfill);
+
+smoothScrollPolyfillInit();
