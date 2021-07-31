@@ -105,15 +105,26 @@ const path = (from, to) => {
  * @param {{ x: number, y: number }} to 
  */
 const animate = (from, to) => new Promise((res, rej) => {
-  const yPath = path(from.y, to.y);
-  const seconds = yPath.fullPath / SPEED;
+  const pathControllers = { 
+    x: path(from.x, to.x), 
+    y: path(from.y, to.y) 
+  };
+
+  const seconds = (pathControllers.y.fullPath + pathControllers.x.fullPath) / SPEED;
   const frames = seconds * FPS;
   const timeStep = seconds * 1000 / frames;
-  const yStep = yPath.fullPath / frames;
+
+  const getStep = (fullPath) => fullPath / frames;
+
+  const step = { 
+    x: getStep(pathControllers.x.fullPath),
+    y: getStep(pathControllers.y.fullPath)
+  };
 
   const scrollEvents = ['touchstart', 'wheel'];
 
-  let y = from.y;
+  let current = {...from};
+
   let timeout;
   let onCancel;
 
@@ -136,39 +147,65 @@ const animate = (from, to) => new Promise((res, rej) => {
     res();
   }
 
-  const oneStep = () => {
-    if( from.y > to.y ) {
-      y -= yStep
+  const createOneStep = (direction = 'x') => () => {
+    if( from[direction] > to[direction] ) {
+      current[direction] -= step[direction];
     } else {
-      y += yStep
-    };
+      current[direction] += step[direction];
+    }
   }
 
-  const isFinish = () => {
-    if( from.y > to.y ) {
-      return y <= to.y;
-    } 
-
-    return y >= to.y;
+  const oneStep = { 
+    x: createOneStep('x'), 
+    y: createOneStep('y') 
   };
 
-  const step = () => {
-    oneStep();
+  const createIsFinish = (direction = 'x') => () => {
+    if( from[direction] > to[direction] ) {
+      return current[direction] <= to[direction];
+    } 
 
-    const easing = EASE_METHOD(yPath.toEasing(y));
-    const point = yPath.fromEasing(easing);
+    return current[direction] >= to[direction];
+  }
 
-    window.scrollTo(to.x, point);
+  const finish = { 
+    x: createIsFinish('x'), 
+    y: createIsFinish('y') 
+  };
+
+  const isFinish = () => finish.x() && finish.y();
+
+  const get = (direction = 'x') => () => {
+    if( finish[direction]() ) return to[direction];
+
+    oneStep[direction]();
+
+    const easing = EASE_METHOD(pathControllers[direction].toEasing(current[direction]));
+    const point = pathControllers[direction].fromEasing(easing);
+
+    return point;
+  }
+
+  const getX = get('x');
+  const getY = get('y');
+
+  const animationStep = () => requestAnimationFrame(() => {
+    const x = getX();
+    const y = getY();
+
+    console.log(x, y);
+
+    window.scrollTo(x, y);
 
     if( isFinish() ) {
       onFinish();
     } else {
-      timeout = setTimeout(step, timeStep);
+      timeout = setTimeout(animationStep, timeStep);
     }
-  }
+  })
 
   subscribe();
-  step();
+  animationStep();
 });
 
 /**
@@ -176,16 +213,16 @@ const animate = (from, to) => new Promise((res, rej) => {
  * @param {HTMLAnchorElement} a 
  */
 const smoothScroll = (a) => {
-  const { hash } = a;
+  const { hash, offsetTop: anchorOffsetTop } = a;
   const elementId = hash.slice(1);
   const element = document.getElementById(elementId);
   
   if( element === null ) return replaceHash(hash);
 
-  const { offsetTop: elementOffsetTop } = element;
+  const { offsetTop, offsetLeft } = element;
 
-  const from = { x: 0, y: window.scrollY };
-  const to = { x: 0, y: elementOffsetTop };
+  const from = { x: window.pageXOffset, y: window.pageYOffset };
+  const to = { x: offsetLeft, y: offsetTop };
 
   animate(from, to)
     .then(() => replaceHash(hash), noop); // noop need for remove promise reject error on cancel animation 
