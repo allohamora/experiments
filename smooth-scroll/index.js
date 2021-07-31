@@ -56,6 +56,10 @@ const path = (from, to) => {
    * @returns {number} point
    */
   const fromPercent = (percent) => {
+    if( from > to ) {
+      return from - fullPathPercent * percent;
+    }
+
     return fullPathPercent * percent + from;
   }
 
@@ -91,18 +95,34 @@ const animate = (from, to) => new Promise(res => {
 
   let y = from.y;
 
+  const oneStep = () => {
+    if( from.y > to.y ) {
+      y -= yStep
+    } else {
+      y += yStep
+    };
+  }
+
+  const isFinish = () => {
+    if( from.y > to.y ) {
+      return y <= to.y;
+    } 
+
+    return y >= to.y;
+  };
+
   const step = () => {
-    y += yStep;
+    oneStep();
 
     const easing = EASE_METHOD(yPath.toEasing(y));
     const point = yPath.fromEasing(easing);
 
     window.scrollTo(to.x, point);
 
-    if( y < to.y ) {
-      setTimeout(step, timeStep);
-    } else {
+    if( isFinish() ) {
       res();
+    } else {
+      setTimeout(step, timeStep);
     }
   }
 
