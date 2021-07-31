@@ -176,7 +176,7 @@ const animate = (from, to) => new Promise((res, rej) => {
  * @param {HTMLAnchorElement} a 
  */
 const smoothScroll = (a) => {
-  const { hash, offsetTop: aOffsetTop } = a;
+  const { hash } = a;
   const elementId = hash.slice(1);
   const element = document.getElementById(elementId);
   
@@ -184,11 +184,11 @@ const smoothScroll = (a) => {
 
   const { offsetTop: elementOffsetTop } = element;
 
-  const from = { x: 0, y: aOffsetTop };
+  const from = { x: 0, y: window.scrollY };
   const to = { x: 0, y: elementOffsetTop };
 
   animate(from, to)
-    .then(() => replaceHash(hash), noop);
+    .then(() => replaceHash(hash), noop); // noop need for remove promise reject error on cancel animation 
 }
 
 document.addEventListener('click', e => {
