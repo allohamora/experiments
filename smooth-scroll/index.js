@@ -1,6 +1,24 @@
 const FPS = 60;
 const SPEED = 700; // px/s
 
+const arrayOrValueInArray = (value) => value instanceof Array ? value : [value];
+
+const subscribeFactory = (method) => (target, eventOrEvents, handlerOrHandlers) => {
+  const events = arrayOrValueInArray(eventOrEvents);
+  const handlers = arrayOrValueInArray(handlerOrHandlers);
+
+  handlers.forEach(handler => {
+    events.forEach(event => {
+      target[method](event, handler);
+    })
+  })
+}
+
+const on = subscribeFactory('addEventListener');
+const off = subscribeFactory('removeEventListener');
+
+const noop = () => {};
+
 /**
  * 
  * @param {string} hash 
@@ -86,14 +104,37 @@ const path = (from, to) => {
  * @param {{ x: number, y: number }} from 
  * @param {{ x: number, y: number }} to 
  */
-const animate = (from, to) => new Promise(res => {
+const animate = (from, to) => new Promise((res, rej) => {
   const yPath = path(from.y, to.y);
   const seconds = yPath.fullPath / SPEED;
   const frames = seconds * FPS;
   const timeStep = seconds * 1000 / frames;
   const yStep = yPath.fullPath / frames;
 
+  const scrollEvents = ['touchstart', 'wheel'];
+
   let y = from.y;
+  let timeout;
+  let onCancel;
+
+  const subscribe = () => {
+    on(document, scrollEvents, onCancel);
+  }
+
+  const unSubscribe = () => {
+    off(document, scrollEvents, onCancel);
+  }
+
+  onCancel = () => {
+    clearTimeout(timeout);
+    unSubscribe();
+    rej();
+  }
+
+  const onFinish = () => {
+    unSubscribe();
+    res();
+  }
 
   const oneStep = () => {
     if( from.y > to.y ) {
@@ -120,12 +161,13 @@ const animate = (from, to) => new Promise(res => {
     window.scrollTo(to.x, point);
 
     if( isFinish() ) {
-      res();
+      onFinish();
     } else {
-      setTimeout(step, timeStep);
+      timeout = setTimeout(step, timeStep);
     }
   }
 
+  subscribe();
   step();
 });
 
@@ -145,7 +187,8 @@ const smoothScroll = (a) => {
   const from = { x: 0, y: aOffsetTop };
   const to = { x: 0, y: elementOffsetTop };
 
-  animate(from, to).then(() => replaceHash(hash));
+  animate(from, to)
+    .then(() => replaceHash(hash), noop);
 }
 
 document.addEventListener('click', e => {
