@@ -1,5 +1,5 @@
 const FPS = 60;
-const SPEED = 700; // px/s
+const SPEED = 1000; // px/s
 
 const arrayOrValueInArray = (value) => value instanceof Array ? value : [value];
 
