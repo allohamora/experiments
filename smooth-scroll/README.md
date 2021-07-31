@@ -13,7 +13,7 @@
 
 ## scroll-behavior: smooth
 1. body { scroll-behavior: smooth; } doesn't work
-2. html { scroll-behavior: smooth; } sometimes doesn't work (stop near start or near end) 31.07.21 opera 77(chromium)
+2. html { scroll-behavior: smooth; } sometimes doesn't work (stop near start or near end) 31.07.21 opera 77(chromium) in pc and dev tools mobile mode
 
 ## window.scrollTo({ behavior: 'smooth' })
 1. in chrome dev tools mobile y scroll doesn't work.
