@@ -1,0 +1,17 @@
+{
+  "name": "money",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "currency.js": "^2.0.4",
+    "dinero.js": "^1.9.0",
+    "ts-money": "^0.4.6"
+  }
+}
