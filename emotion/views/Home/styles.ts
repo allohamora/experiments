@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 
 export const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
-export const Title = styled.h3`
+export const Title = styled.h2`
   color: ${({theme}) => theme.color.primary};
 `;
 
