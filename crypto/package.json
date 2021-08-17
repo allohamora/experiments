@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "encrypt": "node encrypt.js",
+    "hash": "node hash.js",
+    "rsa": "node rsa.js"
   },
   "keywords": [],
   "author": "",
