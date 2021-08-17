@@ -28,21 +28,21 @@ const readAndWrite = async (input, output, ...transformers) => {
   await pipe(source, ...transformers, destination);
 }
 
-const to_gzip = async (input, output) => {
+const toGzip = async (input, output) => {
   const gzip = createGzip();
 
   await readAndWrite(input, output, gzip);
 };
 
-const from_gzip = async (input, output) => {
+const fromGzip = async (input, output) => {
   const gunzip = createGunzip();
 
   await readAndWrite(input, output, gunzip);
 };
 
 const main = async () => {
-  await to_gzip('text.txt', 'text.txt.gz');
-  await from_gzip('text.txt.gz', 'text.txt.raw');
+  await toGzip('text.txt', 'text.txt.gz');
+  await fromGzip('text.txt.gz', 'text.txt.raw');
 };
 
 main();
