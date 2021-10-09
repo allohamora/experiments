@@ -1,0 +1,25 @@
+{
+  "name": "experiments",
+  "version": "1.0.0",
+  "description": "experiments on different topics",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/start",
+    "dev": "node scripts/dev",
+    "install": "node scripts/install",
+    "uninstall": "node scripts/uninstall",
+    "select": "node scripts/select",
+    "init": "node scripts/init"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Allohamora/experiments.git"
+  },
+  "type": "module",
+  "author": "https://github.com/Allohamora",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Allohamora/experiments/issues"
+  },
+  "homepage": "https://github.com/Allohamora/experiments#readme"
+}
