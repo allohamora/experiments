@@ -9,7 +9,7 @@ cluster.schedulingPolicy = cluster.SCHED_RR;
 const PORT = 8000;
 
 const STATUSCODE = {
-  OK: 200
+  OK: 200,
 };
 
 const server = http.createServer((req, res) => {
@@ -17,10 +17,10 @@ const server = http.createServer((req, res) => {
   res.end(`Hello from worker ${process.pid}`);
 });
 
-if( cluster.isMaster ) {
+if (cluster.isMaster) {
   console.log(`Master ${process.pid} is running`);
 
-  for ( let i = 0; i < numCPUs; i++ ) {
+  for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 

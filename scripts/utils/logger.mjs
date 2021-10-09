@@ -6,14 +6,13 @@ export const createLogger = (prefix) => {
   const formatLog = (text) => `[${prefix}] ${text}`;
 
   const createHandler = (transport) => {
-    return async (text) => await Promise.all(
-      transport.map(async handler => await Promise.resolve(handler(formatLog(text))))
-    )
-  }
+    return async (text) =>
+      await Promise.all(transport.map(async (handler) => await Promise.resolve(handler(formatLog(text)))));
+  };
 
   return {
     log: createHandler(logTransport),
     error: createHandler(errorTransport),
-    warn: createHandler(warnTransport)
+    warn: createHandler(warnTransport),
   };
 };

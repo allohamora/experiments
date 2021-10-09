@@ -1,21 +1,21 @@
 class TypeToJSON {
-  constructor(rootToJSON){
+  constructor(rootToJSON) {
     this.rootToJSON = rootToJSON;
   }
 
-  toJSON(key, value, params){
-    throw new Error('override toJSON method')
+  toJSON(key, value, params) {
+    throw new Error('override toJSON method');
   }
 
-  check(value){
-    throw new Error('override check method')
+  check(value) {
+    throw new Error('override check method');
   }
 }
 
 class PrimitiveToJSON extends TypeToJSON {
-  #supportedTypes = ['string', 'number', 'boolean', 'undefined']
-  
-  toJSON(key, value){
+  #supportedTypes = ['string', 'number', 'boolean', 'undefined'];
+
+  toJSON(key, value) {
     switch (typeof value) {
       case 'string':
         return `"${value}"`;
@@ -24,20 +24,20 @@ class PrimitiveToJSON extends TypeToJSON {
     }
   }
 
-  check(value){
+  check(value) {
     return this.#supportedTypes.includes(typeof value);
   }
 }
 
 class ObjectToJSON extends TypeToJSON {
-  getJSONedKeysAndValues(object, params){
+  getJSONedKeysAndValues(object, params) {
     const { tabSize, tabSizeStep } = params;
 
     const keys = Object.keys(object);
     const keysAndValuesMap = keys.reduce((map, key) => {
       const value = object[key];
 
-      if( value === undefined ) return map;
+      if (value === undefined) return map;
 
       map.set(key, this.rootToJSON(key, value, { ...params, tabSize: tabSize + tabSizeStep }));
 
@@ -52,36 +52,36 @@ class ObjectToJSON extends TypeToJSON {
   toJSON(key, object, params) {
     const { initValue, tabSize, tabSizeStep } = params;
     const JSONedKeysAndValues = this.getJSONedKeysAndValues(object, params);
-  
-    if( tabSize !== 0 ) {
+
+    if (tabSize !== 0) {
       const spaces = ' '.repeat(tabSize);
       const result = JSONedKeysAndValues.map(([key, value]) => `${spaces}"${key}": ${value}`);
 
-      if( object !== initValue ) {
+      if (object !== initValue) {
         const beforeEndSpaces = ' '.repeat(tabSize - tabSizeStep);
 
         return `{\n${result.join(`,\n`)}\n${beforeEndSpaces}}`;
       }
-  
+
       return `{\n${result.join(`,\n`)}\n}`;
     }
-  
+
     const result = JSONedKeysAndValues.map(([key, value]) => `"${key}":${value}`);
-  
-    return `{${result.join(',')}}`
+
+    return `{${result.join(',')}}`;
   }
 
-  check(value){
+  check(value) {
     return typeof value === 'object' && value !== null && !(value instanceof Array);
   }
 }
 
 class ArrayToJSON extends TypeToJSON {
-  getJSONedValues(array, params){
+  getJSONedValues(array, params) {
     const { tabSize, tabSizeStep } = params;
 
     return array.reduce((values, current, index) => {
-      if( current === undefined ) return values;
+      if (current === undefined) return values;
 
       values.push(this.rootToJSON(index.toString(), current, { ...params, tabSize: tabSize + tabSizeStep }));
 
@@ -89,36 +89,36 @@ class ArrayToJSON extends TypeToJSON {
     }, []);
   }
 
-  toJSON(key, array, params){
+  toJSON(key, array, params) {
     const { tabSize, tabSizeStep, initValue } = params;
     const JSONedValues = this.getJSONedValues(array, params);
-  
-    if( tabSize !== 0 ) {
+
+    if (tabSize !== 0) {
       const spaces = ' '.repeat(tabSize);
 
-      if( array !== initValue ) {
+      if (array !== initValue) {
         const beforeEndSpaces = ' '.repeat(tabSize - tabSizeStep);
 
         return `[\n${spaces}${JSONedValues.join(`,\n${spaces}`)}\n${beforeEndSpaces}]`;
       }
 
-      return `[\n${spaces}${JSONedValues.join(`,\n${spaces}`)}\n]`
+      return `[\n${spaces}${JSONedValues.join(`,\n${spaces}`)}\n]`;
     }
-  
+
     return `[${JSONedValues.join(',')}]`;
   }
 
-  check(value){
+  check(value) {
     return typeof value === 'object' && value !== null && value instanceof Array;
   }
 }
 
 class NullToJSON extends TypeToJSON {
-  toJSON(key, value, params){
+  toJSON(key, value, params) {
     return `${value}`;
   }
 
-  check(value){
+  check(value) {
     return value === null;
   }
 }
@@ -126,14 +126,14 @@ class NullToJSON extends TypeToJSON {
 class ToJSON {
   #types = [];
 
-  constructor(...typesToJSON){
+  constructor(...typesToJSON) {
     this._toJSON = this._toJSON.bind(this);
 
-    this.#types = typesToJSON.map(type => new type(this._toJSON));
+    this.#types = typesToJSON.map((type) => new type(this._toJSON));
   }
 
-  getParams(userParams, initValue){
-    if( 'initValue' in userParams ) {
+  getParams(userParams, initValue) {
+    if ('initValue' in userParams) {
       throw new Error('you pass a forbidden parameter (initValue)');
     }
 
@@ -143,11 +143,11 @@ class ToJSON {
     return params;
   }
 
-  _toJSON(key, value, params){
+  _toJSON(key, value, params) {
     const finalValue = params.replacer ? params.replacer(key, value) : value;
-    const handler = this.#types.find(handler => handler.check(finalValue));
+    const handler = this.#types.find((handler) => handler.check(finalValue));
 
-    if( !handler ) {
+    if (!handler) {
       throw new Error(`handler for ${finalValue} was not found`);
     }
 

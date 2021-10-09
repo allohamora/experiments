@@ -9,20 +9,21 @@ const worker = new Worker(workerPath);
 const MULTIPLIER = 10;
 const OPERATION_COUNT = 4;
 
-const workerPromise = (name) => new Promise((res, rej) => {
-  worker.on('message', (data) => data.name === name && res(data));
-  worker.on('error', (data) => data.name === name && rej(data));
+const workerPromise = (name) =>
+  new Promise((res, rej) => {
+    worker.on('message', (data) => data.name === name && res(data));
+    worker.on('error', (data) => data.name === name && rej(data));
 
-  worker.postMessage({ multiplier: MULTIPLIER, name });
-});
+    worker.postMessage({ multiplier: MULTIPLIER, name });
+  });
 
 const syncWay = async () => {
-  // don't return because this array takes up a lot of console.log space. 
+  // don't return because this array takes up a lot of console.log space.
   Array.from({ length: OPERATION_COUNT }, () => heavyOperation(MULTIPLIER));
 };
 
 const workerWay = async () => {
-  const promises = Array.from({ length: OPERATION_COUNT }, (_,i) => workerPromise(`w-${i + 1}`));
+  const promises = Array.from({ length: OPERATION_COUNT }, (_, i) => workerPromise(`w-${i + 1}`));
   const values = await Promise.all(promises);
 
   return values;
@@ -39,7 +40,7 @@ const logWay = async (way) => {
   console.log({ values, usedTime, memoryUsed });
 };
 
-const main = async() => {
+const main = async () => {
   await logWay(workerWay);
   await worker.terminate();
 

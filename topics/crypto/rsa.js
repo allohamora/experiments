@@ -22,10 +22,10 @@ const main = () => {
   const { encrypted, exportedPublicKey } = encrypt(data);
   const decrypted = decrypt(encrypted, exportedPublicKey);
 
-  console.log({ 
-    encrypted: encrypted.toString('base64'), 
-    exportedPublicKey, 
-    decrypted: decrypted.toString('utf-8') 
+  console.log({
+    encrypted: encrypted.toString('base64'),
+    exportedPublicKey,
+    decrypted: decrypted.toString('utf-8'),
   });
 };
 

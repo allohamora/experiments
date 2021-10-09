@@ -7,4 +7,4 @@ parentPort.on('message', ({ multiplier = 1, name }) => {
   const memoryUsed = getMemoryUsedMb(process);
 
   parentPort.postMessage({ complete: true, name, memoryUsed: `${name} ${memoryUsed} MB` });
-})
+});

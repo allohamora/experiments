@@ -10,11 +10,7 @@ const encrypt = (data) => {
   const iv = randomBytes(IV_LENGTH);
   const cipher = createCipheriv(algorithm, key, iv);
 
-  const encrypted = Buffer.concat([
-    iv,
-    cipher.update(data),
-    cipher.final()
-  ]);
+  const encrypted = Buffer.concat([iv, cipher.update(data), cipher.final()]);
 
   return encrypted;
 };
@@ -25,13 +21,10 @@ const decrypt = (encrypted) => {
 
   const decipher = createDecipheriv('aes-256-ctr', key, iv);
 
-  const decryptedText = Buffer.concat([
-    decipher.update(encryptedData),
-    decipher.final()
-  ]);
+  const decryptedText = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
 
   return decryptedText;
-}
+};
 
 const encryptAndDecrypt = (data) => {
   const encrypted = encrypt(data).toString('base64');

@@ -17,7 +17,7 @@ const exists = async (path) => {
   } catch (error) {
     return false;
   }
-}
+};
 
 const writeToResult = async (data) => {
   const isFileExists = await exists(RESULT_PATH);
@@ -28,14 +28,14 @@ const writeToResult = async (data) => {
   const finalData = JSON.stringify(state, null, 2);
 
   await fps.writeFile(RESULT_PATH, finalData);
-}
+};
 
 const getMemoryUsedMb = () => {
   const memoryUsed = process.memoryUsage().heapUsed;
-  const memoryUsedMb = Math.round(memoryUsed / 1024 / 1024 * 100) / 100;
+  const memoryUsedMb = Math.round((memoryUsed / 1024 / 1024) * 100) / 100;
 
   return memoryUsedMb;
-}
+};
 
 const test = () => {
   assert.deepEqual(result, expected);
@@ -44,7 +44,7 @@ const test = () => {
   const time = end - start;
   const memory = getMemoryUsedMb();
 
-  return { time, memory }
-}
+  return { time, memory };
+};
 
 writeToResult(test());

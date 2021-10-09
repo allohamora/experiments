@@ -11,20 +11,16 @@ fromEvent(setButton, 'click')
       localStorage.setItem(key, 'test');
 
       return key;
-    })
+    }),
   )
   .subscribe((key) => console.log(`new key: ${key}`));
 
 const getButton = document.querySelector('.get') as Element;
 
 fromEvent(getButton, 'click')
-  .pipe(
-    map(() => localStorage)
-  )
+  .pipe(map(() => localStorage))
   .subscribe(console.log);
 
 fromEvent<StorageEvent>(window, 'storage')
-  .pipe(
-    map((event) => event.key)
-  )
+  .pipe(map((event) => event.key))
   .subscribe((key) => console.log(`changed key from another tab: ${key}`));

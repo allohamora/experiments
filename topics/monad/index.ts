@@ -1,11 +1,11 @@
 import { strict } from 'assert';
 
 class Monad<V = null> {
-  constructor(private _value: V){}
+  constructor(private _value: V) {}
 
-  public map<T> (func: (value: NonNullable<V>) => T): Monad<T> {
+  public map<T>(func: (value: NonNullable<V>) => T): Monad<T> {
     const value = this._value;
-    if( value === null ) return this as unknown as Monad<T>;
+    if (value === null) return this as unknown as Monad<T>;
 
     return new Monad(func(value as NonNullable<V>));
   }

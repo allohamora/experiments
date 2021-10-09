@@ -12,45 +12,49 @@ const exists = async (path) => {
   } catch (error) {
     return false;
   }
-}
+};
 
-const runCommand = (...spawnArgs) => new Promise(res => {
-  const command = spawn(...spawnArgs);
+const runCommand = (...spawnArgs) =>
+  new Promise((res) => {
+    const command = spawn(...spawnArgs);
 
-  command.on('exit', res);
-})
+    command.on('exit', res);
+  });
 
 /**
- * 
- * @param {"esm" | "mjs"} type 
+ *
+ * @param {"esm" | "mjs"} type
  */
 const collectResults = async (type) => {
   const resultPath = path.join(__dirname, './', type, 'result.json');
 
-  if( await exists(resultPath) ) {
+  if (await exists(resultPath)) {
     await fsp.rm(resultPath);
   }
 
   const spawnArgs = ['npm', ['run', `start:${type}`], { cwd: process.cwd(), shell: true }];
 
   // don't use Promise.all because race condition
-  await Array.from({ length: COUNT }).reduce(chain => chain.then(() => runCommand(...spawnArgs)), Promise.resolve());
+  await Array.from({ length: COUNT }).reduce((chain) => chain.then(() => runCommand(...spawnArgs)), Promise.resolve());
 
   return require(resultPath);
 };
 
 /**
- * 
- * @param {{ actual: number, expected: number, time: number, memory: number }[]} resultState 
+ *
+ * @param {{ actual: number, expected: number, time: number, memory: number }[]} resultState
  * @param {string} name
  */
 const getResult = (resultState, name) => {
-  const total = resultState.reduce((result, cur) => {
-    result.memory += cur.memory;
-    result.time += cur.time;
+  const total = resultState.reduce(
+    (result, cur) => {
+      result.memory += cur.memory;
+      result.time += cur.time;
 
-    return result;
-  }, { memory: 0, time: 0 });
+      return result;
+    },
+    { memory: 0, time: 0 },
+  );
 
   const getAverage = (totalValue) => totalValue / resultState.length;
 
@@ -63,7 +67,9 @@ const getResult = (resultState, name) => {
 const getResults = async () => {
   const names = ['esm', 'mjs'];
 
-  const results = await Promise.all(names.map(name => collectResults(name).then((result) => getResult(result, name))))
+  const results = await Promise.all(
+    names.map((name) => collectResults(name).then((result) => getResult(result, name))),
+  );
 
   return results;
 };

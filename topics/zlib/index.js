@@ -17,8 +17,8 @@ const exists = async (path) => {
 };
 
 const readAndWrite = async (input, output, ...transformers) => {
-  if( !await exists(input) ) throw new Error(`${input} is not exists!`);
-  if( await exists(output) ) {
+  if (!(await exists(input))) throw new Error(`${input} is not exists!`);
+  if (await exists(output)) {
     await removeFile(output);
   }
 
@@ -26,7 +26,7 @@ const readAndWrite = async (input, output, ...transformers) => {
   const destination = createWriteStream(output);
 
   await pipe(source, ...transformers, destination);
-}
+};
 
 const toGzip = async (input, output) => {
   const gzip = createGzip();

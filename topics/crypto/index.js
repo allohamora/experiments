@@ -1,3 +1,3 @@
 const scripts = ['./encrypt', './hash', './rsa'];
 
-scripts.forEach(script => require(script));
+scripts.forEach((script) => require(script));

@@ -7,7 +7,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.h2`
-  color: ${({theme}) => theme.color.primary};
+  color: ${({ theme }) => theme.color.primary};
 `;
 
 const BaseText = styled.p<{ size: string }>`
