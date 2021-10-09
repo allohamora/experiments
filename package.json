@@ -4,12 +4,29 @@
   "description": "experiments on different topics",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "start": "node scripts/start",
     "dev": "node scripts/dev",
     "install": "node scripts/install",
     "uninstall": "node scripts/uninstall",
     "select": "node scripts/select",
-    "init": "node scripts/init"
+    "init": "node scripts/init",
+    "format": "prettier",
+    "format:fix": "npm run format -- --write ."
+  },
+  "devDependencies": {
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.1",
+    "prettier": "^2.4.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,yml,md}": [
+      "npm run format -- --write"
+    ]
+  },
+  "engines": {
+    "node": "^14.17.4",
+    "npm": "^6.14.14"
   },
   "repository": {
     "type": "git",
