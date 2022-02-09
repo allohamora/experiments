@@ -1,14 +1,9 @@
 {
-  "name": "dataloader-experiment",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "dataloader.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "dataloader": "^2.0.0"
   }

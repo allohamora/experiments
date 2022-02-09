@@ -1,20 +1,10 @@
 {
-  "name": "thread-pool",
+  "name": "thread-pool.topic",
   "private": true,
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev --respawn src/index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Allohamora/experiments.git"
-  },
-  "author": "https://github.com/Allohamora",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/Allohamora/experiments/issues"
-  },
-  "homepage": "https://github.com/Allohamora/experiments#readme",
   "dependencies": {
     "@types/node": "^14.14.31",
     "ts-node": "^10.3.0",

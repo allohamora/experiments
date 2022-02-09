@@ -1,15 +1,10 @@
 {
-  "name": "multer",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "multer.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "mime-types": "^2.1.32",

@@ -1,14 +1,9 @@
 {
-  "name": "passport-experiment",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "passport.topic",
+  "private": true,
   "scripts": {
     "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.12"
   },

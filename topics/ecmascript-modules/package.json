@@ -1,16 +1,11 @@
 {
-  "name": "ecmascript-modules",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ecmascript.topic",
+  "private": true,
   "scripts": {
     "start:result": "node index.js",
     "start:esm": "node -r esm esm/index.js",
     "start:mjs": "node mjs/index.mjs"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "esm": "^3.2.25"
   }

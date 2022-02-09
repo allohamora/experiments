@@ -1,12 +1,7 @@
 {
-  "name": "json",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "json.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  }
 }

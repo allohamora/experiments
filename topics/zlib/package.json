@@ -1,12 +1,7 @@
 {
-  "name": "zlib",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "zlib.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

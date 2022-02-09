@@ -1,8 +1,6 @@
 {
-  "name": "monad",
+  "name": "monad.topic",
   "private": true,
-  "license": "UNLICENSED",
-  "main": "index.ts",
   "scripts": {
     "start": "ts-node index.ts",
     "dev": "ts-node-dev --respawn index.ts"

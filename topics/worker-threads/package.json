@@ -1,14 +1,9 @@
 {
-  "name": "worker-threads-experiment",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "worker-threads.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^15.12.2"
   }

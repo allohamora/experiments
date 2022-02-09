@@ -1,15 +1,10 @@
 {
-  "name": "crypto-experiment",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "crypto.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js",
     "encrypt": "node encrypt.js",
     "hash": "node hash.js",
     "rsa": "node rsa.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

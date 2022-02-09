@@ -1,14 +1,9 @@
 {
-  "name": "minecraft-ping",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "minecraft-ping.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "minecraft-server-util": "^3.5.1"
   }

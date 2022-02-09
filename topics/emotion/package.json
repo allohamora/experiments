@@ -1,6 +1,5 @@
 {
-  "name": "emotion-experiment",
-  "version": "0.1.0",
+  "name": "emotion.topic",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "next": "11.1.0",
+    "next": "^11.1.4",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },

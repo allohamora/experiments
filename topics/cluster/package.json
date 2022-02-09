@@ -1,12 +1,7 @@
 {
-  "name": "cluster",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "cluster.topic",
+  "private": true,
   "scripts": {
     "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

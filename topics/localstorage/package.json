@@ -1,6 +1,6 @@
 {
-  "name": "localstorage-experiment",
-  "version": "0.0.0",
+  "name": "localstorage.topic",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

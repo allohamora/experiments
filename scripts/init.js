@@ -4,25 +4,15 @@ import { TOPICS_PATH } from './utils/topic.mjs';
 import fsp from 'fs/promises';
 import path from 'path';
 
-const SCRIPT_PLACEHOLDER = 'echo "Error: no test specified" && exit 1';
+const SCRIPT_PLACEHOLDER = 'echo "Error: no script specified" && exit 1';
 
 const createPackageJson = (name) => ({
-  name,
-  license: 'MIT',
+  name: `${name}.topic`,
   private: true,
   scripts: {
     start: SCRIPT_PLACEHOLDER,
     dev: SCRIPT_PLACEHOLDER,
   },
-  repository: {
-    type: 'git',
-    url: 'git+https://github.com/Allohamora/experiments.git',
-  },
-  author: 'https://github.com/Allohamora',
-  bugs: {
-    url: 'https://github.com/Allohamora/experiments/issues',
-  },
-  homepage: 'https://github.com/Allohamora/experiments#readme',
 });
 
 const script = createScript({
