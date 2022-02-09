@@ -8,6 +8,7 @@ const SCRIPT_PLACEHOLDER = 'echo "Error: no test specified" && exit 1';
 
 const createPackageJson = (name) => ({
   name,
+  license: 'MIT',
   private: true,
   scripts: {
     start: SCRIPT_PLACEHOLDER,
@@ -18,7 +19,6 @@ const createPackageJson = (name) => ({
     url: 'git+https://github.com/Allohamora/experiments.git',
   },
   author: 'https://github.com/Allohamora',
-  license: 'UNLICENSED',
   bugs: {
     url: 'https://github.com/Allohamora/experiments/issues',
   },
