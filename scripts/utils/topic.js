@@ -1,6 +1,6 @@
 import path from 'path';
-import { isExists } from './fs.mjs';
-import { ROOT_PATH } from './path.mjs';
+import { isExists } from './fs.js';
+import { ROOT_PATH } from './path.js';
 
 export const TOPICS_PATH = path.resolve(ROOT_PATH, 'topics');
 

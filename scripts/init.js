@@ -1,8 +1,7 @@
-import { createScript } from './utils/script.mjs';
-import { isTopicExists } from './utils/topic.mjs';
-import { TOPICS_PATH } from './utils/topic.mjs';
 import fsp from 'fs/promises';
 import path from 'path';
+import { createScript } from './utils/script.js';
+import { isTopicExists, TOPICS_PATH } from './utils/topic.js';
 
 const SCRIPT_PLACEHOLDER = 'echo "Error: no script specified" && exit 1';
 

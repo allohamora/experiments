@@ -6,11 +6,11 @@ export const spawnCommand = async (commandName, args) => {
 
     child.on('error', (err) => rej(err));
     child.on('exit', () => res());
-  })
+  });
 };
 
 export const runCommand = async (command) => {
   const [name, ...args] = command.split(' ');
 
   return await spawnCommand(name, args);
-}
+};

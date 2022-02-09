@@ -1,7 +1,7 @@
 import fsp from 'fs/promises';
 import path from 'path';
-import { isExists } from './fs.mjs';
-import { SCRIPTS_PATH } from './path.mjs';
+import { isExists } from './fs.js';
+import { SCRIPTS_PATH } from './path.js';
 
 const OPTIONS_PATH = path.resolve(SCRIPTS_PATH, 'options.json');
 

@@ -2,6 +2,7 @@
   "name": "experiments",
   "description": "experiments on different topics",
   "license": "MIT",
+  "type": "module",
   "private": true,
   "scripts": {
     "prepare": "husky install",
@@ -25,12 +26,11 @@
     "node": ">=16.13.2",
     "npm": ">=8.1.2"
   },
+  "author": "https://github.com/Allohamora",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Allohamora/experiments.git"
   },
-  "type": "module",
-  "author": "https://github.com/Allohamora",
   "bugs": {
     "url": "https://github.com/Allohamora/experiments/issues"
   },
