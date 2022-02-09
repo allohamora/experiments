@@ -1,17 +1,11 @@
 {
   "name": "experiments",
-  "version": "1.0.0",
   "description": "experiments on different topics",
   "license": "MIT",
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "srcipt:start": "node scripts/start",
-    "srcipt:dev": "node scripts/dev",
-    "script:install": "node scripts/install",
-    "script:uninstall": "node scripts/uninstall",
-    "script:select": "node scripts/select",
-    "script:init": "node scripts/init",
+    "topic:init": "node scripts/init",
     "format": "prettier",
     "format:fix": "npm run format -- --write ."
   },
