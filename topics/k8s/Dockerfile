@@ -1,0 +1,10 @@
+FROM node:16.13.2
+
+WORKDIR /app
+
+COPY . .
+
+ENV PORT 3000
+EXPOSE 3000
+
+CMD npm run start
