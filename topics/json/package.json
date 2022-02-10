@@ -1,7 +1,0 @@
-{
-  "name": "json.topic",
-  "private": true,
-  "scripts": {
-    "start": "node index.js"
-  }
-}
