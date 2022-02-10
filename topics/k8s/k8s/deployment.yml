@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: allohamora/hello-world:v1
+          image: allohamora/hello-world:v2
           ports:
             - containerPort: 3000
