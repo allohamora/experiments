@@ -5,7 +5,7 @@ metadata:
   labels:
     app: hello-world
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: hello-world
@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: hello-world
-          image: allohamora/hello-world:v2
+          image: allohamora/hello-world:v5
           ports:
             - containerPort: 3000
