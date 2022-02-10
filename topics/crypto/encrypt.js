@@ -4,15 +4,13 @@ const IV_LENGTH = 16;
 const algorithm = 'aes-256-ctr';
 
 const secret = 'SECRET';
-const key = createHash('sha256').update(secret).digest('base64').substr(0, 32);
+const key = createHash('sha256').update(secret).digest('base64').substring(0, 32);
 
 const encrypt = (data) => {
   const iv = randomBytes(IV_LENGTH);
   const cipher = createCipheriv(algorithm, key, iv);
 
-  const encrypted = Buffer.concat([iv, cipher.update(data), cipher.final()]);
-
-  return encrypted;
+  return Buffer.concat([iv, cipher.update(data), cipher.final()]);
 };
 
 const decrypt = (encrypted) => {
@@ -21,9 +19,7 @@ const decrypt = (encrypted) => {
 
   const decipher = createDecipheriv('aes-256-ctr', key, iv);
 
-  const decryptedText = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
-
-  return decryptedText;
+  return Buffer.concat([decipher.update(encryptedData), decipher.final()]);
 };
 
 const encryptAndDecrypt = (data) => {

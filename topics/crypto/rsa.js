@@ -11,9 +11,8 @@ const encrypt = (data) => {
 
 const decrypt = (encrypted, exportedPublicKey) => {
   const publicKey = createPublicKey(exportedPublicKey);
-  const data = publicDecrypt(publicKey, encrypted);
 
-  return data;
+  return publicDecrypt(publicKey, encrypted);
 };
 
 const main = () => {

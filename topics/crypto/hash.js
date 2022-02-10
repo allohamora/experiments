@@ -5,11 +5,9 @@ const scrypt = promisify(scryptCallback);
 
 const hash = async (data) => {
   const salt = randomBytes(8).toString('hex');
-
   const hash = (await scrypt(data, salt, 64)).toString('hex');
-  const hashWithSalt = `${salt}:${hash}`;
 
-  return hashWithSalt;
+  return `${salt}:${hash}`;
 };
 
 const verify = async (data, hashWithSalt) => {
