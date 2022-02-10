@@ -19,18 +19,3 @@ spec:
           image: allohamora/hello-world:v1
           ports:
             - containerPort: 3000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-world
-  labels:
-    app: hello-world
-spec:
-  type: LoadBalancer
-  selector:
-    app: hello-world
-  ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
