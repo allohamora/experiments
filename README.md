@@ -1,1 +1,2 @@
-# Git repository with my 🧪 experiments 🧪
+# Experiments
+repository with my experience and code samples, sorted by topics. 
