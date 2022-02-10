@@ -20,11 +20,14 @@ const main = () => {
 
   const { encrypted, exportedPublicKey } = encrypt(data);
   const decrypted = decrypt(encrypted, exportedPublicKey);
+  const decryptedString = decrypted.toString('utf-8');
+  const isEqual = data === decryptedString;
 
   console.log({
     encrypted: encrypted.toString('base64'),
     exportedPublicKey,
-    decrypted: decrypted.toString('utf-8'),
+    decrypted: decryptedString,
+    isEqual,
   });
 };
 
