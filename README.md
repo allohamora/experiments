@@ -1,2 +1,2 @@
 # Experiments
-repository with my experience and code samples, sorted by topics. 
+repository with my experiments and code samples, sorted by topics.
