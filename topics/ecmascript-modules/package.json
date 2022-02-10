@@ -1,0 +1,12 @@
+{
+  "name": "ecmascript.topic",
+  "private": true,
+  "scripts": {
+    "start:result": "node index.js",
+    "start:esm": "node -r esm esm/index.js",
+    "start:mjs": "node mjs/index.mjs"
+  },
+  "dependencies": {
+    "esm": "^3.2.25"
+  }
+}
