@@ -1,0 +1,10 @@
+{
+  "name": "minecraft-ping.topic",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "minecraft-server-util": "^3.5.1"
+  }
+}
