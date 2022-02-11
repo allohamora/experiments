@@ -1,7 +1,7 @@
 import { deepStrictEqual } from 'assert/strict';
 import { compare } from './my-compare.js';
 
-const assignWay = (actual, expected) => {
+const assertWay = (actual, expected) => {
   try {
     deepStrictEqual(actual, expected);
 
@@ -34,10 +34,10 @@ const userCopy = {
 };
 
 const main = () => {
-  const assign = assignWay(userCopy, user);
+  const assert = assertWay(userCopy, user);
   const my = myWay(user, userCopy);
 
-  console.log({ assign, my });
+  console.log({ assert, my });
 };
 
 main();
