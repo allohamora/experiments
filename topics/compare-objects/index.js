@@ -50,13 +50,13 @@ const manyCompare = ({ compareWay, values }) => {
   return true;
 };
 
-const ITEMS_COUNT = 100;
+const VALUES_COUNT = 100;
 
 const main = async () => {
   const assert = await performanceTest(() => assertWay(userCopy, user));
   const my = await performanceTest(() => myWay(user, userCopy));
 
-  const values = Array.from({ length: ITEMS_COUNT }, () => (Math.random() > 0.5 ? user : userCopy));
+  const values = Array.from({ length: VALUES_COUNT }, () => (Math.random() > 0.5 ? user : userCopy));
   const assertMany = await performanceTest(() => manyCompare({ compareWay: assertWay, values }));
   const myMany = await performanceTest(() => manyCompare({ compareWay: myWay, values }));
 
