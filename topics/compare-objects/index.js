@@ -1,5 +1,6 @@
 import { deepStrictEqual } from 'assert/strict';
 import { compare } from './my-compare.js';
+import { performanceTest } from '../../utils/performance.mjs';
 
 const assertWay = (actual, expected) => {
   try {
@@ -33,9 +34,9 @@ const userCopy = {
   },
 };
 
-const main = () => {
-  const assert = assertWay(userCopy, user);
-  const my = myWay(user, userCopy);
+const main = async () => {
+  const assert = await performanceTest(() => assertWay(userCopy, user));
+  const my = await performanceTest(() => myWay(user, userCopy));
 
   console.log({ assert, my });
 };
