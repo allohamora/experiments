@@ -1,7 +1,8 @@
 import { randomInt } from 'crypto';
 import { manyPerformaneTest, averageNumber } from '../../utils/performance.mjs';
+import url from 'url';
 
-const myRandom = (min, max) => {
+export const myRandom = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -19,4 +20,6 @@ const main = async () => {
   console.log({ my, crypto });
 };
 
-main();
+if (import.meta.url === url.pathToFileURL(process.argv[1]).href) {
+  main();
+}
