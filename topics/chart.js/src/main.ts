@@ -26,7 +26,7 @@ chartBlock.append(canvas);
 app.append(chartBlock);
 const data = [-1, 3, 2, 1, 3, 2].map((num) => num * 100);
 
-const chart = new Chart(ctx, {
+new Chart(ctx, {
   type: 'line',
   data: {
     labels: ['16:00', '17:00', '18:00', '19:00', '20:00'],
