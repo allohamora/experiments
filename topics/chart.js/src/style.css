@@ -4,3 +4,10 @@
 
   background-color: rgba(0, 0, 0, .1);
 }
+
+@media (max-width: 550px) {
+  .chart-block {
+    width: 400px;
+    height: 200px;
+  }
+}
