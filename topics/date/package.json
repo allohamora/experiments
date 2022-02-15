@@ -1,0 +1,8 @@
+{
+  "name": "date.topic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  }
+}
