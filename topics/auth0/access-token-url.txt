@@ -1,0 +1,1 @@
+https://dev-experiment-rx3ijh0f.eu.auth0.com/authorize?response_type=token&client_id=kw2uRXp8vYaDPWwsayqZKzViL1kXqLgK&redirect_uri=http://localhost:3000&prompt=login
