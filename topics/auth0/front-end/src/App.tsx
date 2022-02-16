@@ -1,40 +1,18 @@
-import { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { FC } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
-function App() {
-  const [count, setCount] = useState(0);
+export const App: FC = () => {
+  const { isAuthenticated, isLoading, loginWithPopup, logout } = useAuth0();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div className="app">
+      <div className="attributes">{JSON.stringify({ isAuthenticated, isLoading }, null, 2)}</div>
+
+      <div className="buttons">
+        <button onClick={() => loginWithPopup()}>login</button>
+        <button onClick={() => logout()}>logout</button>
+      </div>
     </div>
   );
-}
-
-export default App;
+};
