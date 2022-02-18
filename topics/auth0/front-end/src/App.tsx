@@ -1,18 +1,28 @@
 import './App.css';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 export const App: FC = () => {
   const { isAuthenticated, isLoading, loginWithPopup, logout, getAccessTokenSilently } = useAuth0();
 
-  const getPrivateData = async () => {
+  const request = async ({ url }: { url: string }) => {
     const token = await getAccessTokenSilently();
-    const url = 'http://localhost:4000/private-data';
 
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-    const text = await res.text();
+    return await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  };
 
-    console.log(text);
+  const requestPrivateData = async () => {
+    const res = await request({ url: 'http://localhost:4000/private-data' });
+    const privateData = await res.text();
+
+    console.log(privateData);
+  };
+
+  const requestMe = async () => {
+    const res = await request({ url: 'http://localhost:4000/me' });
+    const me = await res.json();
+
+    console.log(me);
   };
 
   return (
@@ -22,7 +32,8 @@ export const App: FC = () => {
       <div className="buttons">
         <button onClick={() => loginWithPopup()}>login</button>
         <button onClick={() => logout()}>logout</button>
-        <button onClick={() => getPrivateData()}>request to back-end</button>
+        <button onClick={() => requestPrivateData()}>request private data</button>
+        <button onClick={() => requestMe()}>request me</button>
       </div>
     </div>
   );
