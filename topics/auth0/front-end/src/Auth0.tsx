@@ -9,6 +9,7 @@ export const Auth0: FC = ({ children }) => {
       domain={env('VITE_AUTH0_DOMAIN')}
       clientId={env('VITE_AUTH0_CLIENT_ID')}
       audience={env('VITE_AUTH0_AUDIENCE')}
+      scope="read:private-data"
       redirectUri={window.location.origin}
     >
       {children}

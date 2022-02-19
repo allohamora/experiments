@@ -9,4 +9,6 @@ export class User {
 
   azp: string;
   scope: string;
+
+  permissions: string[];
 }
