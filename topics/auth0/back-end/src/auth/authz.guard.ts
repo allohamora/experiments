@@ -4,13 +4,10 @@ import { Permision } from './permission.enum';
 import { User } from './user.entity';
 
 const arrayToMap = <V>(array: V[]) => {
-  const result = new Map<V, V>();
-
-  for (const item of array) {
-    result.set(item, item);
-  }
-
-  return result;
+  return array.reduce(
+    (state, value) => state.set(value, value),
+    new Map<V, V>(),
+  );
 };
 
 @Injectable()
