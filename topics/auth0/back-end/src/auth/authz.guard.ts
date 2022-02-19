@@ -28,15 +28,14 @@ export class AuthzGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
     const tokenPermissions = this.getTokenPermissions(req.user);
+    const tokenPermissionsMap = arrayToMap(tokenPermissions);
     const permissions = this.reflector.get(
       'permissions',
       context.getHandler(),
     ) as Permision[];
 
     return permissions.every((permission) =>
-      tokenPermissions.some(
-        (tokenPermission) => permission === tokenPermission,
-      ),
+      tokenPermissionsMap.has(permission),
     );
   }
 }
