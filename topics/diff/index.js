@@ -1,10 +1,12 @@
 import { manyPerformaneTest } from '../../utils/performance.mjs';
 
 const isObject = (value) => typeof value === 'object' && value !== null;
-const isPrimitive = (value) => !isObject(value) && typeof value !== 'function';
 const isFunction = (value) => typeof value === 'function';
+const isPrimitive = (value) => !isObject(value) && !isFunction(value);
 
 const isObjects = (a, b) => isObject(a) && isObject(b);
+
+const isDifferentTypes = (a, b) => typeof a !== typeof b && a !== b;
 
 const isFunctionsNotEqual = (a, b) => isFunction(a) && isFunction(b) && a.toString() !== b.toString();
 const isPrimitiveNotEqual = (a, b) => (isPrimitive(a) || isPrimitive(b)) && a !== b;
@@ -37,11 +39,15 @@ const deepEqual = (a, b) => {
     return true;
   }
 
-  if (isPrimitiveNotEqual(a, b)) {
+  if (isDifferentTypes(a, b)) {
     return false;
   }
 
   if (isFunctionsNotEqual(a, b)) {
+    return false;
+  }
+
+  if (isPrimitiveNotEqual(a, b)) {
     return false;
   }
 
@@ -64,16 +70,19 @@ const objectDiff = (a, b) => {
 };
 
 const arrayDiff = (...targets) => {
-  const tableOfContent = targets.flat(1).reduce((map, key) => {
-    const value = map.get(key) ?? 0;
-    map.set(key, value + 1);
+  const flated = targets.flat(1);
 
-    return map;
-  }, new Map());
+  return flated.filter((main, mainI) => {
+    const hasDuplicate = flated.some((second, secondI) => {
+      if (mainI === secondI) return;
 
-  return Array.from(tableOfContent.entries())
-    .filter(([, value]) => value === 1)
-    .map(([key]) => key);
+      if (deepEqual(main, second)) {
+        return true;
+      }
+    });
+
+    return !hasDuplicate;
+  });
 };
 
 const objectDiffTestTarget = () => {
@@ -99,8 +108,8 @@ const objectDiffTestTarget = () => {
 };
 
 const arrayDiffTestTarget = () => {
-  const a = [1, 2, 3, {}, 5n];
-  const b = [3, 2, {}, 5n];
+  const a = [1, 2, 3, {}, 5n, { test: 1 }, () => {}, null];
+  const b = [3, 2, {}, 5n, { test: 2 }, () => {}, () => console.log(123), null];
 
   return arrayDiff(a, b);
 };
