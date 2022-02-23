@@ -69,8 +69,8 @@ const objectDiff = (a, b) => {
   }, []);
 };
 
-const arrayDiff = (...targets) => {
-  const flated = targets.flat(1);
+const arrayDiff = (a, b) => {
+  const flated = [a, b].flat(1);
 
   return flated.filter((main, mainI) => {
     const hasDuplicate = flated.some((second, secondI) => {
