@@ -1,0 +1,11 @@
+{
+  "name": "fastify.topic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "fastify": "^3.27.2"
+  }
+}
