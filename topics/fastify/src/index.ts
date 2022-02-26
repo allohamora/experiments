@@ -41,4 +41,4 @@ app.route<{ Querystring: { a: number; b: number } }>({
   handler: async ({ query: { a, b } }) => sum(a, b),
 });
 
-app.listen(PORT, () => console.log(`server started on port ${PORT}`));
+app.listen(PORT);

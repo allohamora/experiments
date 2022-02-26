@@ -3,12 +3,13 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "node --loader ts-node/esm src/index.ts",
-    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts"
+    "start": "node --loader ts-node/esm src/index.ts | pino-colada",
+    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts | pino-colada"
   },
   "dependencies": {
     "fastify": "^3.27.2",
-    "fastify-swagger": "^4.15.0"
+    "fastify-swagger": "^4.15.0",
+    "pino-colada": "^2.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
