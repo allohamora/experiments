@@ -1,0 +1,16 @@
+secretGenerator:
+  - name: hello-world-secret
+    envs:
+      - .env
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    type: generated
+  annotations:
+    note: generated
+resources:
+  - postgres.config-map.yml
+  - postgres.stateful-set.yml
+  - postgres.service.yml
+  - hello-world.deployment.yml
+  - hello-world.service.yml

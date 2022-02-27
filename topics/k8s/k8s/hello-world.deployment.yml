@@ -9,13 +9,23 @@ spec:
   selector:
     matchLabels:
       app: hello-world
+      tier: server
   template:
     metadata:
       labels:
         app: hello-world
+        tier: server
     spec:
       containers:
         - name: hello-world
-          image: allohamora/hello-world:v5
+          image: allohamora/hello-world:v6
           ports:
             - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: hello-world-secret
+            - configMapRef:
+                name: hello-world-config-map
+          env:
+            - name: PORT
+              value: "3000"
