@@ -1,6 +1,21 @@
-import { createServer } from 'http';
+import { createServer } from 'node:http';
+import { randomUUID } from 'node:crypto';
+import { sql, createPool } from 'slonik';
 
-const { PORT = 3000, HOSTNAME } = process.env;
+const {
+  PORT = 3000,
+  HOSTNAME,
+
+  POSTGRES_DB,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_HOST,
+  POSTGRES_PORT,
+} = process.env;
+
+const pool = createPool(
+  `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`,
+);
 
 const chain = (...funcs) => {
   return (...args) => {
@@ -8,18 +23,6 @@ const chain = (...funcs) => {
       func(...args);
     }
   };
-};
-
-const FIB_DEFAULT_INPUT = 42;
-const fib = (number = FIB_DEFAULT_INPUT) => {
-  if (number === 2) {
-    return 1;
-  }
-  if (number === 1 || number < 1) {
-    return 0;
-  }
-
-  return fib(number - 1) + fib(number - 2);
 };
 
 const logging = ({ req }) => {
@@ -35,20 +38,59 @@ const logging = ({ req }) => {
   });
 };
 
+const HttpType = {
+  Text: 'text/plain',
+  Json: 'application/json',
+};
+
+const HttpCode = {
+  Ok: 200,
+  Created: 201,
+};
+
+const HttpMessage = {
+  Ok: 'Ok',
+};
+
 const replyFactory = (res) => {
-  return ({ code = 200, type = 'text/plain', message = 'OK' }) => {
+  return ({ code = HttpCode.Ok, type = HttpType.Text, data = HttpMessage.Ok } = {}) => {
     res.statusCode = code;
     res.setHeader('Content-Type', type);
-    res.end(message);
+    res.end(data);
   };
 };
 
 const routes = {
   '/': ({ reply }) => {
-    reply({ code: 200, message: 'hello world!' });
+    reply({ code: 200, data: 'hello world!' });
   },
-  '/fib': ({ reply }) => {
-    reply({ code: 200, message: `result: ${fib()}` });
+  '/customer/create-random': async ({ reply }) => {
+    const name = randomUUID();
+    const customer = await pool.connect(async (connection) => {
+      const { rows } = await connection.query(sql`
+        INSERT INTO customers (name) 
+        VALUES (${name}) 
+        RETURNING *;
+      `);
+
+      return rows[0];
+    });
+
+    reply({
+      code: HttpCode.Created,
+      data: `random customer successfully created, customer: ${JSON.stringify(customer)}`,
+    });
+  },
+  '/customer': async ({ reply }) => {
+    const customers = await pool.connect(async (connection) => {
+      const { rows } = await connection.query(sql`
+        SELECT * FROM customers;
+      `);
+
+      return rows;
+    });
+
+    reply({ data: JSON.stringify(customers), type: HttpType.Json });
   },
 };
 
@@ -58,7 +100,7 @@ const routing = (ctx) => {
   const route = routes[url];
 
   if (!route) {
-    reply({ code: 404, message: '404' });
+    reply({ code: 404, data: '404' });
     return;
   }
 
@@ -73,4 +115,17 @@ const server = createServer((req, res) => {
   handler({ req, res, reply });
 });
 
-server.listen(PORT, () => console.log(`server started on port: ${PORT}, hostname: ${HOSTNAME}`));
+const main = async () => {
+  await pool.connect(async (connection) => {
+    await connection.query(sql`
+      CREATE TABLE IF NOT EXISTS customers (
+        id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        name UUID NOT NULL
+      );
+    `);
+  });
+
+  server.listen(PORT, () => console.log(`server started on port: ${PORT}, hostname: ${HOSTNAME}`));
+};
+
+main();

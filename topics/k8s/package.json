@@ -1,12 +1,21 @@
 {
   "name": "k8s.topic",
+  "version": "6.0.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon -r dotenv/config server.js dotenv_config_path=k8s/.env"
   },
   "engines": {
     "node": ">=16.13.2",
     "npm": ">=8.1.2"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.15",
+    "slonik": "^27.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
   }
 }
