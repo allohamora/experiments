@@ -1,11 +1,11 @@
 {
-  "name": "k8s.topic",
-  "version": "6.0.0",
+  "name": "hello-world",
+  "version": "7.0.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon -r dotenv/config server.js dotenv_config_path=k8s/.env"
+    "start": "node hello-world.js",
+    "dev": "nodemon -r dotenv/config hello-world.js dotenv_config_path=k8s/.env"
   },
   "engines": {
     "node": ">=16.13.2",
