@@ -1,7 +1,8 @@
 # How to run
+
 ```bash
 # apply kustomization.yml in k8s dir
-kubectl apply -k k8s/
+kubectl apply -k k8s
 ```
 
 # Check list
