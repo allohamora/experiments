@@ -1,0 +1,8 @@
+{
+  "name": "debug.topic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "NODE_DEBUG='math*,log' node index.js"
+  }
+}
