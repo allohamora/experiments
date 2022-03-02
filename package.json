@@ -27,13 +27,13 @@
     "node": ">=16.13.2",
     "npm": ">=8.1.2"
   },
-  "author": "https://github.com/Allohamora",
+  "author": "https://github.com/allohamora",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Allohamora/experiments.git"
+    "url": "git+https://github.com/allohamora/experiments.git"
   },
   "bugs": {
-    "url": "https://github.com/Allohamora/experiments/issues"
+    "url": "https://github.com/allohamora/experiments/issues"
   },
-  "homepage": "https://github.com/Allohamora/experiments#readme"
+  "homepage": "https://github.com/allohamora/experiments#readme"
 }
