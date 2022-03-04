@@ -15,7 +15,7 @@ const DEFAULT_OPTIONS = {
 };
 
 const CONTAINER_CLASS = 'container';
-const SEPARATOR_CLASS = 'delimiter';
+const SEPARATOR_CLASS = 'separator';
 const DND_CLASS = 'dnd';
 
 class ImageComparison extends HTMLElement {
