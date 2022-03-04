@@ -133,11 +133,27 @@ class ImageComparison extends HTMLElement {
     return event.x - x - left;
   }
 
+  handleSeparatorMinAndMaxX(x) {
+    const { container, separator } = this.elements;
+    const min = 0;
+    const max = container.clientWidth - separator.clientWidth;
+
+    if( x <= min ) {
+      return min;
+    }
+
+    if( x >= max ) {
+      return max;
+    }
+
+    return x;
+  }
+
   separatorPointerMoveHandler = (event) => {
     if( !this.isDrag ) return;
     const { separator } = this.elements;
 
-    const x = this.calculateSeparatorX(event);
+    const x = this.handleSeparatorMinAndMaxX(this.calculateSeparatorX(event));
 
     separator.style.left = `${x}px`;
   }
