@@ -50,6 +50,8 @@ class ImageComparison extends HTMLElement {
           left: 50%;
           top: 0;
 
+          transform: translateX(-50%);
+
           height: 100%;
 
           touch-action: none;
