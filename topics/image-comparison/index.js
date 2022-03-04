@@ -50,8 +50,6 @@ class ImageComparison extends HTMLElement {
           left: 50%;
           top: 0;
 
-          transform: translateX(-50%);
-
           height: 100%;
 
           touch-action: none;
@@ -137,10 +135,11 @@ class ImageComparison extends HTMLElement {
 
   separatorPointerMoveHandler = (event) => {
     if( !this.isDrag ) return;
-    const { delimeter } = this.elements;
+    const { separator } = this.elements;
 
     const x = this.calculateSeparatorX(event);
-    delimeter.style.left = `${x}px`;
+
+    separator.style.left = `${x}px`;
   }
 
   separatorPointerUpHandler = () => {
