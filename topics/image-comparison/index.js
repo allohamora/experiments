@@ -50,6 +50,8 @@ class ImageComparison extends HTMLElement {
           left: 50%;
           top: 0;
 
+          transform: translate(-50%);
+
           height: 100%;
 
           touch-action: none;
@@ -156,6 +158,7 @@ class ImageComparison extends HTMLElement {
     const x = this.handleSeparatorMinAndMaxX(this.calculateSeparatorX(event));
 
     separator.style.left = `${x}px`;
+    separator.style.transform = 'translate(0, 0)';
   }
 
   separatorPointerUpHandler = () => {
