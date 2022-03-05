@@ -113,7 +113,11 @@ class ImageComparison extends HTMLElement {
 
   separatorPointerDownHandler = (event) => {
     if( !event.target.classList.contains(DND_CLASS) ) return;
+    
+    const { separator } = this.elements;
 
+    // bind all events with pointerId to separator
+    separator.setPointerCapture(event.pointerId);
     this.clickedCoords = this.calculateClickedCoords(event);
     this.isDrag = true;
   }
