@@ -16,6 +16,7 @@ const DEFAULT_OPTIONS = {
 
 const CONTAINER_CLASS = 'container';
 const SEPARATOR_CLASS = 'separator';
+const FIRST_CLASS = 'first';
 const DND_CLASS = 'dnd';
 
 class ImageComparison extends HTMLElement {
@@ -30,19 +31,11 @@ class ImageComparison extends HTMLElement {
           position: relative;
 
           display: flex;
-        }
 
-        .image {
-          width: 100%;
+          min-height: 600px;
           width: 100%;
 
-          object-fit: cover;
-          user-select: none;
-          pointer-events: none;
-        }
-
-        .image:nth-of-type(2) {
-          margin-left: -100%;
+          background-color: rgba(0, 0, 0, .25);
         }
 
         .${SEPARATOR_CLASS} {
@@ -100,8 +93,6 @@ class ImageComparison extends HTMLElement {
       ${this.styles()}
 
       <div class="${CONTAINER_CLASS}">
-        <img class="image" src="${this.first}" alt="first image">
-        <img class="image" src="${this.second}" alt="second image">
         <div class="${SEPARATOR_CLASS}">
           <div class="line ${DND_CLASS}"></div>
           <div class="circle ${DND_CLASS}"></div>
