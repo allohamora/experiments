@@ -17,10 +17,14 @@ const DEFAULT_OPTIONS = {
 };
 
 const CONTAINER_CLASS = 'container';
-const SEPARATOR_CLASS = 'separator';
+
 const BEFORE_CLASS = 'before';
 const AFTER_CLASS = 'after';
+
+const SEPARATOR_CLASS = 'separator';
 const DND_CLASS = 'dnd';
+const CIRCLE_CLASS = 'circe';
+const LINE_CLASS = 'line';
 
 class ImageComparison extends HTMLElement {
   styles() {
@@ -79,14 +83,14 @@ class ImageComparison extends HTMLElement {
           touch-action: none;
         }
 
-        .line {
+        .${LINE_CLASS} {
           height: 100%;
           width: 10px;
           margin: 0 auto;
           background-color: ${this.separator.bg};
         }
 
-        .circle {
+        .${CIRCLE_CLASS} {
           position: relative;
           top: -50%;
           left: -50%;
@@ -97,7 +101,7 @@ class ImageComparison extends HTMLElement {
           border-radius: 50%;
         }
 
-        .circle::after {
+        .${CIRCLE_CLASS}::after {
           content: '';
 
           position: absolute;
@@ -131,8 +135,8 @@ class ImageComparison extends HTMLElement {
         </div>
 
         <div class="${SEPARATOR_CLASS}">
-          <div class="line ${DND_CLASS}"></div>
-          <div class="circle ${DND_CLASS}"></div>
+          <div class="${LINE_CLASS} ${DND_CLASS}"></div>
+          <div class="${CIRCLE_CLASS} ${DND_CLASS}"></div>
         </div>
       </div>
     `;
@@ -140,6 +144,8 @@ class ImageComparison extends HTMLElement {
     this.elements.separator = this.target.querySelector(`.${SEPARATOR_CLASS}`);
     this.elements.container = this.target.querySelector(`.${CONTAINER_CLASS}`);
     this.elements.after = this.target.querySelector(`.${AFTER_CLASS}`);
+    this.elements.circle = this.target.querySelector(`.${CIRCLE_CLASS}`);
+    this.elements.line = this.target.querySelector(`.${LINE_CLASS}`);
   }
 
   handleImages(x) {
@@ -168,6 +174,15 @@ class ImageComparison extends HTMLElement {
     this.isDrag = true;
   }
 
+  calculateLineOffset() {
+    const { line, separator } = this.elements;
+
+    const full = separator.offsetWidth - line.offsetWidth;
+    const half = Math.round(full / 2);
+
+    return { full, half };
+  }
+
   calculateSeparatorX(event) {
     const { x } = this.clickedCoords;
     const { container } = this.elements;
@@ -178,8 +193,9 @@ class ImageComparison extends HTMLElement {
 
   handleSeparatorMinAndMaxX(x) {
     const { container, separator } = this.elements;
-    const min = 0;
-    const max = container.clientWidth - separator.clientWidth;
+    const { half } = this.calculateLineOffset();
+    const min = -half;
+    const max = container.clientWidth - separator.clientWidth + half;
 
     if( x <= min ) {
       return min;
