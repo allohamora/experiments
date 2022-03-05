@@ -1,6 +1,8 @@
 const DEFAULT_OPTIONS = {
-  first: 'https://images.unsplash.com/photo-1558637845-c8b7ead71a3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-  second: 'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+  before: 'https://images.unsplash.com/photo-1558637845-c8b7ead71a3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+  after: 'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+  width: '1200px',
+  height: '600px',
   separator: {
     bg: '#2980b9',
     circle: {
@@ -16,7 +18,8 @@ const DEFAULT_OPTIONS = {
 
 const CONTAINER_CLASS = 'container';
 const SEPARATOR_CLASS = 'separator';
-const FIRST_CLASS = 'first';
+const BEFORE_CLASS = 'before';
+const AFTER_CLASS = 'after';
 const DND_CLASS = 'dnd';
 
 class ImageComparison extends HTMLElement {
@@ -32,16 +35,42 @@ class ImageComparison extends HTMLElement {
 
           display: flex;
 
-          min-height: 600px;
+          height: ${this.height};
+          width: ${this.width};
+        }
+
+        .${AFTER_CLASS}, .${BEFORE_CLASS} {
+          position: absolute;
+          left: 0;
+          top: 0;
+
+          height: 100%;
           width: 100%;
 
-          background-color: rgba(0, 0, 0, .25);
+          overflow: hidden;
+        }
+
+        .${AFTER_CLASS} {
+          z-index: 1;
+
+          width: 50%;
+        }
+
+        .${AFTER_CLASS} > img, .${BEFORE_CLASS} > img {
+          display: block;
+          
+          width: ${this.width};
+          height: ${this.height};
+
+          object-fit: fill;
         }
 
         .${SEPARATOR_CLASS} {
           position: absolute;
           left: 50%;
           top: 0;
+          
+          z-index: 2;
 
           transform: translate(-50%);
 
@@ -93,6 +122,14 @@ class ImageComparison extends HTMLElement {
       ${this.styles()}
 
       <div class="${CONTAINER_CLASS}">
+        <div class="${AFTER_CLASS}">
+          <img alt="before image" src="${this.before}">
+        </div>
+
+        <div class="${BEFORE_CLASS}">
+          <img alt="after image" src="${this.after}">
+        </div>
+
         <div class="${SEPARATOR_CLASS}">
           <div class="line ${DND_CLASS}"></div>
           <div class="circle ${DND_CLASS}"></div>
@@ -102,6 +139,15 @@ class ImageComparison extends HTMLElement {
 
     this.elements.separator = this.target.querySelector(`.${SEPARATOR_CLASS}`);
     this.elements.container = this.target.querySelector(`.${CONTAINER_CLASS}`);
+    this.elements.after = this.target.querySelector(`.${AFTER_CLASS}`);
+  }
+
+  handleImages(x) {
+    const { after, separator } = this.elements;
+    const separatorHalfWidth = Math.round(separator.offsetWidth / 2);
+    const width = x + separatorHalfWidth;
+
+    after.style.width = `${width}px`;
   }
 
   calculateClickedCoords(event) {
@@ -154,6 +200,7 @@ class ImageComparison extends HTMLElement {
 
     separator.style.left = `${x}px`;
     separator.style.transform = 'translate(0, 0)';
+    this.handleImages(x);
   }
 
   separatorPointerUpHandler = () => {
@@ -173,8 +220,10 @@ class ImageComparison extends HTMLElement {
   }
 
   init() {
-    this.first = this.getAttribute('first') ?? DEFAULT_OPTIONS.first;
-    this.second = this.getAttribute('second') ?? DEFAULT_OPTIONS.second;
+    this.before = this.getAttribute('before') ?? DEFAULT_OPTIONS.before;
+    this.after = this.getAttribute('after') ?? DEFAULT_OPTIONS.after;
+    this.width = this.getAttribute('width') ?? DEFAULT_OPTIONS.width;
+    this.height = this.getAttribute('height') ?? DEFAULT_OPTIONS.height;
     this.separator = JSON.parse(this.getAttribute('separator')) ?? DEFAULT_OPTIONS.separator;
 
     this.elements = {};
