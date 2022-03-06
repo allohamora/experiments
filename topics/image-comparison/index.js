@@ -72,23 +72,26 @@ class ImageComparison extends HTMLElement {
 
           transform: translate(-50%);
 
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
           height: 100%;
 
           touch-action: none;
         }
 
         .${LINE_CLASS} {
+          position: absolute;
+
           height: 100%;
           width: 10px;
-          margin: 0 auto;
+
           background-color: var(--separator-bg);
         }
 
         .${CIRCLE_CLASS} {
           position: relative;
-          top: -50%;
-          left: -50%;
-          transform: translate(50%, 50%);
           z-index: 3;
 
           border: 20px solid var(--separator-circle-outer-bg);
