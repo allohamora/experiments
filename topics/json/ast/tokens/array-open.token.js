@@ -6,9 +6,10 @@ export class ArrayOpenToken extends Token {
   static finder = new TokenFinder('\\[');
 
   astBuildHandler({ parent }) {
-    const newParent = new ArrayLeaf()
-    newParent.parent = parent;
-
+    const newParent = new ArrayLeaf(parent)
+    newParent.appendToTokens(this);
+    newParent.appendToRange(this.range[0]);
+    
     parent.appendToBody(newParent);
 
     return { parent: newParent };

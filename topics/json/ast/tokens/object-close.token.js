@@ -7,6 +7,9 @@ export class ObjectCloseToken extends Token {
 
   astBuildHandler({ parent, invalidTokenError }) {
     if( parent instanceof ObjectLeaf ) {
+      parent.appendToTokens(this);
+      parent.appendToRange(this.range[1]);
+
       return { parent: parent.parent };
     }
 

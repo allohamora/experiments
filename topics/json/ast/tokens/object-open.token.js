@@ -6,9 +6,10 @@ export class ObjectOpenToken extends Token {
   static finder = new TokenFinder('{');
 
   astBuildHandler({ parent }) {
-    const newParent = new ObjectLeaf()
-    newParent.parent = parent;
-
+    const newParent = new ObjectLeaf(parent);
+    newParent.appendToTokens(this);
+    newParent.appendToRange(this.range[0]);
+  
     parent.appendToBody(newParent);
 
     return { parent: newParent };

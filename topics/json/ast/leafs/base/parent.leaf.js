@@ -1,15 +1,33 @@
 import { Leaf } from "./leaf.js";
 
 export class ParentLeaf extends Leaf {
-  _body = [];
-  _parent;
+  constructor(parent = null) {
+    super();
+
+    this._body = [];
+    this._tokens = [];
+    this._range = [];
+    this._parent = parent;
+  }
+
+  get tokens() {
+    return this._tokens;
+  }
+
+  get range() {
+    return this.range;
+  }
 
   get parent() {
     return this._parent;
   }
 
-  set parent(parent) {
-    return this._parent = parent;
+  appendToRange(pos) {
+    this._range.push(pos);
+  }
+
+  appendToTokens(token) {
+    this._tokens.push(token);
   }
 
   appendToBody(leaf) {

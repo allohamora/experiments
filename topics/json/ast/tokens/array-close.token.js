@@ -7,6 +7,9 @@ export class ArrayCloseToken extends Token {
 
   astBuildHandler({ parent, invalidTokenError }) {
     if( parent instanceof ArrayLeaf ) {
+      parent.appendToTokens(this);
+      parent.appendToRange(this.range[1]);
+
       return { parent: parent.parent };
     }
 
