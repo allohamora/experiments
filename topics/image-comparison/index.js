@@ -12,6 +12,8 @@ const CIRCLE_CLASS = 'circe';
 const LINE_CLASS = 'line';
 
 class ImageComparison extends HTMLElement {
+  isInitialized = false;
+
   styles() {
     return `
       <style>
@@ -118,7 +120,7 @@ class ImageComparison extends HTMLElement {
     `;
   }
 
-  render() {
+  renderHtml() {
     this.target.innerHTML = `
       ${this.styles()}
 
@@ -137,12 +139,19 @@ class ImageComparison extends HTMLElement {
         </div>
       </div>
     `;
+  }
+
+  bindElements() {
+    this.elements = {};
+
+    this.elements.container = this.target.querySelector(`.${CONTAINER_CLASS}`);
+
+    this.elements.after = this.target.querySelector(`.${AFTER_CLASS}`);
+    this.elements.before = this.target.querySelector(`.${BEFORE_CLASS}`);
 
     this.elements.separator = this.target.querySelector(`.${SEPARATOR_CLASS}`);
-    this.elements.container = this.target.querySelector(`.${CONTAINER_CLASS}`);
-    this.elements.after = this.target.querySelector(`.${AFTER_CLASS}`);
-    this.elements.circle = this.target.querySelector(`.${CIRCLE_CLASS}`);
     this.elements.line = this.target.querySelector(`.${LINE_CLASS}`);
+    this.elements.circle = this.target.querySelector(`.${CIRCLE_CLASS}`);
   }
 
   handleImages(x) {
@@ -221,30 +230,71 @@ class ImageComparison extends HTMLElement {
     this.clickedCoords = null;
   }
 
-  initSeparatorHandlers() {
+  bindSeparatorHandlers() {
     const { separator } = this.elements;
-
-    separator.ondragstart = () => false;
 
     separator.addEventListener('pointerdown', this.separatorPointerDownHandler);
     separator.addEventListener('pointermove', this.separatorPointerMoveHandler);
     separator.addEventListener('pointerup', this.separatorPointerUpHandler);
-    separator.addEventListener('pointerleave', this.separatorPointerUpHandler)
+    separator.addEventListener('pointerleave', this.separatorPointerUpHandler);
   }
 
-  init() {
+  unBindSeparatorHandlers() {
+    const { separator } = this.elements;
+
+    separator.removeEventListener('pointerdown', this.separatorPointerDownHandler);
+    separator.removeEventListener('pointermove', this.separatorPointerMoveHandler);
+    separator.removeEventListener('pointerup', this.separatorPointerUpHandler);
+    separator.removeEventListener('pointerleave', this.separatorPointerUpHandler);
+  }
+
+  initAttributes() {
     this.before = this.getAttribute('before') ?? DEFAULT_BEFORE;
     this.after = this.getAttribute('after') ?? DEFAULT_AFTER;
+  }
 
-    this.elements = {};
+  initShadowDom() {
     this.target = this.attachShadow({ mode: 'open' });
   }
 
-  // entrypoint
+  render() {
+    this.initAttributes();
+    this.initShadowDom();
+
+    this.renderHtml();
+    this.bindElements();
+    this.bindSeparatorHandlers();
+
+    this.isInitialized = true;
+  }
+
+  changeImageSrc(target, src) {
+    const img = this.elements[target].querySelector('img');
+
+    img.setAttribute('src', src);
+  }
+
+  static get observedAttributes() {
+    return ['after', 'before'];
+  }
+
+  // on change element attribute
+  attributeChangedCallback(name, oldValue, newValue) {
+    if( this.isInitialized === false ) return;
+
+    switch (name) {
+      case 'after':
+      case 'before':
+        return this.changeImageSrc(name, newValue);
+      default:
+        console.warn(`invalid attribute changed: ${name}`);
+        break;
+    }
+  }
+
+  // on create element
   connectedCallback() {
-    this.init();
     this.render();
-    this.initSeparatorHandlers();
   }
 };
 
