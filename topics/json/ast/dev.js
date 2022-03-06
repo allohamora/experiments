@@ -1,4 +1,8 @@
+import { Ast } from './ast.js';
 import { Tokenizer } from './tokenizer.js';
+import { formatWithOptions } from 'node:util';
+
+const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
 const json = {
   obj: JSON.stringify({ str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } }),
@@ -6,9 +10,16 @@ const json = {
   string: JSON.stringify('string'),
   boolean: JSON.stringify(false),
   null: JSON.stringify(null),
+  invalidComma: '123,321',
+  invalidColon: '123:321'
 };
 
-const tokenizer = new Tokenizer();
-const tokens = tokenizer.parse(json.obj);
+const target = json.array;
 
-console.log(tokens);
+const tokenizer = new Tokenizer();
+const ast = new Ast();
+
+const tokens = tokenizer.parse(target);
+const astTree = ast.build(target, tokens);
+
+log(astTree);

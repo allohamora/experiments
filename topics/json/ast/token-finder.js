@@ -1,22 +1,6 @@
-export const Type = {
-  ObjectOpen: 'ObjectOpen',
-  ObjectClose: 'ObjectClose',
-  ArrayOpen: 'ArrayOpen',
-  ArrayClose: 'ArrayClose',
-  Comma: 'Comma',
-  Colon: 'Colon',
-  String: 'String',
-  Raw: 'Raw',
-};
-
-export class TokenType {
-  constructor(type, strRegexp) {
-    this._type = type,
+export class TokenFinder {
+  constructor(strRegexp) {
     this._regexp = this.compileRegexp(strRegexp);
-  }
-
-  get type() {
-    return this._type;
   }
 
   compileRegexp(strRegexp) {
@@ -43,4 +27,4 @@ export class TokenType {
 
     return match;
   }
-};
+}

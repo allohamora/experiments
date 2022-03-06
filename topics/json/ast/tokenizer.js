@@ -1,5 +1,4 @@
-import { tokenTypes } from './token-types.js';
-import { Token } from './token.js';
+import { tokens } from './tokens.js';
 
 export class Tokenizer {
   parse(json) {
@@ -12,11 +11,10 @@ export class Tokenizer {
         throw new Error(`invalid input on position: ${i}-${json.length}. raw: '${json.slice(i)}'`);
       }
 
-      const { tokenType, match } = finded;
+      const { token, match } = finded;
       const { value, range } = match;
-      const { type } = tokenType;
 
-      result.push(new Token(type, value, range));
+      result.push(new token(value, range));
 
       const [, lastIndex] = range;
       i = lastIndex - 1;
@@ -26,11 +24,11 @@ export class Tokenizer {
   }
 
   findTokenTypeMatch(body, pos) {
-    for(const tokenType of tokenTypes) {
-      const match = tokenType.matchByPos(body, pos);
+    for(const token of tokens) {
+      const match = token.finder.matchByPos(body, pos);
 
       if( match ) {
-        return { match, tokenType };
+        return { match, token };
       }
     }
 
