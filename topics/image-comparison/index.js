@@ -1,20 +1,5 @@
-const DEFAULT_OPTIONS = {
-  before: 'https://images.unsplash.com/photo-1558637845-c8b7ead71a3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-  after: 'https://images.unsplash.com/photo-1580757468214-c73f7062a5cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8MTYlM0E5fGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-  width: '1200px',
-  height: '600px',
-  separator: {
-    bg: '#2980b9',
-    circle: {
-      inner: {
-        bg: '#3498db'
-      },
-      outer: {
-        bg: '#ecf0f1'
-      }
-    }
-  }
-};
+const DEFAULT_BEFORE = 'https://i.imgur.com/d7FBNqi.jpg';
+const DEFAULT_AFTER = 'https://i.imgur.com/znzRHFd.jpg';
 
 const CONTAINER_CLASS = 'container';
 
@@ -34,13 +19,22 @@ class ImageComparison extends HTMLElement {
           box-sizing: border-box;
         }
 
+        :host {
+          --width: 1000px;
+          --height: 750px;
+
+          --separator-bg: #2980b9;
+          --separator-circle-inner-bg: #3498db;
+          --separator-circle-outer-bg: #ecf0f1;
+        }
+
         .${CONTAINER_CLASS} {
           position: relative;
 
           display: flex;
 
-          height: ${this.height};
-          width: ${this.width};
+          height: var(--height);
+          width: var(--width);
         }
 
         .${AFTER_CLASS}, .${BEFORE_CLASS} {
@@ -63,8 +57,8 @@ class ImageComparison extends HTMLElement {
         .${AFTER_CLASS} > img, .${BEFORE_CLASS} > img {
           display: block;
           
-          width: ${this.width};
-          height: ${this.height};
+          width: var(--width);
+          height: var(--height);
 
           object-fit: fill;
         }
@@ -87,7 +81,7 @@ class ImageComparison extends HTMLElement {
           height: 100%;
           width: 10px;
           margin: 0 auto;
-          background-color: ${this.separator.bg};
+          background-color: var(--separator-bg);
         }
 
         .${CIRCLE_CLASS} {
@@ -97,7 +91,7 @@ class ImageComparison extends HTMLElement {
           transform: translate(50%, 50%);
           z-index: 3;
 
-          border: 20px solid ${this.separator.circle.outer.bg};
+          border: 20px solid var(--separator-circle-outer-bg);
           border-radius: 50%;
         }
 
@@ -109,7 +103,7 @@ class ImageComparison extends HTMLElement {
           left: 50%;
           transform: translate(-50%, -50%);
 
-          border: 12px solid ${this.separator.circle.inner.bg};
+          border: 12px solid var(--separator-circle-inner-bg);
           border-radius: 50%;
         }
 
@@ -126,11 +120,11 @@ class ImageComparison extends HTMLElement {
       ${this.styles()}
 
       <div class="${CONTAINER_CLASS}">
-        <div class="${AFTER_CLASS}">
-          <img alt="before image" src="${this.before}">
+        <div class="${BEFORE_CLASS}">
+          <img alt="after image" src="${this.before}">
         </div>
 
-        <div class="${BEFORE_CLASS}">
+        <div class="${AFTER_CLASS}">
           <img alt="after image" src="${this.after}">
         </div>
 
@@ -236,11 +230,8 @@ class ImageComparison extends HTMLElement {
   }
 
   init() {
-    this.before = this.getAttribute('before') ?? DEFAULT_OPTIONS.before;
-    this.after = this.getAttribute('after') ?? DEFAULT_OPTIONS.after;
-    this.width = this.getAttribute('width') ?? DEFAULT_OPTIONS.width;
-    this.height = this.getAttribute('height') ?? DEFAULT_OPTIONS.height;
-    this.separator = JSON.parse(this.getAttribute('separator')) ?? DEFAULT_OPTIONS.separator;
+    this.before = this.getAttribute('before') ?? DEFAULT_BEFORE;
+    this.after = this.getAttribute('after') ?? DEFAULT_AFTER;
 
     this.elements = {};
     this.target = this.attachShadow({ mode: 'open' });
