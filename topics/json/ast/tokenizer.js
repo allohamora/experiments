@@ -1,6 +1,13 @@
 import { tokens } from './tokens.js';
+import { SpaceToken } from './tokens/space.token.js';
 
 export class Tokenizer {
+  blacklist = [SpaceToken];
+
+  isNotBlacklisted(token) {
+    return this.blacklist.some(tokenConstructor => token !== tokenConstructor);
+  }
+
   parse(json) {
     const result = [];
 
@@ -14,7 +21,9 @@ export class Tokenizer {
       const { token, match } = finded;
       const { value, range } = match;
 
-      result.push(new token(value, range));
+      if( this.isNotBlacklisted(token) ) {
+        result.push(new token(value, range)); 
+      }
 
       const [, lastIndex] = range;
       i = lastIndex - 1;
