@@ -1,4 +1,4 @@
-import { Token } from "./token.js";
+import { Token } from './token.js';
 
 export class CloseToken extends Token {
   get parentLeaf() {
@@ -6,7 +6,7 @@ export class CloseToken extends Token {
   }
 
   astBuildHandler({ parent, invalidTokenError }) {
-    if( parent instanceof this.parentLeaf ) {
+    if (parent instanceof this.parentLeaf) {
       parent.appendToTokens(this);
       parent.appendToRange(this.range[1]);
 

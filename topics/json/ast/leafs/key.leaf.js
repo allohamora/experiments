@@ -1,5 +1,3 @@
 import { TokenLeaf } from './base/token.leaf.js';
 
-export class KeyLeaf extends TokenLeaf {
-
-}
+export class KeyLeaf extends TokenLeaf {}

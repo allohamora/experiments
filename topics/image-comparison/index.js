@@ -170,15 +170,15 @@ class ImageComparison extends HTMLElement {
   }
 
   separatorPointerDownHandler = (event) => {
-    if( !event.target.classList.contains(DND_CLASS) ) return;
-    
+    if (!event.target.classList.contains(DND_CLASS)) return;
+
     const { separator } = this.elements;
 
     // bind all events with pointerId to separator
     separator.setPointerCapture(event.pointerId);
     this.clickedCoords = this.calculateClickedCoords(event);
     this.isDrag = true;
-  }
+  };
 
   calculateLineOffset() {
     const { line, separator } = this.elements;
@@ -203,11 +203,11 @@ class ImageComparison extends HTMLElement {
     const min = -half;
     const max = container.clientWidth - separator.clientWidth + half;
 
-    if( x <= min ) {
+    if (x <= min) {
       return min;
     }
 
-    if( x >= max ) {
+    if (x >= max) {
       return max;
     }
 
@@ -215,7 +215,7 @@ class ImageComparison extends HTMLElement {
   }
 
   separatorPointerMoveHandler = (event) => {
-    if( !this.isDrag ) return;
+    if (!this.isDrag) return;
     const { separator } = this.elements;
 
     const x = this.handleSeparatorMinAndMaxX(this.calculateSeparatorX(event));
@@ -223,12 +223,12 @@ class ImageComparison extends HTMLElement {
     separator.style.left = `${x}px`;
     separator.style.transform = 'translate(0, 0)';
     this.handleImages(x);
-  }
+  };
 
   separatorPointerUpHandler = () => {
     this.isDrag = false;
     this.clickedCoords = null;
-  }
+  };
 
   bindSeparatorHandlers() {
     const { separator } = this.elements;
@@ -280,7 +280,7 @@ class ImageComparison extends HTMLElement {
 
   // on change element attribute
   attributeChangedCallback(name, oldValue, newValue) {
-    if( this.isInitialized === false ) return;
+    if (this.isInitialized === false) return;
 
     switch (name) {
       case 'after':
@@ -296,6 +296,6 @@ class ImageComparison extends HTMLElement {
   connectedCallback() {
     this.render();
   }
-};
+}
 
-customElements.define('image-comparison', ImageComparison)
+customElements.define('image-comparison', ImageComparison);

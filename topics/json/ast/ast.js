@@ -1,4 +1,4 @@
-import { FileLeaf } from "./leafs/file.leaf.js";
+import { FileLeaf } from './leafs/file.leaf.js';
 import { SyntaxError } from './syntax.error.js';
 
 export class Ast {
@@ -7,8 +7,8 @@ export class Ast {
   }
 
   build(source, tokens, pos = 0, parent = new FileLeaf(source), onEndHandlers = []) {
-    if( pos === tokens.length ) {
-      onEndHandlers.forEach(handler => handler());
+    if (pos === tokens.length) {
+      onEndHandlers.forEach((handler) => handler());
 
       return parent;
     }
@@ -17,7 +17,17 @@ export class Ast {
     const prev = tokens[pos - 1];
     const next = tokens[pos + 1];
 
-    const context = { source, tokens, pos, parent, curr, prev, next, onEnd: (fn) => onEndHandlers.push(fn), invalidTokenError: (range = curr.range) => this.invalidTokenError(range, source) };
+    const context = {
+      source,
+      tokens,
+      pos,
+      parent,
+      curr,
+      prev,
+      next,
+      onEnd: (fn) => onEndHandlers.push(fn),
+      invalidTokenError: (range = curr.range) => this.invalidTokenError(range, source),
+    };
 
     const contextMutations = curr.astBuildHandler(context);
     const afterRunCtx = { ...context, pos: pos + 1, ...contextMutations };

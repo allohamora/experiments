@@ -1,8 +1,8 @@
-import { ArrayLeaf } from "./leafs/array.leaf.js";
-import { FileLeaf } from "./leafs/file.leaf.js";
-import { KeyLeaf } from "./leafs/key.leaf.js";
-import { ObjectLeaf } from "./leafs/object.leaf.js";
-import { ValueLeaf } from "./leafs/value.leaf.js";
+import { ArrayLeaf } from './leafs/array.leaf.js';
+import { FileLeaf } from './leafs/file.leaf.js';
+import { KeyLeaf } from './leafs/key.leaf.js';
+import { ObjectLeaf } from './leafs/object.leaf.js';
+import { ValueLeaf } from './leafs/value.leaf.js';
 import { debuglog } from 'node:util';
 
 const debug = debuglog('json:parser');
@@ -13,10 +13,10 @@ export class Parser {
   }
 
   set reviver(reviver) {
-    return this._reviver = reviver;
+    return (this._reviver = reviver);
   }
 
-  parse(leaf) {    
+  parse(leaf) {
     switch (true) {
       case leaf instanceof FileLeaf:
         return this.parseFile(leaf);
@@ -40,7 +40,7 @@ export class Parser {
   parseObject(objectLeaf) {
     const state = {};
 
-    for ( let i = 0; i < objectLeaf.body.length; i+=2 ) {
+    for (let i = 0; i < objectLeaf.body.length; i += 2) {
       const curr = objectLeaf.body[i];
       const next = objectLeaf.body[i + 1];
 
@@ -92,7 +92,7 @@ export class Parser {
   }
 
   handleReviver(key, value) {
-    if( this._reviver ) {
+    if (this._reviver) {
       return this._reviver(key, value);
     }
 

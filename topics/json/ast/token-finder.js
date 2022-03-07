@@ -10,7 +10,7 @@ export class TokenFinder {
   match(body) {
     const match = this._regexp.exec(body);
 
-    if( match === null ) {
+    if (match === null) {
       return match;
     }
 

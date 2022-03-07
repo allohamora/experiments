@@ -1,7 +1,7 @@
-import { ArrayLeaf } from "../leafs/array.leaf.js";
-import { ObjectLeaf } from "../leafs/object.leaf.js";
-import { TokenFinder } from "../token-finder.js";
-import { Token } from "./base/token.js";
+import { ArrayLeaf } from '../leafs/array.leaf.js';
+import { ObjectLeaf } from '../leafs/object.leaf.js';
+import { TokenFinder } from '../token-finder.js';
+import { Token } from './base/token.js';
 import { ArrayCloseToken } from './array-close.token.js';
 import { ArrayOpenToken } from './array-open.token.js';
 import { ObjectCloseToken } from './object-close.token.js';
@@ -17,13 +17,13 @@ export class CommaToken extends Token {
 
   astBuildHandler({ parent, invalidTokenError, prev, next }) {
     const isParentSupportsComma = parent instanceof ArrayLeaf || parent instanceof ObjectLeaf;
-    if( !isParentSupportsComma ) {
+    if (!isParentSupportsComma) {
       throw invalidTokenError();
     }
 
-    const isNextSupported = this.supportedNext.some(constructor => next instanceof constructor);
-    const isPrevSupported = this.supportedPrev.some(constructor => prev instanceof constructor);
-    if( !isNextSupported || !isPrevSupported ) {
+    const isNextSupported = this.supportedNext.some((constructor) => next instanceof constructor);
+    const isPrevSupported = this.supportedPrev.some((constructor) => prev instanceof constructor);
+    if (!isNextSupported || !isPrevSupported) {
       throw invalidTokenError();
     }
   }

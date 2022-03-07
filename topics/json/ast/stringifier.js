@@ -4,7 +4,7 @@ export class Stringifier {
   }
 
   set space(space) {
-    return this._space = space;
+    return (this._space = space);
   }
 
   get replacer() {
@@ -12,7 +12,7 @@ export class Stringifier {
   }
 
   set replacer(replacer) {
-    return this._replacer = replacer
+    return (this._replacer = replacer);
   }
 
   stringify(value) {
@@ -39,7 +39,7 @@ export class Stringifier {
   stringifyObject(object, depth) {
     const tokens = [];
 
-    for ( const [key, value] of Object.entries(object) ) {
+    for (const [key, value] of Object.entries(object)) {
       const handledKey = this.handleStringify(key, 0);
 
       const afterReplacer = this.handleReplacer(key, value);
@@ -60,7 +60,7 @@ export class Stringifier {
   stringifyArray(array, depth) {
     const tokens = [];
 
-    for ( let i = 0; i < array.length; i++ ) {
+    for (let i = 0; i < array.length; i++) {
       const value = array[i];
 
       const afterReplacer = this.handleReplacer(i.toString(), value);
@@ -89,7 +89,7 @@ export class Stringifier {
   }
 
   handleReplacer(key, value) {
-    if( this._replacer ) {
+    if (this._replacer) {
       return this._replacer(key, value);
     }
 
@@ -101,7 +101,7 @@ export class Stringifier {
   }
 
   handleSpace(depth) {
-    if( this._space ) {
+    if (this._space) {
       return ' '.repeat(this._space * depth);
     }
 

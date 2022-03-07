@@ -6,24 +6,24 @@ export class Tokenizer {
   blacklist = [SpaceToken];
 
   isNotBlacklisted(token) {
-    return this.blacklist.some(tokenConstructor => token !== tokenConstructor);
+    return this.blacklist.some((tokenConstructor) => token !== tokenConstructor);
   }
 
   parse(json) {
     const result = [];
 
-    for( let i = 0; i < json.length; i++ ) {
+    for (let i = 0; i < json.length; i++) {
       const finded = this.findTokenTypeMatch(json, i);
 
-      if( finded === null ) {
+      if (finded === null) {
         throw new SyntaxError([i, json.length], json);
       }
 
       const { token, match } = finded;
       const { value, range } = match;
 
-      if( this.isNotBlacklisted(token) ) {
-        result.push(new token(value, range)); 
+      if (this.isNotBlacklisted(token)) {
+        result.push(new token(value, range));
       }
 
       const [, lastIndex] = range;
@@ -34,10 +34,10 @@ export class Tokenizer {
   }
 
   findTokenTypeMatch(body, pos) {
-    for(const token of tokens) {
+    for (const token of tokens) {
       const match = token.finder.matchByPos(body, pos);
 
-      if( match ) {
+      if (match) {
         return { match, token };
       }
     }

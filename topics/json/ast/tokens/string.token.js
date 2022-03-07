@@ -1,5 +1,5 @@
-import { TokenFinder } from "../token-finder.js";
-import { Token } from "./base/token.js";
+import { TokenFinder } from '../token-finder.js';
+import { Token } from './base/token.js';
 import { ColonToken } from './colon.token.js';
 import { ObjectLeaf } from '../leafs/object.leaf.js';
 import { KeyLeaf } from '../leafs/key.leaf.js';
@@ -11,7 +11,7 @@ export class StringToken extends Token {
   astBuildHandler({ parent, next }) {
     let leaf;
 
-    if(parent instanceof ObjectLeaf && next instanceof ColonToken) {
+    if (parent instanceof ObjectLeaf && next instanceof ColonToken) {
       leaf = new KeyLeaf(this);
     } else {
       leaf = new ValueLeaf(this);

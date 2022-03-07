@@ -1,4 +1,4 @@
-import { Leaf } from "./leaf.js";
+import { Leaf } from './leaf.js';
 
 export class ParentLeaf extends Leaf {
   constructor(parent = null) {

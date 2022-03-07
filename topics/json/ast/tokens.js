@@ -3,7 +3,7 @@ import { ArrayOpenToken } from './tokens/array-open.token.js';
 import { ColonToken } from './tokens/colon.token.js';
 import { CommaToken } from './tokens/comma.token.js';
 import { ObjectCloseToken } from './tokens/object-close.token.js';
-import { ObjectOpenToken } from './tokens/object-open.token.js'
+import { ObjectOpenToken } from './tokens/object-open.token.js';
 import { RawToken } from './tokens/raw.token.js';
 import { SpaceToken } from './tokens/space.token.js';
 import { StringToken } from './tokens/string.token.js';
@@ -17,5 +17,5 @@ export const tokens = [
   ObjectOpenToken,
   RawToken,
   StringToken,
-  SpaceToken
+  SpaceToken,
 ];

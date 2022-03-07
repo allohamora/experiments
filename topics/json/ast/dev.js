@@ -8,8 +8,8 @@ import { manyPerformaneTest, performanceTest, averageFirst } from '../../../util
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
 const stringifyValid = (data, depth = 0) => {
-  if( depth === 2 ) {
-    return JSON.stringify(data, null, Math.random() > .5 ? 2 : undefined);
+  if (depth === 2) {
+    return JSON.stringify(data, null, Math.random() > 0.5 ? 2 : undefined);
   }
 
   return Object.entries(data).reduce((state, [key, value]) => {
@@ -17,29 +17,29 @@ const stringifyValid = (data, depth = 0) => {
 
     return state;
   }, {});
-}
+};
 
 const forStringify = {
   valid: {
     object: {
-      default: { str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } }
+      default: { str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } },
     },
     array: {
-      default: ['b', 2, true, null, { key: 'value' }, [1]]
+      default: ['b', 2, true, null, { key: 'value' }, [1]],
     },
     string: {
-      default: 'string'
+      default: 'string',
     },
     boolean: {
       default: false,
       true: true,
-      false: false
+      false: false,
     },
     null: {
-      default: null
-    }
-  }
-}
+      default: null,
+    },
+  },
+};
 
 const forParse = {
   valid: stringifyValid(forStringify.valid),
@@ -47,12 +47,12 @@ const forParse = {
     comma: {
       default: '123,321',
       object: '{"key":"value",}',
-      array: '["value",]'
+      array: '["value",]',
     },
     colon: {
       default: '123:321',
       object: '{key:"value"}',
-      array: '["key":"value"]'
+      array: '["key":"value"]',
     },
     object: {
       default: '{"key":"value"',
@@ -62,10 +62,10 @@ const forParse = {
     array: {
       default: '["value"',
       inner: '["value", []',
-      open: ']'
-    }
-  }
-}
+      open: ']',
+    },
+  },
+};
 
 const MANY_DEFAULT_OPTIONS = { runCount: 100, averageResult: averageFirst };
 
@@ -77,17 +77,16 @@ const parseTest = async () => {
     const tokenizer = new Tokenizer();
     const ast = new Ast();
     const parser = new Parser();
-  
+
     parser.reviver = reviver;
-  
+
     const tokens = tokenizer.parse(target);
     const astTree = ast.build(target, tokens);
 
     return parser.parse(astTree);
-  }
+  };
 
   const JSONWay = () => JSON.parse(target, reviver);
-
 
   const singleAst = await performanceTest(astWay);
   const singleJSON = await performanceTest(JSONWay);
@@ -96,7 +95,7 @@ const parseTest = async () => {
   const manyJSON = await manyPerformaneTest({ ...MANY_DEFAULT_OPTIONS, target: JSONWay });
 
   log({ singleAst, singleJSON, manyAst, manyJSON });
-}
+};
 
 const stringifyTest = async () => {
   const target = forStringify.valid.object.default;
@@ -125,6 +124,6 @@ const stringifyTest = async () => {
 const main = async () => {
   await parseTest();
   await stringifyTest();
-}
+};
 
 main();

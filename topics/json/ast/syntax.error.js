@@ -15,7 +15,7 @@ export class SyntaxError extends Error {
   createMessage() {
     const rangeDiff = this.#range[1] - this.#range[0];
 
-    if( rangeDiff < 2 ) {
+    if (rangeDiff < 2) {
       return this.createTokenMessage();
     } else {
       return this.createRangeMessage();
@@ -28,7 +28,7 @@ export class SyntaxError extends Error {
     return `unexpected token on position: ${index}
 '${this.#source}'
  ${' '.repeat(index)}^
-`
+`;
   }
 
   createRangeMessage() {
