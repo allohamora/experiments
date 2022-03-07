@@ -1,58 +1,79 @@
 export class Stringifier {
+  get space() {
+    return this._space;
+  }
+
+  set space(space) {
+    return this._space = space;
+  }
+
   get replacer() {
     return this._replacer;
   }
 
   set replacer(replacer) {
-    this._replacer = replacer
+    return this._replacer = replacer
   }
 
   stringify(value) {
     return this.handleStringify(this.handleValueReplacer(value));
   }
 
-  handleStringify(value) {
+  handleStringify(value, depth = 1) {
     switch (true) {
-      case this.isObject(value):
-        return this.stringifyObject(value);
-      case Array.isArray(value):
-        return this.stringifyArray(value);
+      case this.isObject(value, depth):
+        return this.stringifyObject(value, depth);
+      case Array.isArray(value, depth):
+        return this.stringifyArray(value, depth);
       case typeof value === 'string':
-        return this.stringifyString(value);
+        return this.stringifyString(value, depth);
       case typeof value === 'number':
       case typeof value === 'boolean':
       case value === null:
-        return this.stringifyRaw(value);
+        return this.stringifyRaw(value, depth);
       default:
         throw new Error(`invalid value: ${value}`);
     }
   }
 
-  stringifyObject(object) {
+  stringifyObject(object, depth) {
     const tokens = [];
 
     for ( const [key, value] of Object.entries(object) ) {
-      const afterReplacer = this.handleReplacer(key, value);
+      const handledKey = this.handleStringify(key, 0);
 
-      tokens.push(`${this.handleStringify(key)}:${this.handleStringify(afterReplacer)}`);
+      const afterReplacer = this.handleReplacer(key, value);
+      const handledValue = this.handleStringify(afterReplacer, depth + 1);
+
+      const space = this._space ? ' ' : '';
+      const after = this.handleSpace(depth);
+
+      tokens.push(`${after}${handledKey}:${space}${handledValue}`);
     }
 
-    return `{${tokens.join(',')}}`;
+    const newLine = this._space ? '\n' : '';
+    const after = this.handleSpace(depth - 1);
+
+    return `{${newLine}${tokens.join(`,${newLine}`)}${newLine}${after}}`;
   }
 
-  stringifyArray(array) {
+  stringifyArray(array, depth) {
     const tokens = [];
 
     for ( let i = 0; i < array.length; i++ ) {
       const value = array[i];
 
       const afterReplacer = this.handleReplacer(i.toString(), value);
-      const afterStringify = this.handleStringify(afterReplacer);
+      const afterStringify = this.handleStringify(afterReplacer, depth + 1);
+      const after = this.handleSpace(depth);
 
-      tokens.push(afterStringify);
+      tokens.push(`${after}${afterStringify}`);
     }
 
-    return `[${tokens.join(',')}]`;
+    const newLine = this._space ? '\n' : '';
+    const after = this.handleSpace(depth - 1);
+
+    return `[${newLine}${tokens.join(`,${newLine}`)}${newLine}${after}]`;
   }
 
   stringifyString(string) {
@@ -77,5 +98,13 @@ export class Stringifier {
 
   handleValueReplacer(value) {
     return this.handleReplacer('', value);
+  }
+
+  handleSpace(depth) {
+    if( this._space ) {
+      return ' '.repeat(this._space * depth);
+    }
+
+    return '';
   }
 }

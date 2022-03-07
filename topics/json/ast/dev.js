@@ -86,16 +86,17 @@ const parse = () => {
 }
 
 const stringify = () => {
-  const target = forStringify.valid.array.default;
+  const target = forStringify.valid.object.default;
   const replacer = (key, value) => value;
+  const space = 0;
 
   const stringifier = new Stringifier();
   stringifier.replacer = replacer;
+  stringifier.space = space;
 
+  const isEqual = stringifier.stringify(target) === JSON.stringify(target, replacer, space);
 
-  const isEqual = stringifier.stringify(target) === JSON.stringify(target, replacer);
-
-  console.log({ isEqual });
+  console.log({ isEqual, a: stringifier.stringify(target), b: JSON.stringify(target, replacer, space) });
 }
 
 const main = () => {
