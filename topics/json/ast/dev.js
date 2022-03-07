@@ -96,7 +96,7 @@ const stringify = () => {
 
   const isEqual = stringifier.stringify(target) === JSON.stringify(target, replacer, space);
 
-  console.log({ isEqual, a: stringifier.stringify(target), b: JSON.stringify(target, replacer, space) });
+  console.log({ isEqual });
 }
 
 const main = () => {
