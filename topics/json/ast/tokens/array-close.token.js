@@ -1,18 +1,8 @@
 import { TokenFinder } from "../token-finder.js";
-import { Token } from "./token.js";
 import { ArrayLeaf } from '../leafs/array.leaf.js';
+import { CloseToken } from './base/close.token.js';
 
-export class ArrayCloseToken extends Token {
+export class ArrayCloseToken extends CloseToken {
   static finder = new TokenFinder('\\]');
-
-  astBuildHandler({ parent, invalidTokenError }) {
-    if( parent instanceof ArrayLeaf ) {
-      parent.appendToTokens(this);
-      parent.appendToRange(this.range[1]);
-
-      return { parent: parent.parent };
-    }
-
-    throw invalidTokenError();
-  }
+  static parentLeaf = ArrayLeaf;
 }

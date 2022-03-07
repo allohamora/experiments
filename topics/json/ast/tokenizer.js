@@ -1,3 +1,4 @@
+import { SyntaxError } from './syntax.error.js';
 import { tokens } from './tokens.js';
 import { SpaceToken } from './tokens/space.token.js';
 
@@ -15,7 +16,7 @@ export class Tokenizer {
       const finded = this.findTokenTypeMatch(json, i);
 
       if( finded === null ) {
-        throw new Error(`invalid input on position: ${i}-${json.length}. raw: '${json.slice(i)}'`);
+        throw new SyntaxError([i, json.length], json);
       }
 
       const { token, match } = finded;

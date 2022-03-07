@@ -20,7 +20,7 @@ export class Token {
     return this._range;
   }
 
-  astBuildHandler({ tokens, pos, parent, curr, prev, next }) {
+  astBuildHandler({ tokens, pos, parent, curr, prev, next, onEnd, invalidTokenError }) {
     throw new Error(`astBuildHandler not implemented in ${this.type}`);
   }
 }

@@ -1,7 +1,7 @@
 import { ArrayLeaf } from "../leafs/array.leaf.js";
 import { ObjectLeaf } from "../leafs/object.leaf.js";
 import { TokenFinder } from "../token-finder.js";
-import { Token } from "./token.js";
+import { Token } from "./base/token.js";
 import { ArrayCloseToken } from './array-close.token.js';
 import { ArrayOpenToken } from './array-open.token.js';
 import { ObjectCloseToken } from './object-close.token.js';

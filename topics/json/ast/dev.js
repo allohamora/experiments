@@ -4,17 +4,44 @@ import { formatWithOptions } from 'node:util';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
-const json = {
-  obj: JSON.stringify({ str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } }),
-  array: JSON.stringify(['b', 2, true, null, { key: 'value' }, [1]], null, 2),
-  string: JSON.stringify('string'),
-  boolean: JSON.stringify(false),
-  null: JSON.stringify(null),
-  invalidComma: '123,321',
-  invalidColon: '123:321'
+const valid = {
+  object: {
+    default: JSON.stringify({ str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } }),
+  },
+  array: {
+    default: JSON.stringify(['b', 2, true, null, { key: 'value' }, [1]], null, 2),
+  },
+  string: {
+    default:  JSON.stringify('string'),
+  },
+  boolean: {
+    default: JSON.stringify(false),
+  },
+  null: {
+    default: JSON.stringify(null)
+  }
 };
 
-const target = json.array;
+const invalid = {
+  comma: {
+    default: '123,321',
+    object: '{"key":"value",}',
+    array: '["value",]'
+  },
+  colon: {
+    default: '123:321',
+    object: '{key:"value"}',
+    array: '["key":"value"]'
+  },
+  object: {
+    default: '{"key":"value","obj":{}',
+  },
+  array: {
+    default: '["value"',
+  }
+}
+
+const target = valid.object.default;
 
 const tokenizer = new Tokenizer();
 const ast = new Ast();

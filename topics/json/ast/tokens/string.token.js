@@ -1,5 +1,5 @@
 import { TokenFinder } from "../token-finder.js";
-import { Token } from "./token.js";
+import { Token } from "./base/token.js";
 import { ColonToken } from './colon.token.js';
 import { ObjectLeaf } from '../leafs/object.leaf.js';
 import { KeyLeaf } from '../leafs/key.leaf.js';
