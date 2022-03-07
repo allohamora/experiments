@@ -8,6 +8,14 @@ import { debuglog } from 'node:util';
 const debug = debuglog('json:parser');
 
 export class Parser {
+  get reviver() {
+    return this._reviver;
+  }
+
+  set reviver(reviver) {
+    return this._reviver = reviver;
+  }
+
   parse(leaf) {    
     switch (true) {
       case leaf instanceof FileLeaf:
@@ -26,7 +34,7 @@ export class Parser {
   }
 
   parseFile(fileLeaf) {
-    return this.parse(fileLeaf.body[0]);
+    return this.handleValueReviver(this.parse(fileLeaf.body[0]));
   }
 
   parseObject(objectLeaf) {
@@ -39,15 +47,15 @@ export class Parser {
       const key = this.parse(curr);
       const value = this.parse(next);
 
-      state[key] = value;
+      state[key] = this.handleReviver(key, value);
     }
 
     return state;
   }
 
   parseArray(arrayLeaf) {
-    return arrayLeaf.body.reduce((state, curr) => {
-      state.push(this.parse(curr));
+    return arrayLeaf.body.reduce((state, curr, i) => {
+      state.push(this.handleReviver(i.toString(), this.parse(curr)));
 
       return state;
     }, []);
@@ -81,5 +89,17 @@ export class Parser {
 
   parseString(string) {
     return string.replace(/^"(.+)"$/, '$1');
+  }
+
+  handleReviver(key, value) {
+    if( this._reviver ) {
+      return this._reviver(key, value);
+    }
+
+    return value;
+  }
+
+  handleValueReviver(value) {
+    return this.handleReviver('', value);
   }
 }

@@ -5,6 +5,10 @@ import { Parser } from './parser.js';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
+const isEqual = (json, parser) => {
+  return JSON.stringify(json) === JSON.stringify(parser);
+}
+
 const valid = {
   object: {
     default: JSON.stringify({ str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } }),
@@ -44,14 +48,21 @@ const invalid = {
   }
 }
 
-const target = valid.object.default;
+const main = () => {
+  const target = valid.object.default;
+  const reviver = (key, value) => value;
 
-const tokenizer = new Tokenizer();
-const ast = new Ast();
-const parser = new Parser();
+  const tokenizer = new Tokenizer();
+  const ast = new Ast();
+  const parser = new Parser();
 
-const tokens = tokenizer.parse(target);
-const astTree = ast.build(target, tokens);
-const parsed = parser.parse(astTree);
+  parser.reviver = reviver;
 
-log(parsed);
+  const tokens = tokenizer.parse(target);
+  const astTree = ast.build(target, tokens);
+  const parsed = parser.parse(astTree);
+
+  console.log(`isEqual: ${isEqual(JSON.parse(target, reviver), parsed)}`);
+}
+
+main();
