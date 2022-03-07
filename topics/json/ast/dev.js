@@ -34,10 +34,12 @@ const invalid = {
     array: '["key":"value"]'
   },
   object: {
-    default: '{"key":"value","obj":{}',
+    default: '{"key":"value"',
+    inner: '{"key": {}',
   },
   array: {
     default: '["value"',
+    inner: '["value", []'
   }
 }
 
