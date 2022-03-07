@@ -1,5 +1,17 @@
 export class Stringifier {
+  get replacer() {
+    return this._replacer;
+  }
+
+  set replacer(replacer) {
+    this._replacer = replacer
+  }
+
   stringify(value) {
+    return this.handleStringify(this.handleValueReplacer(value));
+  }
+
+  handleStringify(value) {
     switch (true) {
       case this.isObject(value):
         return this.stringifyObject(value);
@@ -20,7 +32,9 @@ export class Stringifier {
     const tokens = [];
 
     for ( const [key, value] of Object.entries(object) ) {
-      tokens.push(`${this.stringify(key)}:${this.stringify(value)}`);
+      const afterReplacer = this.handleReplacer(key, value);
+
+      tokens.push(`${this.handleStringify(key)}:${this.handleStringify(afterReplacer)}`);
     }
 
     return `{${tokens.join(',')}}`;
@@ -29,8 +43,13 @@ export class Stringifier {
   stringifyArray(array) {
     const tokens = [];
 
-    for ( const value of array ) {
-      tokens.push(this.stringify(value));
+    for ( let i = 0; i < array.length; i++ ) {
+      const value = array[i];
+
+      const afterReplacer = this.handleReplacer(i.toString(), value);
+      const afterStringify = this.handleStringify(afterReplacer);
+
+      tokens.push(afterStringify);
     }
 
     return `[${tokens.join(',')}]`;
@@ -46,5 +65,17 @@ export class Stringifier {
 
   isObject(value) {
     return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+
+  handleReplacer(key, value) {
+    if( this._replacer ) {
+      return this._replacer(key, value);
+    }
+
+    return value;
+  }
+
+  handleValueReplacer(value) {
+    return this.handleReplacer('', value);
   }
 }

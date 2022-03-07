@@ -6,8 +6,8 @@ import { Stringifier } from './stringifier.js';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
-const isEqual = (json, parser) => {
-  return JSON.stringify(json) === JSON.stringify(parser);
+const isObjectsEqual = (a, b) => {
+  return JSON.stringify(a) === JSON.stringify(b);
 }
 
 const stringifyValid = (data, depth = 0) => {
@@ -82,14 +82,20 @@ const parse = () => {
   const astTree = ast.build(target, tokens);
   const parsed = parser.parse(astTree);
 
-  console.log(`isEqual: ${isEqual(JSON.parse(target, reviver), parsed)}`);
+  console.log({ isEqual: isObjectsEqual(JSON.parse(target, reviver), parsed) });
 }
 
 const stringify = () => {
-  const target = forStringify.valid.object.default;
-  const stringifier = new Stringifier();
+  const target = forStringify.valid.array.default;
+  const replacer = (key, value) => value;
 
-  console.log(stringifier.stringify(target));
+  const stringifier = new Stringifier();
+  stringifier.replacer = replacer;
+
+
+  const isEqual = stringifier.stringify(target) === JSON.stringify(target, replacer);
+
+  console.log({ isEqual });
 }
 
 const main = () => {
