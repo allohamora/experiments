@@ -3,7 +3,7 @@ import { Tokenizer } from './tokenizer.js';
 import { formatWithOptions } from 'node:util';
 import { Parser } from './parser.js';
 import { Stringifier } from './stringifier.js';
-import { manyPerformaneTest, performanceTest, firstElement } from '../../../utils/performance.mjs';
+import { manyPerformaneTest, performanceTest, averageFirst } from '../../../utils/performance.mjs';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
@@ -65,7 +65,7 @@ const forParse = {
   }
 }
 
-const MANY_DEFAULT_OPTIONS = { runCount: 100, averageResult: firstElement };
+const MANY_DEFAULT_OPTIONS = { runCount: 100, averageResult: averageFirst };
 
 const parseTest = async () => {
   const target = forParse.valid.object.default;
