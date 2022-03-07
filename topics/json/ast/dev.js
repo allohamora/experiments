@@ -57,10 +57,12 @@ const forParse = {
     object: {
       default: '{"key":"value"',
       inner: '{"key": {}',
+      open: '}',
     },
     array: {
       default: '["value"',
-      inner: '["value", []'
+      inner: '["value", []',
+      open: ']'
     }
   }
 }
