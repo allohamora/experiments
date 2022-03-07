@@ -10,6 +10,10 @@ export class ParentLeaf extends Leaf {
     this._parent = parent;
   }
 
+  get body() {
+    return this._body;
+  }
+
   get tokens() {
     return this._tokens;
   }

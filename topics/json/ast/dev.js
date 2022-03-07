@@ -1,6 +1,7 @@
 import { Ast } from './ast.js';
 import { Tokenizer } from './tokenizer.js';
 import { formatWithOptions } from 'node:util';
+import { Parser } from './parser.js';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
 
@@ -47,8 +48,10 @@ const target = valid.object.default;
 
 const tokenizer = new Tokenizer();
 const ast = new Ast();
+const parser = new Parser();
 
 const tokens = tokenizer.parse(target);
 const astTree = ast.build(target, tokens);
+const parsed = parser.parse(astTree);
 
-log(astTree);
+log(parsed);
