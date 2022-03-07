@@ -36,8 +36,8 @@ export class SyntaxError extends Error {
     const slice = this.#source.slice(this.#range[0], this.#range[1]);
 
     return `unexpected input on range: ${range}
-${slice}
-${'-'.repeat(slice.length)}
+'${slice}'
+ ${'-'.repeat(slice.length)}
 `;
   }
 }
