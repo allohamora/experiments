@@ -3,12 +3,9 @@ import { Tokenizer } from './tokenizer.js';
 import { formatWithOptions } from 'node:util';
 import { Parser } from './parser.js';
 import { Stringifier } from './stringifier.js';
+import { manyPerformaneTest, performanceTest, firstElement } from '../../../utils/performance.mjs';
 
 const log = (data) => console.log(formatWithOptions({ depth: Infinity }, data));
-
-const isObjectsEqual = (a, b) => {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
 
 const stringifyValid = (data, depth = 0) => {
   if( depth === 2 ) {
@@ -68,39 +65,64 @@ const forParse = {
   }
 }
 
-const parse = () => {
+const MANY_DEFAULT_OPTIONS = { runCount: 100, averageResult: firstElement };
+
+const parseTest = async () => {
   const target = forParse.valid.object.default;
   const reviver = (key, value) => value;
 
-  const tokenizer = new Tokenizer();
-  const ast = new Ast();
-  const parser = new Parser();
+  const astWay = () => {
+    const tokenizer = new Tokenizer();
+    const ast = new Ast();
+    const parser = new Parser();
+  
+    parser.reviver = reviver;
+  
+    const tokens = tokenizer.parse(target);
+    const astTree = ast.build(target, tokens);
 
-  parser.reviver = reviver;
+    return parser.parse(astTree);
+  }
 
-  const tokens = tokenizer.parse(target);
-  const astTree = ast.build(target, tokens);
-  const parsed = parser.parse(astTree);
+  const JSONWay = () => JSON.parse(target, reviver);
 
-  console.log({ isEqual: isObjectsEqual(JSON.parse(target, reviver), parsed) });
+
+  const singleAst = await performanceTest(astWay);
+  const singleJSON = await performanceTest(JSONWay);
+
+  const manyAst = await manyPerformaneTest({ ...MANY_DEFAULT_OPTIONS, target: astWay });
+  const manyJSON = await manyPerformaneTest({ ...MANY_DEFAULT_OPTIONS, target: JSONWay });
+
+  log({ singleAst, singleJSON, manyAst, manyJSON });
 }
 
-const stringify = () => {
+const stringifyTest = async () => {
   const target = forStringify.valid.object.default;
   const replacer = (key, value) => value;
-  const space = 0;
+  const space = 2;
 
-  const stringifier = new Stringifier();
-  stringifier.replacer = replacer;
-  stringifier.space = space;
+  const myWay = () => {
+    const stringifier = new Stringifier();
+    stringifier.replacer = replacer;
+    stringifier.space = space;
 
-  const isEqual = stringifier.stringify(target) === JSON.stringify(target, replacer, space);
+    return stringifier.stringify(target, replacer, space);
+  };
 
-  console.log({ isEqual });
-}
+  const JSONWay = () => JSON.stringify(target, replacer, space);
 
-const main = () => {
-  stringify();
+  const singleMy = await performanceTest(myWay);
+  const singleJSON = await performanceTest(JSONWay);
+
+  const multipleMy = await manyPerformaneTest({ ...MANY_DEFAULT_OPTIONS, target: myWay });
+  const multipleJSON = await manyPerformaneTest({ ...MANY_DEFAULT_OPTIONS, target: JSONWay });
+
+  log({ singleMy, singleJSON, multipleMy, multipleJSON });
+};
+
+const main = async () => {
+  await parseTest();
+  await stringifyTest();
 }
 
 main();
