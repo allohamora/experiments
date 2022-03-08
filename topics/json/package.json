@@ -5,7 +5,9 @@
   "main": "ast/index.js",
   "scripts": {
     "start": "node ast/index.js",
-    "dev": "nodemon ast/index.js"
+    "dev": "nodemon ast/index.js",
+    "start:parsers": "node parsers.js",
+    "dev:parsers": "nodemon parsers.js"
   },
   "dependencies": {
     "nodemon": "^2.0.15"
