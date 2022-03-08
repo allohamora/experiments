@@ -2,9 +2,10 @@
   "name": "json.topic",
   "private": true,
   "type": "module",
+  "main": "ast/index.js",
   "scripts": {
-    "start": "node index.js",
-    "ast:dev": "nodemon ast/dev.js"
+    "start": "node ast/index.js",
+    "dev": "nodemon ast/index.js"
   },
   "dependencies": {
     "nodemon": "^2.0.15"
