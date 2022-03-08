@@ -22,7 +22,16 @@ const stringifyValid = (data, depth = 0) => {
 const forStringify = {
   valid: {
     object: {
-      default: { str: 'str', num: 1, bool: false, null: null, arr: [1, 2, 3], obj: { key: 'value' } },
+      default: {
+        str: 'str',
+        num: 1,
+        bool: false,
+        null: null,
+        arr: [1, 2, 3],
+        obj: { key: 'value' },
+        undefined: undefined,
+        fun: () => {},
+      },
     },
     array: {
       default: ['b', 2, true, null, { key: 'value' }, [1]],

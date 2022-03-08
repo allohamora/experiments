@@ -31,6 +31,9 @@ export class Stringifier {
       case typeof value === 'boolean':
       case value === null:
         return this.stringifyRaw(value, depth);
+      case typeof value === 'undefined':
+      case typeof value === 'function':
+        return undefined;
       default:
         throw new Error(`invalid value: ${value}`);
     }
@@ -42,19 +45,23 @@ export class Stringifier {
     for (const [key, value] of Object.entries(object)) {
       const handledKey = this.handleStringify(key, 0);
 
-      const afterReplacer = this.handleReplacer(key, value);
-      const handledValue = this.handleStringify(afterReplacer, depth + 1);
+      const valueAfterReplacer = this.handleReplacer(key, value);
+      const handledValue = this.handleStringify(valueAfterReplacer, depth + 1);
 
-      const space = this._space ? ' ' : '';
-      const after = this.handleSpace(depth);
+      if (handledValue === undefined) {
+        continue;
+      }
 
-      tokens.push(`${after}${handledKey}:${space}${handledValue}`);
+      const colonSpace = this._space ? ' ' : '';
+      const beforeSpace = this.handleSpace(depth);
+
+      tokens.push(`${beforeSpace}${handledKey}:${colonSpace}${handledValue}`);
     }
 
     const newLine = this._space ? '\n' : '';
-    const after = this.handleSpace(depth - 1);
+    const afterSpace = this.handleSpace(depth - 1);
 
-    return `{${newLine}${tokens.join(`,${newLine}`)}${newLine}${after}}`;
+    return `{${newLine}${tokens.join(`,${newLine}`)}${newLine}${afterSpace}}`;
   }
 
   stringifyArray(array, depth) {
@@ -63,17 +70,22 @@ export class Stringifier {
     for (let i = 0; i < array.length; i++) {
       const value = array[i];
 
-      const afterReplacer = this.handleReplacer(i.toString(), value);
-      const afterStringify = this.handleStringify(afterReplacer, depth + 1);
-      const after = this.handleSpace(depth);
+      const valueAfterReplacer = this.handleReplacer(i.toString(), value);
+      const handledValue = this.handleStringify(valueAfterReplacer, depth + 1);
 
-      tokens.push(`${after}${afterStringify}`);
+      if (handledValue === undefined) {
+        continue;
+      }
+
+      const beforeSpace = this.handleSpace(depth);
+
+      tokens.push(`${beforeSpace}${handledValue}`);
     }
 
     const newLine = this._space ? '\n' : '';
-    const after = this.handleSpace(depth - 1);
+    const afterSpace = this.handleSpace(depth - 1);
 
-    return `[${newLine}${tokens.join(`,${newLine}`)}${newLine}${after}]`;
+    return `[${newLine}${tokens.join(`,${newLine}`)}${newLine}${afterSpace}]`;
   }
 
   stringifyString(string) {
