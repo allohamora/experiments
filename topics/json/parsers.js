@@ -1,7 +1,16 @@
 import { performanceTest, averageFirst, manyPerformaneTest } from '../../utils/performance.mjs';
+import { createContext, runInContext } from 'node:vm';
 
 const JSONWay = (json) => JSON.parse(json);
 const evalWay = (json) => eval(`() => (${json})`)();
+const vmWay = (json) => {
+  const contextTarget = { exports: null };
+  const context = createContext(contextTarget);
+
+  runInContext(`exports = ${json}`, context);
+
+  return contextTarget.exports;
+};
 
 const json = JSON.stringify({
   str: 'str',
@@ -24,7 +33,7 @@ const test = (testRunner) => async (ways) => {
 };
 
 const main = async () => {
-  const ways = [JSONWay, evalWay];
+  const ways = [JSONWay, evalWay, vmWay];
 
   const manyOptions = { runCount: 100, averageResult: averageFirst };
   const many = test((target) => manyPerformaneTest({ ...manyOptions, target }));
