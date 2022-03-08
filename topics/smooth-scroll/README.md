@@ -3,9 +3,9 @@
 ## goals:
 
 1. [x] create smooth-scroll
-2. [x] check scroll-behavior: smooth.
-3. [x] check window.scrollTo({ behavior: 'smooth' }).
-4. [x] check window.scrollTo({ behavior: 'smooth' }) polyfill.
+2. [x] check scroll-behavior: smooth
+3. [x] check window.scrollTo({ behavior: 'smooth' })
+4. [x] check window.scrollTo({ behavior: 'smooth' }) polyfill
 5. [x] stop scroll on wheel and touchstart
 
 ## my smooth-scroll
@@ -22,12 +22,12 @@
 
 ## window.scrollTo({ behavior: 'smooth' })
 
-1. in chrome dev tools mobile y scroll doesn't work.
+1. in chrome dev tools mobile y scroll doesn't work
 2. in pc mode issues doesn't found
 
 ## window.scrollTo({ behavior: 'smooth' }) polyfill
 
-1. in chrome dev tools mobile horizontal scroll may be wrong (doesn't scroll to offsetLeft element).
+1. in chrome dev tools mobile horizontal scroll may be wrong (doesn't scroll to offsetLeft element)
 
 ## bugs
 
