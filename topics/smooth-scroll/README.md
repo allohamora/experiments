@@ -6,7 +6,7 @@
 2. [x] check scroll-behavior: smooth.
 3. [x] check window.scrollTo({ behavior: 'smooth' }).
 4. [x] check window.scrollTo({ behavior: 'smooth' }) polyfill.
-5. [x] stop scroll on wheel and touchestart
+5. [x] stop scroll on wheel and touchstart
 
 ## my smooth-scroll
 
