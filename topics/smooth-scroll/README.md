@@ -6,6 +6,7 @@
 2. [x] check scroll-behavior: smooth.
 3. [x] check window.scrollTo({ behavior: 'smooth' }).
 4. [x] check window.scrollTo({ behavior: 'smooth' }) polyfill.
+5. [x] stop scroll on wheel and touchestart
 
 ## my smooth-scroll
 
@@ -29,4 +30,5 @@
 1. in chrome dev tools mobile horizontal scroll may be wrong (doesn't scroll to offsetLeft element).
 
 ## bugs
+
 chrome devtools in mobile simulation mode (Dimensions: IPhone XR) can't x scroll. window.scrollTo, element.scrollLeft doesn't have any feedback, for fix that need switch mobile simulation mode to Dimensions: Responsive with the same mobile properties.
