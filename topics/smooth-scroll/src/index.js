@@ -127,6 +127,6 @@ const smoothScrollPolyfill = () => {
 const initMy = () => registerSmoothScroll(mySmoothScroll);
 const initPolyfill = () => smoothScrollPolyfill();
 
-const init = initPolyfill;
+const init = initMy;
 
-initMy();
+init();
