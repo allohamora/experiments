@@ -1,4 +1,4 @@
-# smooth-scroll experiment 31.07.21
+# smooth-scroll experiment 31.07.21, 08.03.22
 
 ## goals:
 
@@ -11,9 +11,8 @@
 
 1. [x] vertical scroll
 2. [x] horizontal scroll
-3. [x] easy function support
-
-- Maybe on mobile this doesn't work, because chrome dev tools in mobile mode shows window.pageYOffset and analogs === 0 in any state. And chrome dev tools shows torn fps when click on anchor tag.
+3. [x] vertical + horizontal scroll
+4. [x] easy function support
 
 ## scroll-behavior: smooth
 
@@ -28,3 +27,6 @@
 ## window.scrollTo({ behavior: 'smooth' }) polyfill
 
 1. in chrome dev tools mobile horizontal scroll may be wrong (doesn't scroll to offsetLeft element).
+
+## bugs
+chrome devtools in mobile simulation mode (Dimensions: IPhone XR) can't x scroll. window.scrollTo, element.scrollLeft doesn't have any feedback, for fix that need switch mobile simulation mode to Dimensions: Responsive with the same mobile properties.
