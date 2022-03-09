@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const migrationsDir = path.join(__dirname, 'migrations');
+const srcDir = path.join(__dirname, 'src');
+const databaseDir = path.join(srcDir, 'database');
+const migrationsDir = path.join(databaseDir, 'migrations');
 
 export default {
   type: 'postgres',
@@ -17,7 +19,9 @@ export default {
   entities: [path.join(__dirname, '**', '*.entity{.ts,.js}')],
   migrations: [path.join(migrationsDir, '*{.ts,.js}')],
 
+  logging: true,
   synchronize: true,
+
   cli: {
     migrationsDir,
   },

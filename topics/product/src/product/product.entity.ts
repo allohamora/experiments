@@ -13,7 +13,7 @@ export enum ProductType {
 }
 
 @Entity()
-export class Product {
+export class Product<A = unknown> {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,7 +30,7 @@ export class Product {
   price: string;
 
   @Column({ type: 'jsonb' })
-  attributes: unknown;
+  attributes: A;
 
   @CreateDateColumn()
   createdAt: Date;
