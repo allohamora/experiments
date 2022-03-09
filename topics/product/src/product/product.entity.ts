@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -13,7 +14,14 @@ export enum ProductType {
 }
 
 @Entity()
-export class Product<A = unknown> {
+@TableInheritance({
+  column: {
+    type: 'enum',
+    enum: ProductType,
+    name: 'type' /** default name === 'type' */,
+  },
+})
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,9 +37,6 @@ export class Product<A = unknown> {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: string;
 
-  @Column({ type: 'jsonb' })
-  attributes: A;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -39,7 +44,6 @@ export class Product<A = unknown> {
   updatedAt: Date;
 }
 
-export const isFactory =
-  <T extends Product>(type: ProductType) =>
-  (product: Product): product is T =>
-    product.type === type;
+export const isFactory = <T extends Product>(type: ProductType) => {
+  return (product: Product): product is T => product.type === type;
+};

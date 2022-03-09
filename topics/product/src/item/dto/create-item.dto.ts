@@ -1,7 +1,7 @@
 import { IsInt } from 'class-validator';
-import { ProductContentDto } from './product-content.dto';
+import { ProductContentDto } from 'src/product/dto/product-content.dto';
 
 export class CreateItemDto extends ProductContentDto {
   @IsInt()
-  id: number;
+  inGameId: number;
 }

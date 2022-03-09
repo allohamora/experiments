@@ -5,10 +5,11 @@ import { Repository } from 'typeorm';
 import { Order } from './order.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ProductService } from 'src/product/product.service';
-import { BuyProductDto } from './dto/buy-product.dto';
+import { PurchaseProductDto } from './dto/purchase-product.dto';
+import { Event } from 'src/event.enum';
 
 @Injectable()
-export class PaymentService {
+export class PurchaseService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
@@ -16,14 +17,14 @@ export class PaymentService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  public async buyProduct({ productId, count }: BuyProductDto) {
+  public async purchaseProduct({ productId, count }: PurchaseProductDto) {
     const product = await this.productService.getProductById(productId);
     const summ = currency(product.price).multiply(count).toString();
 
     const order = this.orderRepository.create({ product, summ, count });
     const result = await this.orderRepository.save(order);
 
-    this.eventEmitter.emit('order.paymented', result);
+    this.eventEmitter.emit(Event.ProductPurchased, result);
 
     return result;
   }

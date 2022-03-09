@@ -1,7 +1,7 @@
 {
   "client": "Thunder Client",
   "collectionName": "product",
-  "dateExported": "2022-03-09T13:51:17.892Z",
+  "dateExported": "2022-03-09T15:44:50.651Z",
   "version": "1.1",
   "folders": [],
   "requests": [
@@ -15,13 +15,13 @@
           "value": "Thunder Client (https://www.thunderclient.com)"
         }
       ],
-      "colId": "492df9c2-09f4-4d5c-bdfd-e46e87277936",
+      "colId": "31731116-c5a2-482c-b6d6-415c4d7ead00",
       "name": "get-products",
       "url": "{{BASE_URL}}/product",
       "method": "GET",
-      "modified": "2022-03-09T13:47:09.925Z",
-      "created": "2022-03-09T13:43:18.744Z",
-      "_id": "b817bc2c-0073-4553-aac1-b1e971213e31",
+      "modified": "2022-03-09T15:28:10.102Z",
+      "created": "2022-03-09T15:28:10.102Z",
+      "_id": "3090c2ca-195c-41b5-a8c7-4a88b1ed2a43",
       "params": [],
       "tests": []
     },
@@ -35,17 +35,17 @@
           "value": "Thunder Client (https://www.thunderclient.com)"
         }
       ],
-      "colId": "492df9c2-09f4-4d5c-bdfd-e46e87277936",
-      "name": "buy-product",
-      "url": "{{BASE_URL}}/payment/buy-product",
+      "colId": "31731116-c5a2-482c-b6d6-415c4d7ead00",
+      "name": "purchase-product",
+      "url": "{{BASE_URL}}/purchase/product",
       "method": "POST",
-      "modified": "2022-03-09T13:48:45.642Z",
-      "created": "2022-03-09T13:47:23.646Z",
-      "_id": "1f24b310-9d1e-4ff3-9bda-7f08e7810a17",
+      "modified": "2022-03-09T15:44:05.518Z",
+      "created": "2022-03-09T15:28:10.102Z",
+      "_id": "7f0da595-396b-4d52-8907-c246d6855e8d",
       "params": [],
       "body": {
         "type": "json",
-        "raw": "{\n    \"productId\": 9,\n    \"count\": 1\n}",
+        "raw": "{\n    \"productId\": 10,\n    \"count\": 2\n}",
         "form": []
       },
       "tests": []
