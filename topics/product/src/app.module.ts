@@ -1,9 +1,16 @@
+import ormConfig from '../ormconfig';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './product/product.module';
-import ormConfig from '../ormconfig';
+import { PaymentModule } from './payment/payment.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), ProductModule],
+  imports: [
+    TypeOrmModule.forRoot(ormConfig),
+    ProductModule,
+    PaymentModule,
+    EventEmitterModule.forRoot(),
+  ],
 })
 export class AppModule {}

@@ -6,9 +6,15 @@ import { CreatePrivilegeDto } from './dto/create-privelege.dto';
 import { CreateItemDto } from './dto/create-item.dto';
 import { ProductContentDto } from './dto/product-content.dto';
 import { Product, ProductType } from './product.entity';
-import { CoinAttributes } from './variant/coin.variant';
-import { PrivilegeAttributes } from './variant/privilege.variant';
-import { ItemAttributes } from './variant/item.variant';
+import { Coin, CoinAttributes, isCoin } from './variant/coin.variant';
+import {
+  isPrivilege,
+  Privilege,
+  PrivilegeAttributes,
+} from './variant/privilege.variant';
+import { isItem, Item, ItemAttributes } from './variant/item.variant';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Order } from 'src/payment/order.entity';
 
 interface CreateProductDto extends ProductContentDto {
   type: ProductType;
@@ -21,6 +27,10 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
   ) {}
+
+  public async getProductById(id: number) {
+    return await this.productRepository.findOneOrFail(id);
+  }
 
   public async getProducts() {
     return await this.productRepository.find();
@@ -72,5 +82,30 @@ export class ProductService {
       attributes,
       ...base,
     });
+  }
+
+  @OnEvent('order.paymented')
+  public async handleOrderPaymented({ product, count }: Order) {
+    if (isPrivilege(product)) {
+      return await this.applyPrivilege(product, count);
+    } else if (isItem(product)) {
+      return await this.applyItem(product, count);
+    } else if (isCoin(product)) {
+      return await this.applyCoin(product, count);
+    }
+
+    console.warn(`unknown product`, product);
+  }
+
+  private async applyPrivilege(privilege: Privilege, count: number) {
+    console.log(`privilege applied`, privilege, count);
+  }
+
+  private async applyItem(item: Item, count: number) {
+    console.log(`item applied`, item, count);
+  }
+
+  private async applyCoin(coin: Coin, count: number) {
+    console.log(`coint applied`, coin, count);
   }
 }
