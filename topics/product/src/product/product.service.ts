@@ -98,14 +98,14 @@ export class ProductService {
   }
 
   private async applyPrivilege(privilege: Privilege, count: number) {
-    console.log(`privilege applied`, privilege, count);
+    console.log(`privilege applied`, { privilege, count });
   }
 
   private async applyItem(item: Item, count: number) {
-    console.log(`item applied`, item, count);
+    console.log(`item applied`, { item, count });
   }
 
   private async applyCoin(coin: Coin, count: number) {
-    console.log(`coint applied`, coin, count);
+    console.log(`coint applied`, { coin, count });
   }
 }
