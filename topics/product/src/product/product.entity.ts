@@ -18,7 +18,8 @@ export enum ProductType {
   column: {
     type: 'enum',
     enum: ProductType,
-    name: 'type' /** default name === 'type' */,
+    /** default name === 'type' */
+    name: 'type',
   },
 })
 export class Product {
