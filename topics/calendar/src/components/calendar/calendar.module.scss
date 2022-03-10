@@ -1,0 +1,63 @@
+.calendar {
+  --border-color: rgba(0, 0, 0, .2);
+  --border-size: 2px;
+  --border-type: solid;
+
+  margin: 5px;
+  width: 300px;
+
+  text-align: center;
+
+  border: var(--border-size) var(--border-type) var(--border-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  border-bottom: var(--border-size) var(--border-type) var(--border-color);
+
+  > button {
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .75;
+    }
+
+    &:active {
+      opacity: .5;
+    } 
+  }
+}
+
+.main {
+  padding: 5px;
+}
+
+.week {
+  display: flex;
+  justify-content: space-between;
+}
+
+.days {
+  display: flex;
+  flex-wrap: wrap;
+
+  > .day {
+    padding: 2px 0;
+  }
+}
+
+.day[data-in-target-month="false"] {
+  color: red;
+}
+
+.day {
+  width: calc(100% / 7);
+}
+
+.footer {
+  border-top: var(--border-size) var(--border-type) var(--border-color);
+}
