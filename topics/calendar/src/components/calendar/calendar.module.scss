@@ -14,12 +14,14 @@
 .header {
   display: flex;
   justify-content: space-between;
+  padding: 5px;
 
   border-bottom: var(--border-size) var(--border-type) var(--border-color);
 
   > button {
     border: none;
     border-radius: 0;
+    background-color: transparent;
     cursor: pointer;
 
     &:hover {
@@ -33,12 +35,14 @@
 }
 
 .main {
-  padding: 5px;
+  padding: 10px;
 }
 
 .week {
   display: flex;
   justify-content: space-between;
+
+  margin-bottom: 10px;
 }
 
 .days {
@@ -46,11 +50,17 @@
   flex-wrap: wrap;
 
   > .day {
-    padding: 2px 0;
+    padding: 5px 0;
+
+    cursor: pointer;
+
+    &:hover {
+      opacity: .5;
+    }
   }
 }
 
-.day[data-in-target-month="false"] {
+.in-target-month {
   color: red;
 }
 
@@ -59,5 +69,7 @@
 }
 
 .footer {
+  padding: 5px;
+
   border-top: var(--border-size) var(--border-type) var(--border-color);
 }

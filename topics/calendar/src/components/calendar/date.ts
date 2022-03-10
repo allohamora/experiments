@@ -64,13 +64,13 @@ const getMonthFirstDay = (date: Date) => {
 };
 
 const getMonthLastDay = (date: Date) => {
-  const firstDay = new Date(date);
-  firstDay.setMonth(firstDay.getMonth() + 1);
-  firstDay.setDate(0);
+  const lastDay = new Date(date);
+  lastDay.setMonth(lastDay.getMonth() + 1);
+  lastDay.setDate(0);
 
-  clearTime(firstDay);
+  clearTime(lastDay);
 
-  return firstDay;
+  return lastDay;
 };
 
 const findFirstDay = (start: Date, targetDay: DateDay, direction: Direction) => {
@@ -108,19 +108,19 @@ const getCalendarLastDay = (date: Date, weekStart: WeekStart) => {
 };
 
 const toMonthWithDay = (date: Date) => {
-  return `${date.getDay()}/${date.getMonth()}`;
+  return `${date.getDate()}/${date.getMonth()}`;
 };
 
 export const getDatesInRange = (start: Date, end: Date) => {
   const result = [new Date(start)];
   const endMonthWithDay = toMonthWithDay(end);
 
-  let current = start;
+  let current = new Date(start);
 
   while (toMonthWithDay(current) !== endMonthWithDay) {
     current.setDate(current.getDate() + 1);
 
-    result.push(new Date(start));
+    result.push(new Date(current));
   }
 
   return result;
@@ -135,5 +135,6 @@ export const getDays = (target: Date, weekStart: WeekStart = WeekStart.Sunday) =
   return dates.map((date) => ({
     inTargetMonth: date.getMonth() === month,
     day: date.getDate(),
+    date,
   }));
 };

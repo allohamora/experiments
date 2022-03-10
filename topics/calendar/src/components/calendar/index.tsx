@@ -10,6 +10,7 @@ import {
   WeekStart,
 } from './date';
 import styles from './calendar.module.scss';
+import { cls } from 'src/utils/cls';
 
 interface Props {
   onSelect: (selected: Date) => unknown;
@@ -23,6 +24,7 @@ export const Calendar: FC<Props> = ({
   locale = Locale.English,
   format = Format.Short,
   weekStart = WeekStart.Monday,
+  onSelect,
 }) => {
   const [target, setTarget] = useState(new Date());
 
@@ -63,8 +65,12 @@ export const Calendar: FC<Props> = ({
       </div>
 
       <div className={styles.days}>
-        {days.map(({ day, inTargetMonth }) => (
-          <div key={`${day}-${inTargetMonth}`} data-in-target-month={inTargetMonth} className={styles.day}>
+        {days.map(({ day, inTargetMonth, date }) => (
+          <div
+            key={date.toString()}
+            className={cls(styles.day, !inTargetMonth && styles['in-target-month'])}
+            onClick={() => onSelect(date)}
+          >
             {day}
           </div>
         ))}
