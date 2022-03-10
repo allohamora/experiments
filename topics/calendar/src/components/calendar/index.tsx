@@ -21,7 +21,7 @@ interface Props {
   onSelect: (selected: Date[]) => unknown;
 
   locale?: Locale;
-  format?: Format;
+  monthFormat?: Format;
   weekStart?: WeekStart;
   mode?: Mode;
 }
@@ -52,7 +52,7 @@ const inSelectionRange = (target: Date, from: Date | null, moveOn: Date | null) 
 
 export const Calendar: FC<Props> = ({
   locale = Locale.English,
-  format = Format.Short,
+  monthFormat = Format.Short,
   weekStart = WeekStart.Monday,
   mode = Mode.Single,
   onSelect,
@@ -61,8 +61,8 @@ export const Calendar: FC<Props> = ({
   const [from, setFrom] = useState<Date | null>(null);
   const [moveOn, setMoveOn] = useState<Date | null>(null);
 
-  const translatedWeekDays = getTranslatedWeekDays(locale, format, weekStart);
-  const translatedMonths = getTranslatedMonths(locale, format);
+  const translatedWeekDays = getTranslatedWeekDays(locale, Format.Short, weekStart);
+  const translatedMonths = getTranslatedMonths(locale, monthFormat);
 
   const days = getDays(target, weekStart);
 
@@ -126,8 +126,8 @@ export const Calendar: FC<Props> = ({
   const main = (
     <div className={styles.main}>
       <div className={styles.week}>
-        {translatedWeekDays.map((day) => (
-          <div key={day} className={styles.day}>
+        {translatedWeekDays.map((day, i) => (
+          <div key={`${day}-${i}`} className={styles.day}>
             {day}
           </div>
         ))}
