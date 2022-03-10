@@ -1,7 +1,11 @@
 .calendar {
-  --border-color: rgba(0, 0, 0, .2);
+  --border-color: rgba(149, 165, 166,1.0);
   --border-size: 2px;
   --border-type: solid;
+  --out-of-month-color: red;
+  --in-selection-range-bg-color: rgba(209, 216, 224, .4);
+
+  color: black;
 
   margin: 5px;
   width: 300px;
@@ -60,8 +64,12 @@
   }
 }
 
-.in-target-month {
-  color: red;
+.in-selection-range {
+  background-color: var(--in-selection-range-bg-color);
+}
+
+.out-of-month {
+  color: var(--out-of-month-color);
 }
 
 .day {

@@ -133,7 +133,7 @@ export const getDays = (target: Date, weekStart: WeekStart = WeekStart.Sunday) =
   const month = target.getMonth();
 
   return dates.map((date) => ({
-    inTargetMonth: date.getMonth() === month,
+    outOfMonth: date.getMonth() !== month,
     day: date.getDate(),
     date,
   }));

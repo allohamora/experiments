@@ -12,21 +12,54 @@ import {
 import styles from './calendar.module.scss';
 import { cls } from 'src/utils/cls';
 
+export enum Mode {
+  Single = 'Single',
+  Range = 'Range',
+}
+
 interface Props {
-  onSelect: (selected: Date) => unknown;
+  onSelect: (selected: Date[]) => unknown;
 
   locale?: Locale;
   format?: Format;
   weekStart?: WeekStart;
+  mode?: Mode;
 }
+
+const inSelectionRange = (target: Date, from: Date | null, moveOn: Date | null) => {
+  if (from === null) {
+    return false;
+  }
+
+  const fromTime = from.getTime();
+  const targetTime = target.getTime();
+
+  if (fromTime === targetTime) {
+    return true;
+  }
+
+  if (moveOn === null) {
+    return false;
+  }
+
+  const moveOnTime = moveOn.getTime();
+
+  const isInBackwardRange = fromTime >= targetTime && moveOnTime <= targetTime;
+  const isInForwardRange = fromTime <= targetTime && moveOnTime >= targetTime;
+
+  return isInBackwardRange || isInForwardRange;
+};
 
 export const Calendar: FC<Props> = ({
   locale = Locale.English,
   format = Format.Short,
   weekStart = WeekStart.Monday,
+  mode = Mode.Single,
   onSelect,
 }) => {
   const [target, setTarget] = useState(new Date());
+  const [from, setFrom] = useState<Date | null>(null);
+  const [moveOn, setMoveOn] = useState<Date | null>(null);
 
   const translatedWeekDays = getTranslatedWeekDays(locale, format, weekStart);
   const translatedMonths = getTranslatedMonths(locale, format);
@@ -44,6 +77,42 @@ export const Calendar: FC<Props> = ({
     newTarget.setMonth(diff);
 
     setTarget(newTarget);
+  };
+
+  const singleModeHandler = (date: Date) => {
+    return onSelect([date]);
+  };
+
+  const rangeModeHandler = (date: Date) => {
+    if (from === null) {
+      return setFrom(date);
+    }
+
+    if (from.toString() === date.toString()) {
+      return;
+    }
+
+    onSelect([from, date]);
+    setFrom(null);
+  };
+
+  const dayClickHandler = (date: Date) => () => {
+    switch (mode) {
+      case Mode.Single:
+        return singleModeHandler(date);
+      case Mode.Range:
+        return rangeModeHandler(date);
+      default:
+        return console.warn(`invalid mode ${mode}`);
+    }
+  };
+
+  const dayPointerMoveHandler = (date: Date) => () => {
+    if (mode === Mode.Single || from === null) {
+      return;
+    }
+
+    setMoveOn(date);
   };
 
   const header = (
@@ -65,15 +134,27 @@ export const Calendar: FC<Props> = ({
       </div>
 
       <div className={styles.days}>
-        {days.map(({ day, inTargetMonth, date }) => (
-          <div
-            key={date.toString()}
-            className={cls(styles.day, !inTargetMonth && styles['in-target-month'])}
-            onClick={() => onSelect(date)}
-          >
-            {day}
-          </div>
-        ))}
+        {days.map(({ day, outOfMonth, date }) => {
+          const key = date.toString();
+          const isInSelectionRange = inSelectionRange(date, from, moveOn);
+
+          const className = cls(
+            styles.day,
+            outOfMonth && styles['out-of-month'],
+            isInSelectionRange && styles['in-selection-range'],
+          );
+
+          return (
+            <div
+              key={key}
+              className={className}
+              onClick={dayClickHandler(date)}
+              onPointerMove={dayPointerMoveHandler(date)}
+            >
+              {day}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
