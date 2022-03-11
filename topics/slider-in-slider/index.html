@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>slider-in-slider</title>
+  </head>
+  <body>
+
+    <div class="swiper main-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">1</div>
+        <div class="swiper-slide">
+          <div class="swiper nested-swiper">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">2-1</div>
+              <div class="swiper-slide">2-2</div>
+              <div class="swiper-slide">2-3</div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+        <div class="swiper-slide">3</div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>
