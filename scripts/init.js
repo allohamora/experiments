@@ -1,7 +1,8 @@
 import fsp from 'fs/promises';
 import path from 'path';
 import { createScript } from './utils/script.js';
-import { isTopicExists, TOPICS_PATH } from './utils/topic.js';
+import { topicNotExists, TOPICS_PATH } from './utils/topic.js';
+import { validator, string } from './utils/validator.js';
 
 const SCRIPT_PLACEHOLDER = 'echo "Error: no script specified" && exit 1';
 
@@ -15,25 +16,16 @@ const createPackageJson = (name) => ({
 });
 
 const script = createScript({
-  name: 'init',
-  handler: async ({ filteredArgv, logger }) => {
-    const [topic] = filteredArgv;
-
-    if (!topic) {
-      throw new Error('Provide topic name as first argument');
-    }
-
-    if (await isTopicExists(topic)) {
-      throw new Error(`Topic ${topic} is already exists`);
-    }
-
+  name: 'topic:init',
+  argsSchema: [validator('topic').is(string()).is(topicNotExists())],
+  handler: async ({ args: [topic], logger }) => {
     const topicPath = path.join(TOPICS_PATH, topic);
     await fsp.mkdir(topicPath);
 
     const packageJsonPath = path.join(topicPath, 'package.json');
     await fsp.writeFile(packageJsonPath, JSON.stringify(createPackageJson(topic), null, 2));
 
-    logger.log(`Topic ${topic} successfully created`);
+    logger.log(`topic ${topic} successfully created`);
   },
 });
 
