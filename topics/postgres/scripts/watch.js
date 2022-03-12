@@ -1,4 +1,4 @@
-import { watch } from 'node:fs/promises';
+import { fileWatcher } from './utils/fs.js';
 import { createScript } from '../../../scripts/utils/script.js';
 import { runScriptOptions } from './run.js';
 import { getTopicFileName, getTopicPath } from './utils/topic.js';
@@ -12,13 +12,11 @@ const script = createScript({
     const { args, logger } = ctx;
     const [topic] = args;
     const topicPath = getTopicPath(topic);
-    const watcher = watch(topicPath, { encoding: 'utf-8' });
+    const onChange = async () => await handler(ctx);
 
     logger.log(`start ${getTopicFileName(topic)} watching`);
 
-    for await (const event of watcher) {
-      handler(ctx);
-    }
+    await fileWatcher(topicPath, onChange);
   },
 });
 
