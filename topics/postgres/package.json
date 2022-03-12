@@ -1,4 +1,15 @@
 {
   "name": "postgres.topic",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postgres:run": "node scripts/run.js",
+    "postgres:watch": "node scripts/watch.js"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
+  },
+  "dependencies": {
+    "slonik": "^27.1.0"
+  }
 }
