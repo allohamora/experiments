@@ -16,3 +16,4 @@ exta requirements:
 
 - [ ] implement simple channels with posts
 - [ ] implement comments for channels with posts
+- [ ] implement search for public channels
