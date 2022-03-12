@@ -1,6 +1,8 @@
-const logTransport = [(text) => console.log(`\x1b[36m${text}`)];
-const errorTransport = [(text) => console.error(`\x1b[31m${text}`)];
-const warnTransport = [(text) => console.warn(`\x1b[33m${text}`)];
+import { cyan, red, yellow } from './colors.js';
+
+const logTransport = [(text) => console.log(cyan(text))];
+const errorTransport = [(text) => console.error(red(text))];
+const warnTransport = [(text) => console.warn(yellow(text))];
 
 export const createLogger = (prefix) => {
   const formatLog = (text) => `[${prefix}] ${text}`;
