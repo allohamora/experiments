@@ -1,11 +1,11 @@
-# chat technical task agreement
+# messenger technical task agreement
 
-Create a chat rest api that has some requirements:
+Create a messenger rest api that has some requirements:
 
 - [ ] implement simple auth where client will pass user id instead of jwt token (because auth isn't a goal of that experiment)
-- [ ] implement private(tet-a-tet) chat
-- [ ] implement public(many people with link) chat
-- [ ] implement search for people and public chats
+- [ ] implement private(tet-a-tet) chat api without events
+- [ ] implement public(many people with link) chat api without events
+- [ ] implement search for people and public chats api without events
 - [ ] implement short links for profiles and public chats
 - [ ] implement text messages
 - [ ] implement image messages
@@ -14,6 +14,6 @@ Create a chat rest api that has some requirements:
 
 exta requirements:
 
-- [ ] implement simple channels with posts
-- [ ] implement comments for channels with posts
+- [ ] implement simple channels with posts without events
+- [ ] implement comments for channels with posts without events
 - [ ] implement search for public channels
