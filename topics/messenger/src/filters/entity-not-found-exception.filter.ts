@@ -1,19 +1,19 @@
-import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
+import { EntityNotFoundError } from 'typeorm';
 
+@Catch(EntityNotFoundError)
 export class EntityNotFoundExceptionFilter implements ExceptionFilter {
-  public catch(exception: any, host: ArgumentsHost) {
+  public catch(exception: EntityNotFoundError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
 
-    return response
-      .code(404)
-      .send({
-        message: {
-          statusCode: 404,
-          error: 'Not Found',
-          message: exception.message,
-        },
-      });
+    const statusCode = 404;
+
+    return response.code(statusCode).send({
+      statusCode,
+      error: 'Not Found',
+      message: exception.message,
+    });
   }
 }
