@@ -1,0 +1,65 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "messenger",
+  "dateExported": "2022-03-19T15:14:24.657Z",
+  "version": "1.1",
+  "folders": [
+    {
+      "containerId": "",
+      "sortNum": 10000,
+      "name": "auth",
+      "_id": "a20b653b-37ea-429b-94b1-a22e745c2d82",
+      "created": "2022-03-19T15:12:18.922Z"
+    },
+    {
+      "containerId": "",
+      "sortNum": 20000,
+      "name": "user",
+      "_id": "a244faf4-5094-4078-bb0c-077b665c7d6d",
+      "created": "2022-03-19T15:12:24.997Z"
+    }
+  ],
+  "requests": [
+    {
+      "containerId": "a20b653b-37ea-429b-94b1-a22e745c2d82",
+      "sortNum": 10000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Id 5" }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "test",
+      "url": "{{BASE_URL}}/auth/test",
+      "method": "GET",
+      "modified": "2022-03-19T15:13:38.175Z",
+      "created": "2022-03-19T15:09:20.240Z",
+      "_id": "559fa75e-e9e8-471f-bd4a-62d7266c8786",
+      "params": [],
+      "tests": []
+    },
+    {
+      "containerId": "a244faf4-5094-4078-bb0c-077b665c7d6d",
+      "sortNum": 20000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "get all",
+      "url": "{{BASE_URL}}/user",
+      "method": "GET",
+      "modified": "2022-03-19T15:13:29.940Z",
+      "created": "2022-03-19T15:12:32.401Z",
+      "_id": "991dd582-8da6-4066-bcfe-2222dfb7d923",
+      "params": [],
+      "tests": []
+    }
+  ]
+}

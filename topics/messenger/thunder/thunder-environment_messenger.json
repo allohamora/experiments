@@ -1,0 +1,7 @@
+{
+  "client": "Thunder Client",
+  "environmentName": "messenger",
+  "dateExported": "2022-03-19T15:15:03.477Z",
+  "version": "1.0",
+  "variables": [{ "name": "BASE_URL", "value": "http://localhost:3000" }]
+}

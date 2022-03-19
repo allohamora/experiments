@@ -2,7 +2,7 @@
 
 Create a messenger rest api that has some requirements:
 
-- [ ] implement simple auth where client will pass user id instead of jwt token (because auth isn't a goal of that experiment)
+- [x] implement simple auth where client will pass user id instead of jwt token (because auth isn't a goal of that experiment)
 - [ ] implement private(tet-a-tet) chat api without events
 - [ ] implement public(many people with link) chat api without events
 - [ ] implement search for people and public chats api without events

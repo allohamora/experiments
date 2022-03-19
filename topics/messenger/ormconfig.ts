@@ -8,8 +8,6 @@ const srcDir = path.join(__dirname, 'src');
 const databaseDir = path.join(srcDir, 'database');
 const migrationsDir = path.join(databaseDir, 'migrations');
 
-console.log(srcDir, databaseDir, migrationsDir);
-
 export default {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
