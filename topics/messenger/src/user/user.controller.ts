@@ -12,7 +12,7 @@ export class UserController {
   }
 
   @Get('/:id')
-  public async getUserById(@Param() getUserByIdDto: GetUserByIdDto) {
-    return await this.userService.getUserById(getUserByIdDto);
+  public async getUserById(@Param() { id }: GetUserByIdDto) {
+    return await this.userService.getUserById(id);
   }
 }

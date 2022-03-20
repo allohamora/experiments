@@ -6,6 +6,6 @@ export class AuthService {
   constructor(private userService: UserService) {}
 
   public async getUserById(id: number) {
-    return await this.userService.getUserById({ id });
+    return await this.userService.getUserById(id);
   }
 }

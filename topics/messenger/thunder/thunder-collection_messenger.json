@@ -1,7 +1,7 @@
 {
   "client": "Thunder Client",
   "collectionName": "messenger",
-  "dateExported": "2022-03-19T15:14:24.657Z",
+  "dateExported": "2022-03-20T19:19:55.774Z",
   "version": "1.1",
   "folders": [
     {
@@ -17,6 +17,13 @@
       "name": "user",
       "_id": "a244faf4-5094-4078-bb0c-077b665c7d6d",
       "created": "2022-03-19T15:12:24.997Z"
+    },
+    {
+      "containerId": "",
+      "sortNum": 30000,
+      "name": "chat",
+      "_id": "d86d6d41-de15-4c53-a959-aa4de5606dec",
+      "created": "2022-03-20T13:49:40.218Z"
     }
   ],
   "requests": [
@@ -29,13 +36,13 @@
           "name": "User-Agent",
           "value": "Thunder Client (https://www.thunderclient.com)"
         },
-        { "name": "Authorization", "value": "Id 5" }
+        { "name": "Authorization", "value": "Id 8" }
       ],
       "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
       "name": "test",
       "url": "{{BASE_URL}}/auth/test",
       "method": "GET",
-      "modified": "2022-03-19T15:13:38.175Z",
+      "modified": "2022-03-20T13:48:58.812Z",
       "created": "2022-03-19T15:09:20.240Z",
       "_id": "559fa75e-e9e8-471f-bd4a-62d7266c8786",
       "params": [],
@@ -59,6 +66,105 @@
       "created": "2022-03-19T15:12:32.401Z",
       "_id": "991dd582-8da6-4066-bcfe-2222dfb7d923",
       "params": [],
+      "tests": []
+    },
+    {
+      "containerId": "d86d6d41-de15-4c53-a959-aa4de5606dec",
+      "sortNum": 30000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Id 1" }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "get by id",
+      "url": "{{BASE_URL}}/chat/1",
+      "method": "GET",
+      "modified": "2022-03-20T19:05:12.018Z",
+      "created": "2022-03-20T13:50:01.644Z",
+      "_id": "4f8188fd-1b35-4ca2-bd84-56e79076415f",
+      "params": [],
+      "tests": []
+    },
+    {
+      "containerId": "d86d6d41-de15-4c53-a959-aa4de5606dec",
+      "sortNum": 40000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Id 1" }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "create public chat",
+      "url": "{{BASE_URL}}/chat/public",
+      "method": "POST",
+      "modified": "2022-03-20T14:11:26.812Z",
+      "created": "2022-03-20T14:10:10.402Z",
+      "_id": "df8629eb-8504-4bec-ac90-57e1f4fffe57",
+      "params": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n    \"name\": \"my little chat\"\n}",
+        "form": []
+      },
+      "tests": []
+    },
+    {
+      "containerId": "d86d6d41-de15-4c53-a959-aa4de5606dec",
+      "sortNum": 50000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Id 1" }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "send message",
+      "url": "{{BASE_URL}}/chat/send-message",
+      "method": "POST",
+      "modified": "2022-03-20T14:12:52.796Z",
+      "created": "2022-03-20T14:11:42.113Z",
+      "_id": "f093ea57-a9a9-48ba-ac48-3d17fc65c19e",
+      "params": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n    \"chatId\": 1,\n    \"text\": \"Hello chat!\"\n}",
+        "form": []
+      },
+      "tests": []
+    },
+    {
+      "containerId": "d86d6d41-de15-4c53-a959-aa4de5606dec",
+      "sortNum": 60000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Id 1" }
+      ],
+      "colId": "8258a861-7d7e-4f1e-a604-f5cfe85447c3",
+      "name": "create personal chat",
+      "url": "{{BASE_URL}}/chat/personal",
+      "method": "POST",
+      "modified": "2022-03-20T19:04:20.550Z",
+      "created": "2022-03-20T14:17:17.714Z",
+      "_id": "33887751-4c6c-4de7-af0f-eed60ca1d607",
+      "params": [],
+      "body": {
+        "type": "json",
+        "raw": "{\n    \"targetUserId\": 2\n}",
+        "form": []
+      },
       "tests": []
     }
   ]

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GetUserByIdDto } from './dto/get-user-by-id.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class UserService {
     return await this.userRepository.find();
   }
 
-  public async getUserById({ id }: GetUserByIdDto) {
+  public async getUserById(id: number) {
     return await this.userRepository.findOneOrFail(id);
   }
 }
