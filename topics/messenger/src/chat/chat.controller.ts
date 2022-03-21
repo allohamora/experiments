@@ -3,7 +3,9 @@ import { Auth } from 'src/auth/auth.decorator';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { User } from 'src/user/user.entity';
 import { ChatService } from './chat.service';
+import { CreateChannelDto } from './dto/create-channel.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
+import { CreatePostChatDto } from './dto/create-post-chat';
 import { CreatePublicChatDto } from './dto/create-public-chat.dto';
 import { GetChatDto } from './dto/get-chat.dto';
 import { SendMessageDto } from './dto/send-message.dto';
@@ -46,5 +48,23 @@ export class ChatController {
     @CurrentUser() user: User,
   ) {
     return await this.chatService.createPublicChat(createPublicChatDto, user);
+  }
+
+  @Post('channel')
+  @Auth()
+  public async createChannel(
+    @Body() createChannelDto: CreateChannelDto,
+    @CurrentUser() user: User,
+  ) {
+    return await this.chatService.createChannel(createChannelDto, user);
+  }
+
+  @Post('post-chat')
+  @Auth()
+  public async createPostChat(
+    @Body() createPostChatDto: CreatePostChatDto,
+    @CurrentUser() user: User,
+  ) {
+    return await this.chatService.createPostChat(createPostChatDto, user);
   }
 }

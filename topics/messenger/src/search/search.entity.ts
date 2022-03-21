@@ -11,6 +11,7 @@ import {
 export enum SearchContentType {
   Chat = 'chat',
   User = 'user',
+  Channel = 'channel',
 }
 
 @Entity()

@@ -20,12 +20,14 @@ import {
   CHAT_TYPE_COLUMN,
 } from './chat.entity';
 import { CreateAudioDto } from './dto/create-audio.dto';
+import { CreateChannelDto } from './dto/create-channel.dto';
 import { CreateImageDto } from './dto/create-image.dto';
 import { CreatePersonalChatDto } from './dto/create-personal-chat.dto';
+import { CreatePostChatDto } from './dto/create-post-chat';
 import { CreatePublicChatDto } from './dto/create-public-chat.dto';
 import { SendMessageDto } from './dto/send-message.dto';
 import { Image } from './image.entity';
-import { Message } from './message.entity';
+import { Message, MessageType } from './message.entity';
 
 @Injectable()
 export class ChatService {
@@ -45,7 +47,7 @@ export class ChatService {
 
   public async getChatById(id: number, user: User) {
     const chat = await this.chatRepository.findOneOrFail(id, {
-      relations: ['users', 'messages'],
+      relations: ['users', 'messages', 'post'],
     });
     const isPersonal = chat.type === ChatType.Personal;
     const isChatMember = chat.users.some(({ id }) => user.id === id);
@@ -58,9 +60,11 @@ export class ChatService {
   }
 
   private isUserNotHaveAccessToChat(chat: Chat, user: User) {
-    const isUserHaveAccessToChat = chat.users.some(({ id }) => id === user.id);
+    if (chat.type === ChatType.Channel) {
+      return chat.creator.id !== user.id;
+    }
 
-    return !isUserHaveAccessToChat;
+    return !chat.users.some(({ id }) => id === user.id);
   }
 
   private async createAndSaveMessage(
@@ -74,7 +78,16 @@ export class ChatService {
       throw new BadRequestException('message should have at least one content');
     }
 
-    const data: { text?: string; audio?: Audio; image?: Image } = {};
+    const data: {
+      text?: string;
+      audio?: Audio;
+      image?: Image;
+      type?: MessageType;
+    } = {};
+
+    if (chat.type === ChatType.Channel) {
+      data.type = MessageType.Post;
+    }
 
     if (text) {
       data.text = text;
@@ -104,7 +117,7 @@ export class ChatService {
     user: User,
   ) {
     const chat = await this.chatRepository.findOneOrFail(chatId, {
-      relations: ['users'],
+      relations: ['users', 'creator'],
     });
 
     if (this.isUserNotHaveAccessToChat(chat, user)) {
@@ -164,6 +177,41 @@ export class ChatService {
     });
 
     return await this.chatRepository.save(chat);
+  }
+
+  public async createChannel({ name }: CreateChannelDto, creator: User) {
+    const search = new Search();
+    search.name = name;
+    search.type = SearchContentType.Channel;
+
+    const channel = this.chatRepository.create({
+      creator,
+      name,
+      users: [creator],
+      type: ChatType.Channel,
+      search,
+    });
+
+    return await this.chatRepository.save(channel);
+  }
+
+  public async createPostChat({ postId }: CreatePostChatDto, creator: User) {
+    const message = await this.messageRepository.findOneOrFail(postId, {
+      relations: ['postChat'],
+    });
+
+    if (message.postChat !== null || message.type !== MessageType.Post) {
+      throw new BadRequestException('invalid postId');
+    }
+
+    const postChat = this.chatRepository.create({
+      type: ChatType.ChannelPost,
+      creator,
+      users: [creator],
+      post: message,
+    });
+
+    return await this.chatRepository.save(postChat);
   }
 
   public async createPublicChat({ name }: CreatePublicChatDto, user: User) {

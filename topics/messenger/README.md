@@ -14,6 +14,7 @@ Create a messenger rest api that has some requirements:
 
 exta requirements:
 
-- [ ] implement simple channels with posts without events
-- [ ] implement comments for channels with posts without events
-- [ ] implement search for public channels
+- [x] implement simple channels with posts without events
+- [x] implement chats for channel posts without events
+- [x] implement search for public channels
+- [ ] implement short links for channels

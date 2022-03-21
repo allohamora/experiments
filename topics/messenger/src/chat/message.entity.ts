@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -13,13 +14,25 @@ import { Audio } from './audio.entity';
 import { Chat } from './chat.entity';
 import { Image } from './image.entity';
 
+export enum MessageType {
+  Message = 'message',
+  Post = 'post',
+}
+
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ enum: MessageType, default: MessageType.Message })
+  type: MessageType;
+
   @ManyToOne(() => Chat, (chat) => chat.messages)
   chat: Chat;
+
+  @OneToOne(() => Chat, (chat) => chat.post, { cascade: true, nullable: true })
+  @JoinColumn()
+  postChat?: Chat;
 
   @Column({ length: 3000, nullable: true })
   text?: string;

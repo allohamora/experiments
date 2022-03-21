@@ -18,6 +18,8 @@ import { Message } from './message.entity';
 export enum ChatType {
   Public = 'public',
   Personal = 'personal',
+  Channel = 'channel',
+  ChannelPost = 'channelPost',
 }
 
 export const CHAT_TABLE_NAME = 'chat';
@@ -56,6 +58,9 @@ export class Chat {
     },
   })
   users: User[];
+
+  @OneToOne(() => Message, (message) => message.postChat, { nullable: true })
+  post?: Message;
 
   @OneToOne(() => Search, (search) => search.chat, { cascade: true })
   search?: Search;
