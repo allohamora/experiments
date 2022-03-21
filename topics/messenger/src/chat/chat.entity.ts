@@ -1,3 +1,4 @@
+import { Search } from 'src/search/search.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -54,6 +56,9 @@ export class Chat {
     },
   })
   users: User[];
+
+  @OneToOne(() => Search, (search) => search.chat, { cascade: true })
+  search?: Search;
 
   @ManyToOne(() => User)
   creator: User;

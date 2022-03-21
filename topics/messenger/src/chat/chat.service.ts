@@ -4,6 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+import { Search, SearchContentType } from 'src/search/search.entity';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Connection, Repository } from 'typeorm';
@@ -166,11 +167,16 @@ export class ChatService {
   }
 
   public async createPublicChat({ name }: CreatePublicChatDto, user: User) {
+    const search = new Search();
+    search.name = name;
+    search.type = SearchContentType.Chat;
+
     const chat = this.chatRepository.create({
       type: ChatType.Public,
       name,
       users: [user],
       creator: user,
+      search: search,
     });
 
     return await this.chatRepository.save(chat);

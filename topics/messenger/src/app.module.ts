@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
+import { SearchModule } from './search/search.module';
 import ormconfig from 'ormconfig';
 
 @Module({
@@ -11,6 +12,7 @@ import ormconfig from 'ormconfig';
     UserModule,
     AuthModule,
     ChatModule,
+    SearchModule,
   ],
 })
 export class AppModule {}
