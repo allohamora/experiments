@@ -1,4 +1,8 @@
-# messenger technical task agreement
+# goal of the topic
+
+implement db relations for complete tta, ignore code styling, ignore security and etc, focus only on db relations
+
+## messenger technical task agreement
 
 Create a messenger rest api that has some requirements:
 
