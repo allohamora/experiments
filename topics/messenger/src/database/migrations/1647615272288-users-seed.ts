@@ -6,6 +6,7 @@ export class usersSeed1647615272288 implements MigrationInterface {
   private users = [
     this.createUser('andrew', Role.User),
     this.createUser('john', Role.User),
+    this.createUser('alfred', Role.User),
   ];
 
   private createUser(login: string, role: Role) {

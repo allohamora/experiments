@@ -129,13 +129,18 @@ export class ChatService {
     const findPersonalChatQuery = `
       SELECT cu.${USERS_CHAT_CHATID_COLUMN} as id FROM ${USERS_CHAT_TABLE} cu
       LEFT JOIN ${CHAT_TABLE_NAME} c ON c.${CHAT_ID_COLUMN} = cu.${USERS_CHAT_CHATID_COLUMN}
-      WHERE c.${CHAT_TYPE_COLUMN} = '${ChatType.Personal}'
+      WHERE c.${CHAT_TYPE_COLUMN} = $1
       GROUP BY cu.${USERS_CHAT_CHATID_COLUMN}, c.${CHAT_TYPE_COLUMN}
-      HAVING array_agg(cu.${USERS_CHAT_USERID_COLUMN}) = ARRAY[${user.id}, ${targetUser.id}] 
-      OR array_agg(cu.${USERS_CHAT_USERID_COLUMN}) = ARRAY[${targetUser.id}, ${user.id}];
+      HAVING $2 = ANY(array_agg(cu.${USERS_CHAT_USERID_COLUMN})) 
+      AND $3 = ANY(array_agg(cu.${USERS_CHAT_USERID_COLUMN}))
+      LIMIT 1
     `;
 
-    const [chat] = (await this.connection.query(findPersonalChatQuery)) as {
+    const [chat] = (await this.connection.query(findPersonalChatQuery, [
+      ChatType.Personal,
+      user.id,
+      targetUser.id,
+    ])) as {
       id: number;
     }[];
 
