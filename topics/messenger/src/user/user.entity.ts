@@ -1,5 +1,6 @@
 import { Chat } from 'src/chat/chat.entity';
 import { Search } from 'src/search/search.entity';
+import { ShortLink } from 'src/short-link/short-link.entity';
 import {
   Column,
   Entity,
@@ -25,4 +26,7 @@ export class User {
 
   @OneToOne(() => Search, (search) => search.user, { cascade: true })
   search: Search;
+
+  @OneToOne(() => ShortLink, (shortLink) => shortLink.user, { nullable: true })
+  shortLink?: ShortLink;
 }

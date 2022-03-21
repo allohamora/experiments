@@ -6,7 +6,7 @@ Create a messenger rest api that has some requirements:
 - [x] implement personal(tet-a-tet) chat api without events
 - [x] implement public(many people) chat api without events
 - [x] implement search for people and public chats api without events
-- [ ] implement short links for profiles and public chats
+- [x] implement short links for profiles and public chats
 - [x] implement text messages
 - [x] implement image messages
 - [x] implement audio messages
@@ -17,4 +17,4 @@ exta requirements:
 - [x] implement simple channels with posts without events
 - [x] implement chats for channel posts without events
 - [x] implement search for public channels
-- [ ] implement short links for channels
+- [x] implement short links for channels

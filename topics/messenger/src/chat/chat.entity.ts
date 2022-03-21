@@ -1,4 +1,5 @@
 import { Search } from 'src/search/search.entity';
+import { ShortLink } from 'src/short-link/short-link.entity';
 import { User } from 'src/user/user.entity';
 import {
   Column,
@@ -73,4 +74,7 @@ export class Chat {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => ShortLink, (shortLink) => shortLink.chat, { nullable: true })
+  shortLink?: ShortLink;
 }
