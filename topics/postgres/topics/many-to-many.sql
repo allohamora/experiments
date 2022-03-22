@@ -28,3 +28,9 @@ VALUES (1, 1), (1, 2), (1, 4),
 SELECT users.name, posts.content FROM users_posts
 LEFT JOIN users ON users_posts.userId = users.id
 LEFT JOIN posts ON users_posts.postId = posts.id;
+
+-- join many columns to one entity for checks
+SELECT array_agg(users_posts.postId) as postIds, users.name FROM users_posts
+LEFT JOIN users ON users_posts.userId = users.id
+GROUP BY users_posts.userId, users.name
+HAVING array_agg(users_posts.postId) = array[3, 4]

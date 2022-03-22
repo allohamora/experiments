@@ -1,5 +1,6 @@
 import { sql } from 'slonik';
 import { pool } from './postgres.js';
+import { formatWithOptions } from 'node:util';
 
 class RollbackError extends Error {}
 
@@ -9,7 +10,9 @@ export const run = async (code) => {
   try {
     await pool.transaction(async (transaction) => {
       for (const query of queries) {
-        console.log(await transaction.query(sql([query])));
+        const result = await transaction.query(sql([query]));
+
+        console.log(formatWithOptions({ depth: Infinity }, result));
       }
 
       throw new RollbackError('rollback');
