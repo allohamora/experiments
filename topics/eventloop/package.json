@@ -1,0 +1,5 @@
+{
+  "name": "eventloop.topic",
+  "type": "module",
+  "private": true
+}
