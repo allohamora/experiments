@@ -1,5 +1,6 @@
 /**
  * @example
+ * promise
  * queueMicrotask
  * process.nextTick
  * setImmediate
@@ -7,6 +8,7 @@
  * setTimeout 0
  */
 const microAndMacro = () => {
+  Promise.resolve().then(() => console.log('promise'));
   setImmediate(() => console.log('setImmediate'));
   setTimeout(() => console.log('setTimeout'));
   setTimeout(() => console.log('setTimeout 0'), 0);
@@ -43,6 +45,7 @@ const twoTimers = () => {
  * before
  * after
  * queueMicrotask
+ * promise
  * process.nextTick
  * setImmediate
  * setTimeout
@@ -52,6 +55,7 @@ const logsMicroMacro = () => {
   console.log('before');
 
   queueMicrotask(() => console.log('queueMicrotask'));
+  Promise.resolve().then(() => console.log('promise'));
   setTimeout(() => console.log('setTimeout'));
   setTimeout(() => console.log('setTimeout 0'), 0);
   setImmediate(() => console.log('setImmediate'));
@@ -60,3 +64,5 @@ const logsMicroMacro = () => {
 
   console.log('after');
 };
+
+logsMicroMacro();
