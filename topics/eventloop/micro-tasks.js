@@ -26,8 +26,8 @@ const microAndMacro = () => {
  */
 const timers = () => {
   setTimeout(() => console.log('setTimeout 0'), 0);
-  setTimeout(() => console.log('setTimeout'));
   setImmediate(() => console.log('setImmediate'));
+  setTimeout(() => console.log('setTimeout'));
 };
 
 /**
@@ -64,5 +64,3 @@ const logsMicroMacro = () => {
 
   console.log('after');
 };
-
-logsMicroMacro();
