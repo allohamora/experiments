@@ -1,7 +1,7 @@
 /**
  * @example
  * queueMicrotask
- * proccess.nextTick
+ * process.nextTick
  * setImmediate
  * setTimeout
  * setTimeout 0
@@ -13,7 +13,7 @@ const microAndMacro = () => {
 
   queueMicrotask(() => console.log('queueMicrotask'));
 
-  process.nextTick(() => console.log('proccess.nextTick'));
+  process.nextTick(() => console.log('process.nextTick'));
 };
 
 /**
