@@ -1,2 +1,6 @@
+# Upload
 src/upload/**
 !src/upload/.gitkeep
+
+# Env
+.env

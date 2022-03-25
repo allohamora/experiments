@@ -7,8 +7,8 @@ services:
       - 9001:9001
     volumes:
       - minio-data:/data
-    environment:
-      MINIO_ROOT_USER: example
-      MINIO_ROOT_PASSWORD: example
+    env_file:
+      - .env
+    command: server --console-address ":9001" /data
 volumes:
   minio-data:

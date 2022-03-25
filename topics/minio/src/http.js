@@ -11,12 +11,14 @@ export const HttpCode = {
   Ok: 200,
   Created: 201,
   BadRequest: 400,
+  NotFound: 404,
 };
 
 export const HttpMessage = {
   Ok: 'Ok',
   Created: 'Created',
   BadRequest: 'Bad Request',
+  NotFound: 'Not Found',
 };
 
 const createReply = (res) => {

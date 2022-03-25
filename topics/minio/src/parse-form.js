@@ -1,8 +1,45 @@
 import busboy from 'busboy';
 import { createWriteStream } from 'node:fs';
 import { uploadFilePath } from './path.js';
+import { minioClient, UPLOAD_BUCKET, UPLOAD_REGION } from './minio.js';
 
-export const parseForm = (req) =>
+export const staticUploadStrategy = {
+  fileHandler: (name, stream, info) => {
+    const { filename } = info;
+    const filePath = uploadFilePath(filename);
+    const writeStream = createWriteStream(filePath);
+    const url = `/static/file/${filename}`;
+
+    stream.pipe(writeStream);
+
+    return {
+      ...info,
+      url,
+    };
+  },
+};
+
+export const minioUploadStrategy = {
+  fileHandler: async (name, stream, info) => {
+    const { filename } = info;
+    const isBucketExists = await minioClient.bucketExists(UPLOAD_BUCKET);
+
+    if (!isBucketExists) {
+      await minioClient.makeBucket(UPLOAD_BUCKET, UPLOAD_REGION);
+    }
+
+    const url = `/minio/file/${UPLOAD_BUCKET}/${filename}`;
+
+    minioClient.putObject(UPLOAD_BUCKET, filename, stream);
+
+    return {
+      ...info,
+      url,
+    };
+  },
+};
+
+export const parseForm = (req, strategy = staticUploadStrategy) =>
   new Promise((res, rej) => {
     const bb = busboy({ headers: req.headers });
     const form = {};
@@ -16,17 +53,9 @@ export const parseForm = (req) =>
     });
 
     bb.on('file', async (name, stream, info) => {
-      const { filename } = info;
-      const filePath = uploadFilePath(filename);
-      const writeStream = createWriteStream(filePath);
+      const file = await strategy.fileHandler(name, stream, info);
 
-      form[name] = {
-        ...info,
-        filePath,
-        type: 'file',
-      };
-
-      stream.pipe(writeStream);
+      form[name] = { ...file, type: 'file' };
     });
 
     bb.on('error', (error) => rej(error));

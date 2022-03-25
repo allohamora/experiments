@@ -12,6 +12,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
-    "busboy": "^1.5.0"
+    "busboy": "^1.5.0",
+    "minio": "^7.0.26"
   }
 }
