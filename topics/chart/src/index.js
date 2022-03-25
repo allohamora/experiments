@@ -1,16 +1,18 @@
-import { initCanvas, draw } from './chart.js';
+import { initCanvas, draw, computePoints } from './chart.js';
 
-const points = [
-  { x: 50, y: 50 },
-  { x: 150, y: 100 },
-  { x: 150, y: 150 },
-  { x: 200, y: 200 },
-];
+const data = [-10, 0, 10, 0, -10];
+
+const HEIGHT = 300;
+const WIDTH = 300;
+const PADDING = 20;
+const VIEW_HEIGHT = HEIGHT - PADDING * 2;
+const VIEW_WIDTH = WIDTH - PADDING * 2;
 
 const main = () => {
-  const { ctx } = initCanvas();
+  const { ctx } = initCanvas({ height: HEIGHT, width: WIDTH });
+  const points = computePoints({ data, height: VIEW_HEIGHT, width: VIEW_WIDTH, padding: PADDING });
 
-  draw(ctx, points);
+  draw({ ctx, points, height: HEIGHT, padding: PADDING, circleSize: 5, fontSize: 14 });
 };
 
 main();
