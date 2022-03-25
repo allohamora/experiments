@@ -12,3 +12,19 @@ export const minioClient = new Client({
 
 export const UPLOAD_BUCKET = 'minio.topic';
 export const UPLOAD_REGION = 'eu-central-1';
+
+export const publicReadPolicy = (bucket) =>
+  JSON.stringify({
+    Version: '2012-10-17',
+    Statement: [
+      {
+        Sid: 'PublicRead',
+        Effect: 'Allow',
+        Principal: '*',
+        Action: ['s3:GetObject', 's3:GetObjectVersion'],
+        Resource: [`arn:aws:s3:::${bucket}/*`],
+      },
+    ],
+  });
+
+export const getPublicDownloadUrl = (bucket, filename) => `${MINIO_ENDPOINT}:${MINIO_PORT}/${bucket}/${filename}`;

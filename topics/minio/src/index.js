@@ -3,7 +3,6 @@ import { createServer, logging, routing, HttpCode, HttpType, HttpMessage } from 
 import { publicFilePath, uploadFilePath } from './path.js';
 import { minioUploadStrategy, parseForm } from './parse-form.js';
 import { isExists } from './fs.js';
-import { minioClient } from './minio.js';
 
 const { PORT = 3000 } = process.env;
 
@@ -27,24 +26,6 @@ const routes = {
 
     res.statusCode = 200;
     readStream.pipe(res);
-  },
-  'GET:/minio/file/.+': async ({ req, res, reply }) => {
-    const [bucket, file] = req.url.replace('/minio/file/', '').split('/');
-    const notFound = () => reply({ status: HttpCode.NotFound, data: HttpMessage.NotFound });
-
-    if (!bucket || !file) {
-      notFound();
-      return;
-    }
-
-    try {
-      const stream = await minioClient.getObject(bucket, file);
-
-      res.statusCode = 200;
-      stream.pipe(res);
-    } catch (error) {
-      notFound();
-    }
   },
   'GET:/': ({ res }) => {
     const readStream = createReadStream(publicFilePath('index.html'));

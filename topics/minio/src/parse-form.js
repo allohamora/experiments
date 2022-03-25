@@ -1,7 +1,7 @@
 import busboy from 'busboy';
 import { createWriteStream } from 'node:fs';
 import { uploadFilePath } from './path.js';
-import { minioClient, UPLOAD_BUCKET, UPLOAD_REGION } from './minio.js';
+import { getPublicDownloadUrl, minioClient, publicReadPolicy, UPLOAD_BUCKET, UPLOAD_REGION } from './minio.js';
 
 export const staticUploadStrategy = {
   fileHandler: (name, stream, info) => {
@@ -26,9 +26,10 @@ export const minioUploadStrategy = {
 
     if (!isBucketExists) {
       await minioClient.makeBucket(UPLOAD_BUCKET, UPLOAD_REGION);
+      await minioClient.setBucketPolicy(UPLOAD_BUCKET, publicReadPolicy(UPLOAD_BUCKET));
     }
 
-    const url = `/minio/file/${UPLOAD_BUCKET}/${filename}`;
+    const url = getPublicDownloadUrl(UPLOAD_BUCKET, filename);
 
     minioClient.putObject(UPLOAD_BUCKET, filename, stream);
 
