@@ -2,17 +2,23 @@ import { initCanvas, draw, computePoints } from './chart.js';
 
 const data = [-10, 0, 10, 0, -10];
 
-const HEIGHT = 300;
-const WIDTH = 300;
-const PADDING = 20;
-const VIEW_HEIGHT = HEIGHT - PADDING * 2;
-const VIEW_WIDTH = WIDTH - PADDING * 2;
-
 const main = () => {
-  const { ctx } = initCanvas({ height: HEIGHT, width: WIDTH });
-  const points = computePoints({ data, height: VIEW_HEIGHT, width: VIEW_WIDTH, padding: PADDING });
+  const height = 300;
+  const width = 300;
+  const padding = 20;
+  const viewHeight = height - padding * 2;
+  const viewWidth = width - padding * 2;
 
-  draw({ ctx, points, height: HEIGHT, padding: PADDING, circleSize: 5, fontSize: 14 });
+  const circleSize = 5;
+  const fontSize = 14;
+
+  // 0 = straight lines, 1 = smooth lines
+  const tension = 1;
+
+  const { ctx } = initCanvas({ height, width });
+  const points = computePoints({ data, viewHeight, viewWidth, padding });
+
+  draw({ ctx, points, height, padding, circleSize, fontSize, tension });
 };
 
 main();

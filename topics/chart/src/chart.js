@@ -1,4 +1,4 @@
-export const initCanvas = ({ width = 300, height = 300 } = {}) => {
+export const initCanvas = ({ width, height } = {}) => {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -14,7 +14,7 @@ export const initCanvas = ({ width = 300, height = 300 } = {}) => {
  * google it: spline interpolation canvas curve js
  * https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas
  */
-const drawLines = ({ ctx, points, height, padding, t = 1 }) => {
+const drawLines = ({ ctx, points, height, padding, tension: t }) => {
   ctx.beginPath();
   ctx.moveTo(padding, height - padding);
 
@@ -65,17 +65,17 @@ export const draw = (context) => {
   drawTooltips(context);
 };
 
-export const computePoints = ({ data, width, height, padding }) => {
-  const step = width / (data.length - 1);
+export const computePoints = ({ data, viewWidth, viewHeight, padding }) => {
+  const step = viewWidth / (data.length - 1);
 
   const min = Math.min(...data);
   const max = Math.max(...data);
 
-  const ratio = (max - min) / height;
+  const ratio = (max - min) / viewHeight;
 
   return data.map((value, i) => ({
     x: Math.floor(i * step + padding),
-    y: Math.floor(height + padding - (value - min) / ratio),
+    y: Math.floor(viewHeight + padding - (value - min) / ratio),
     value,
   }));
 };
