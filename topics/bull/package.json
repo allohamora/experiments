@@ -1,0 +1,20 @@
+{
+  "name": "bull.topic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "command:start": "node",
+    "command:dev": "nodemon -r dotenv/config",
+    "consumer:start": "npm run command:start src/consumer.js",
+    "consumer:dev": "npm run command:dev src/consumer.js",
+    "sender:start": "npm run command:start src/sender.js",
+    "sender:dev": "npm run command:dev src/sender.js"
+  },
+  "dependencies": {
+    "bull": "^4.8.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
