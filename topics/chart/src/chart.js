@@ -10,6 +10,10 @@ export const initCanvas = ({ width = 300, height = 300 } = {}) => {
   return { canvas, ctx };
 };
 
+/**
+ * google it: spline interpolation canvas curve js
+ * https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas
+ */
 const drawLines = ({ ctx, points, height, padding, t = 1 }) => {
   ctx.beginPath();
   ctx.moveTo(padding, height - padding);
