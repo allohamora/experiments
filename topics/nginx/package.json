@@ -1,0 +1,8 @@
+{
+  "name": "nginx.topic",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Error: no script specified\" && exit 1",
+    "dev": "echo \"Error: no script specified\" && exit 1"
+  }
+}
