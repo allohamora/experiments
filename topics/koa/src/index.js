@@ -1,5 +1,6 @@
 import Koa from 'koa';
 import Router from '@koa/router';
+import logger from 'koa-logger';
 
 const port = 3000;
 
@@ -14,6 +15,7 @@ router
     ctx.body = 'pong';
   });
 
+app.use(logger());
 app.use(router.routes());
 
 app.listen(port, () => console.log(`server listening on port: ${port}`));
