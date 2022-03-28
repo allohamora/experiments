@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "debug": "NODE_DEBUG=app* npm run dev"
   },
   "dependencies": {
     "@koa/router": "^10.1.1",
+    "ajv": "^8.11.0",
     "koa": "^2.13.4",
     "koa-logger": "^3.2.1"
   },
