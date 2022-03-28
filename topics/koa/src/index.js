@@ -2,12 +2,17 @@ import Koa from 'koa';
 import logger from 'koa-logger';
 import Router from '@koa/router';
 import Ajv from 'ajv';
+import { koaSwagger } from 'koa2-swagger-ui';
+import Yaml from 'yaml';
+import { readFile } from 'node:fs/promises';
 import { debuglog } from 'node:util';
 
 const port = 3000;
+const swaggerFilePath = 'swagger.yml';
 
 const app = new Koa();
 const router = new Router();
+
 const ajv = new Ajv({
   // transform types. e.g. '1' => 1
   coerceTypes: true,
@@ -41,7 +46,7 @@ router
     ctx.body = 'pong';
   })
   .get(
-    '/summ/:a/:b',
+    '/sum/:a/:b',
     validateParams({
       type: 'object',
       properties: {
@@ -58,8 +63,16 @@ router
     },
   );
 
-app.use(logger());
-app.use(router.routes());
-app.use(router.allowedMethods());
+const main = async () => {
+  const swaggerFile = await readFile(swaggerFilePath, 'utf-8');
+  const spec = Yaml.parse(swaggerFile);
 
-app.listen(port, () => console.log(`server listening on port: ${port}`));
+  app.use(logger());
+  app.use(koaSwagger({ routePrefix: '/docs', exposeSpec: true, swaggerOptions: { spec } }));
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+
+  app.listen(port, () => console.log(`server listening on port: ${port}`));
+};
+
+main();

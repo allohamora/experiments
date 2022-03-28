@@ -1,0 +1,80 @@
+openapi: 3.0.0
+info:
+  title: Koa Topic
+  description: Koa Topic Example
+  version: 0.0.0
+
+paths:
+  /:
+    get:
+      summary: Returns text
+      description: Returns index text
+      responses:
+        "200":
+          description: index text
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: index page
+  /ping:
+    get:
+      description: Returns pong
+      tags:
+        - ping
+      responses:
+        200:
+          description: pong text
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+  /sum/{a}/{b}:
+    get:
+      description: Returns sum of a and b
+      tags:
+        - sum
+      parameters:
+        - in: path
+          name: a
+          required: true
+          schema:
+            type: integer
+          example: 1
+        - in: path
+          name: b
+          required: true
+          schema:
+            type: integer
+          example: 2
+      responses:
+        200:
+          description: the sum of a and b
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 3
+        400:
+          description: invalid parameters
+          content:
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    instancePath:
+                      type: string
+                    schemaPath:
+                      type: string
+                    keyword:
+                      type: string
+                    params:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                    message:
+                      type: string
