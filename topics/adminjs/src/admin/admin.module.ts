@@ -90,7 +90,7 @@ const resources: ResourceWithOptions[] = [
             translations: {
               properties: {
                 email: 'Login',
-                rolesIds: 'roles',
+                rolesIds: 'Roles',
               },
             },
           },
