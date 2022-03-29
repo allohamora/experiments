@@ -11,6 +11,9 @@ export class UsersService {
   ) {}
 
   public getByLogin(login: string) {
-    return this.userRepository.findOneOrFail({ where: { login } });
+    return this.userRepository.findOneOrFail({
+      where: { login },
+      relations: ['roles'],
+    });
   }
 }

@@ -1,5 +1,9 @@
 # Compiled output
 dist
+.adminjs
+
+# IDE
+.vscode
 
 # Env
 .env
