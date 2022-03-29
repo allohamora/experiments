@@ -1,0 +1,38 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "adminjs",
+  "dateExported": "2022-03-29T10:24:36.891Z",
+  "version": "1.1",
+  "folders": [
+    {
+      "containerId": "",
+      "sortNum": 10000,
+      "name": "auth",
+      "_id": "eb350cc1-3757-48e5-b146-3830141f3453",
+      "created": "2022-03-29T10:23:34.213Z"
+    }
+  ],
+  "requests": [
+    {
+      "containerId": "eb350cc1-3757-48e5-b146-3830141f3453",
+      "sortNum": 20000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        {
+          "name": "User-Agent",
+          "value": "Thunder Client (https://www.thunderclient.com)"
+        },
+        { "name": "Authorization", "value": "Login user" }
+      ],
+      "colId": "7a7baa0a-3b30-4665-9962-0bca73408659",
+      "name": "me",
+      "url": "{{BASE_URL}}/auth/me",
+      "method": "GET",
+      "modified": "2022-03-29T10:24:10.470Z",
+      "created": "2022-03-29T10:23:37.565Z",
+      "_id": "f29ad55d-1d0d-4c5c-b1d3-406530958f38",
+      "params": [],
+      "tests": []
+    }
+  ]
+}

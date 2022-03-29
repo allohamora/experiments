@@ -1,0 +1,7 @@
+{
+  "client": "Thunder Client",
+  "environmentName": "adminjs",
+  "dateExported": "2022-03-29T10:24:58.355Z",
+  "version": "1.0",
+  "variables": [{ "name": "BASE_URL", "value": "http://localhost:3000" }]
+}
