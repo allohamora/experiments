@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { Title } from 'react-admin';
 
 export const Dashboard: FC = () => (
-  <Card>
+  <Card variant="outlined">
     <Title title="Dashboard" />
     <CardContent>
       <Typography variant="h4">Welcome to Admin Panel Dashboard</Typography>

@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import {
-  ChipField,
   Datagrid,
   DeleteButton,
   EditButton,
@@ -11,21 +10,27 @@ import {
   SingleFieldList,
   TextField,
 } from 'react-admin';
+import { ChipField } from 'src/components/ChipField';
+import { usePermissions } from 'src/lib/react-admin/usePermissions';
 
-export const PostsList: FC = (props) => (
-  <List {...props}>
-    <Datagrid>
-      <TextField source="id" />
-      <TextField source="title" />
-      <RichTextField source="body" />
-      <ReferenceArrayField reference="authors" source="authorIds">
-        <SingleFieldList>
-          <ChipField source="login" />
-        </SingleFieldList>
-      </ReferenceArrayField>
-      <EditButton />
-      <ShowButton />
-      <DeleteButton />
-    </Datagrid>
-  </List>
-);
+export const PostsList: FC = (props) => {
+  const { isAdmin, isEditor } = usePermissions();
+
+  return (
+    <List {...props}>
+      <Datagrid>
+        <TextField source="id" />
+        <TextField source="title" />
+        <RichTextField source="body" />
+        <ReferenceArrayField reference="authors" source="authorIds">
+          <SingleFieldList>
+            <ChipField source="login" />
+          </SingleFieldList>
+        </ReferenceArrayField>
+        {isEditor && <EditButton />}
+        <ShowButton />
+        {isAdmin && <DeleteButton />}
+      </Datagrid>
+    </List>
+  );
+};
