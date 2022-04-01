@@ -10,9 +10,10 @@ import {
   SingleFieldList,
   TextField,
 } from 'react-admin';
+import { Actions } from 'src/authors/Actions';
 
 export const AuthorLists: FC = (props) => (
-  <List {...props}>
+  <List {...props} actions={<Actions />}>
     <Datagrid>
       <TextField source="id" />
       <TextField source="login" />
