@@ -1,4 +1,4 @@
-# [react-admin](https://marmelab.com/react-admin/)
+# [react-admin](https://marmelab.com/react-admin/) / 01.04.2022
 
 - Have i18n support +
 - Have many to many render +
@@ -8,4 +8,4 @@
 
 ## Essential
 
-[React-admin](https://marmelab.com/react-admin/) better than [adminjs(admin-bro)](https://github.com/allohamora/experiments/tree/master/topics/adminjs) because it doesn't have the adminjs issues (01.04.2022)
+[React-admin](https://marmelab.com/react-admin/) better than [adminjs(admin-bro)](https://github.com/allohamora/experiments/tree/master/topics/adminjs) because it doesn't have the adminjs issues
