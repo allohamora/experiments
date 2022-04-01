@@ -27,9 +27,11 @@ export const PostsList: FC = (props) => {
             <ChipField source="login" />
           </SingleFieldList>
         </ReferenceArrayField>
-        {isEditor && <EditButton />}
-        <ShowButton />
-        {isAdmin && <DeleteButton />}
+        <div>
+          {isEditor && <EditButton />}
+          <ShowButton />
+          {isAdmin && <DeleteButton />}
+        </div>
       </Datagrid>
     </List>
   );

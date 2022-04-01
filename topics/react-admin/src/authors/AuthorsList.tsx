@@ -26,9 +26,11 @@ export const AuthorLists: FC = (props) => {
             <ChipField source="title" />
           </SingleFieldList>
         </ReferenceArrayField>
-        {isAdmin && <EditButton />}
-        <ShowButton />
-        {isAdmin && <DeleteButton />}
+        <div>
+          {isAdmin && <EditButton />}
+          <ShowButton />
+          {isAdmin && <DeleteButton />}
+        </div>
       </Datagrid>
     </List>
   );

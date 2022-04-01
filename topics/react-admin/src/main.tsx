@@ -9,6 +9,7 @@ import { authProvider } from './lib/react-admin/authProvider';
 import { createTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import 'src/style/index.css';
+import { getI18nProvider } from './lib/react-admin/i18n';
 
 const theme = createTheme({
   palette: {
@@ -27,7 +28,15 @@ const dataProvider = localStorageDataProvider();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Admin dataProvider={dataProvider} authProvider={authProvider} dashboard={Dashboard} theme={theme} disableTelemetry>
+    <Admin
+      locale="uk"
+      i18nProvider={getI18nProvider()}
+      dataProvider={dataProvider}
+      authProvider={authProvider}
+      dashboard={Dashboard}
+      theme={theme}
+      disableTelemetry
+    >
       <Resource {...posts} />
       <Resource {...authors} />
     </Admin>
