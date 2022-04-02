@@ -1,6 +1,8 @@
 :root {
   --color-primary: #2196f3;
   --color-white: #fff;
+
+  --font: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 html, body {
@@ -8,7 +10,23 @@ html, body {
   padding: 0;
 }
 
+body {
+  font-family: var(--font);
+}
+
 .MuiChip-root.MuiChip-root {
   color: var(--color-white);
   background-color: var(--color-primary);
+}
+
+.se-toolbar-sticky-dummy {
+  display: none !IMPORTANT;
+}
+
+.sun-editor {
+  margin-top: 20px;
+}
+
+.sun-editor, .sun-editor-editable {
+  font-family: inherit;
 }

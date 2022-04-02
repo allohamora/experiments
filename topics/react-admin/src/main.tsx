@@ -9,6 +9,7 @@ import { authProvider } from './lib/react-admin/authProvider';
 import { createTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { getI18nProvider } from './lib/react-admin/i18n';
+import 'suneditor/dist/css/suneditor.min.css';
 import 'src/style/index.css';
 
 const theme = createTheme({
