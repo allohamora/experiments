@@ -1,4 +1,14 @@
+:root {
+  --color-primary: #2196f3;
+  --color-white: #fff;
+}
+
 html, body {
   margin: 0;
   padding: 0;
+}
+
+.MuiChip-root.MuiChip-root {
+  color: var(--color-white);
+  background-color: var(--color-primary);
 }

@@ -8,8 +8,8 @@ import { Dashboard } from './components/Dashboard';
 import { authProvider } from './lib/react-admin/authProvider';
 import { createTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
-import 'src/style/index.css';
 import { getI18nProvider } from './lib/react-admin/i18n';
+import 'src/style/index.css';
 
 const theme = createTheme({
   palette: {
@@ -29,7 +29,6 @@ const dataProvider = localStorageDataProvider();
 ReactDOM.render(
   <React.StrictMode>
     <Admin
-      locale="uk"
       i18nProvider={getI18nProvider()}
       dataProvider={dataProvider}
       authProvider={authProvider}
