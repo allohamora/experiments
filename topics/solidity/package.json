@@ -3,7 +3,13 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "start": "echo \"Error: no script specified\" && exit 1",
-    "dev": "echo \"Error: no script specified\" && exit 1"
+    "truffle": "truffle",
+    "build": "truffle build",
+    "deploy": "truffle deploy",
+    "develop": "truffle develop",
+    "migrate": "truffle migrate"
+  },
+  "dependencies": {
+    "truffle": "^5.5.7"
   }
 }
