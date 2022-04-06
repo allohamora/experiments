@@ -4,50 +4,55 @@ pragma solidity >=0.4.22 <0.9.0;
 contract TodoList {
   uint public count = 0;
 
-  struct Task {
+  struct Todo {
     uint id;
-    string title;
-    string body;
+    string content;
     bool isCompleted;
   }
 
-  mapping(uint => Task) public tasks;
+  mapping(uint => Todo) public todos;
 
-  event TaskCreated (
+  event TodoCreated (
     uint id,
-    string title,
-    string body,
+    string content,
     bool isCompleted
   );
 
-  function createTask(string memory _title, string memory _body) public {
+  function createTodo(string memory _content) public {
     count++;
-    tasks[count] = Task(count, _title, _body, false);
-    emit TaskCreated(count, _title, _body, false);
+    todos[count] = Todo(count, _content, false);
+    emit TodoCreated(count, _content, false);
   }
 
-  event TaskCompleted (
+  event TodoCompleted (
     uint id
   );
 
-  function completeTask(uint _id) public {
-    Task memory _task = tasks[_id];
-    _task.isCompleted = true;
-    tasks[_id] = _task;
-    emit TaskCompleted(_task.id);
+  function completeTodo(uint _id) public {
+    Todo memory _todo = todos[_id];
+    _todo.isCompleted = true;
+    todos[_id] = _todo;
+    emit TodoCompleted(_todo.id);
   }
 
-  event TaskUpdated (
+  event TodoUpdated (
     uint id,
-    string title,
-    string body,
+    string content,
     bool isCompleted
   );
 
-  function updateTask(uint _id, string memory _title, string memory _body) public {
-    Task memory _task = tasks[_id];
-    _task.title = _title;
-    _task.body = _body;
-    emit TaskUpdated(_id, _title, _body, _task.isCompleted);
+  function updateTodo(uint _id, string memory _content) public {
+    Todo memory _todo = todos[_id];
+    _todo.content = _content;
+    emit TodoUpdated(_id, _content, _todo.isCompleted);
+  }
+
+  event TodoDeleted (
+    uint id
+  );
+
+  function deleteTodo(uint _id) public {
+    delete todos[_id];
+    emit TodoDeleted(_id);
   }
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solidity Todo List</title>
+  <style>
+    ol {
+      padding-left: 1em;
+    }
+    ol li {
+      margin-bottom: 5px;
+    }
+
+    .todos {
+      display: none;
+    }
+
+    .todos--active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Welcome to Solidity Todo List Demo App</h1>
+    <p>To open todo list demo you need:</p>
+    <ol>
+      <li><button class="login">Login</button></li>
+      <li><button class="set-network">Set Network</button></li>
+      <li><button class="check-network" >Check Network</button></li>
+    </ol>
+
+    <div class="todos">
+      <p>Features:</p>
+      <div>
+        <button class="create-todo">Create Todo</button>
+        <button class="update-todo">Update Todo</button>
+        <button class="complete-todo">Complete Todo</button>
+        <button class="delete-todo">Delete Todo</button>
+      </div>
+      <p>Todo List:</p>
+      <div class="todos__list"></div>
+    </div>
+  </div>
+  
+  <script id="TodoList" type="application/json" src="../build/contracts/TodoList.json"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.7.1/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.2.31/dist/truffle-contract.min.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
