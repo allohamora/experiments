@@ -97,7 +97,7 @@ const todosList = todos.querySelector('.todos__list');
 let TodoList;
 
 const setTodoListContract = async () => {
-  const TodoListJson = await fetch('../build/contracts/TodoList.json').then((res) => res.json());
+  const TodoListJson = await fetch('/contracts/TodoList.json').then((res) => res.json());
   const TodoListContract = window.TruffleContract(TodoListJson);
 
   TodoListContract.setProvider(window.web3.currentProvider);
@@ -109,27 +109,16 @@ const setTodoListContract = async () => {
 };
 
 const renderTodos = async () => {
-  const {
-    words: [count],
-  } = await TodoList.count();
-  const todos = await Promise.all(Array.from({ length: count }, (_, i) => TodoList.todos(i + 1)));
+  const todos = await TodoList.getTodos();
 
   todosList.innerHTML = '';
-  todos.forEach(
-    ({
-      content,
-      isCompleted,
-      id: {
-        words: [id],
-      },
-    }) => {
-      if (content === '') {
-        return;
-      }
+  todos.forEach(({ id, content, isCompleted }) => {
+    if (content === '') {
+      return;
+    }
 
-      todosList.insertAdjacentHTML('afterbegin', `<div>${id}. ${content} (${isCompleted ? 'V' : 'X'})</div>`);
-    },
-  );
+    todosList.insertAdjacentHTML('afterbegin', `<div>${id}. ${content} (${isCompleted ? 'V' : 'X'})</div>`);
+  });
 
   if (todos.length === 0) {
     todosList.innerHTML = 'Nothing added';

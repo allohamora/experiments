@@ -55,4 +55,15 @@ contract TodoList {
     delete todos[_id];
     emit TodoDeleted(_id);
   }
+
+  function getTodos() public view returns(Todo[] memory) {
+    Todo[] memory _todos = new Todo[](count);
+
+    for (uint i = 0; i < count; i++) {
+      Todo memory _todo = todos[i + 1];
+      _todos[i] = _todo;
+    }
+
+    return _todos;
+  }
 }

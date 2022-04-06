@@ -8,7 +8,7 @@
     "deploy": "truffle deploy",
     "develop": "truffle develop",
     "migrate": "truffle migrate",
-    "app:dev": "serve app"
+    "app:start": "serve"
   },
   "dependencies": {
     "serve": "^13.0.2",

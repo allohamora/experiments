@@ -15,8 +15,10 @@ $ npm run migrate
 - After each development server you need migrate your contracts to it and import new private key to metamask
 - Develop server always uses develop network
 - Migrate script uses development network by default
+- If function doesn't work with states/side effects/etc (pure function) call anyway consts money
+- If function doesn't work with states/side effects/etc (pure function) and has view modifier call doesn't cost money
 - Contracts states are global everyone can interact with it, read, write, delete and etc. In this example tasks is a shared (global) state. One user can write to it, another read it value
-- Read public data doesn't cost anything. But function call costs
+- Read public data doesn't cost anything. But function call cost
 - Front end side of web3 super raw, doesn't have normal bundles for fron-end (web3, @truffle/contract) which not requers node inner modules like buffer/net. Also doesn't have normal types for these packages
 - Metamask can't switch network to test network and can't add not https: network
 - All web3 libraries binds something (window.web3, window.ethereum, window.TruffleContract) to window

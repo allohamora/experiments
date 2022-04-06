@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "app/index.html" },
+    { "source": "/:path", "destination": "app/:path" },
+    { "source": "/contracts/:contract", "destination": "build/contracts/:contract" }
+  ]
+}
