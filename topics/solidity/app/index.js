@@ -45,12 +45,12 @@ const addNetwork = async () => {
 };
 
 const setNetwork = async () => {
-  // can't swith to test networks 06.04.2022
+  // can't swith to test network 06.04.2022
   try {
     await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: network.chainId }] });
   } catch (error) {
+    // network doesn't exists
     if (error.code === 4902) {
-      // network doesn't exists
       await addNetwork();
     }
 
