@@ -43,7 +43,7 @@ const forms = [
   },
   {
     fields: [required(id), required(title), required(content)],
-    name: 'Update one',
+    name: 'Update (replace) one',
     method: Method.Put,
     route: '/posts/:id',
     bodyType: BodyType.Json
