@@ -19,6 +19,11 @@ const id = {
   min: 1,
 };
 
+const postId = {
+  ...id,
+  name: 'postId'
+};
+
 const forms = [
   {
     fields: [],
@@ -61,6 +66,20 @@ const forms = [
     method: Method.Delete,
     route: '/posts/:id',
     bodyType: BodyType.Json
+  },
+  {
+    fields: [required(postId)],
+    name: 'Get All',
+    method: Method.Get,
+    route: '/posts/:postId/langs',
+    bodyType: BodyType.Text
+  },
+  {
+    fields: [required(postId), required(id)],
+    name: 'Get one',
+    method: Method.Get,
+    route: '/posts/:postId/langs/:id',
+    bodyType: BodyType.Text
   }
 ];
 

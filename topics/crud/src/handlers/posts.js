@@ -1,13 +1,6 @@
 import { HttpError, Message, StatusCode } from '../utils/http.js';
 
-let lastId = 1;
-let postsList = [
-  {
-    id: lastId,
-    title: 'first post',
-    content: 'post about war between cats and dogs',
-  },
-];
+let lastId = 0;
 
 function* idGeneratorFactory() {
   while (true) {
@@ -18,12 +11,65 @@ function* idGeneratorFactory() {
 const idGenerator = idGeneratorFactory();
 const nextId = () => idGenerator.next().value;
 
+let postList = [
+  {
+    id: nextId(),
+    title: 'first post',
+    content: 'post about war between cats and dogs',
+  },
+];
+
+let langList = [
+  {
+    id: nextId(),
+    text: 'English',
+    code: 'en',
+  },
+];
+
+const postsLangs = new Map();
+postsLangs.set(postList[0].id, [langList[0].id]);
+
+const getLangs = (postId) => {
+  const parsedId = Number(postId);
+  if (!postsLangs.has(parsedId)) {
+    throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
+  }
+
+  const langIds = postsLangs.get(parsedId);
+  return langIds.map((id) => langList.find((lang) => lang.id === id));
+};
+
+const findLangOrFail = ({ postId, id }) => {
+  const langs = getLangs(postId);
+  const parsedId = Number(id);
+  const found = langs.find((lang) => lang.id === parsedId);
+
+  if (!found) {
+    throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
+  }
+
+  return found;
+};
+
+const getAllLangs = ({ reply, params: { postId } }) => {
+  const langs = getLangs(postId);
+
+  reply({ data: langs });
+};
+
+const getOneLang = ({ reply, params: { postId, id } }) => {
+  const lang = findLangOrFail({ postId, id });
+
+  reply({ data: lang });
+};
+
 const getAll = ({ reply }) => {
-  reply({ data: postsList });
+  reply({ data: postList });
 };
 
 const findByIdOrFail = (id) => {
-  const found = postsList.find((post) => post.id === Number(id));
+  const found = postList.find((post) => post.id === Number(id));
 
   if (!found) {
     throw new HttpError({ message: Message.NotFound, StatusCode: StatusCode.NotFound });
@@ -62,7 +108,7 @@ const createOne = ({
     content,
   };
 
-  postsList.push(post);
+  postList.push(post);
 
   reply({ statusCode: StatusCode.Created, data: post });
 };
@@ -113,7 +159,7 @@ const patchOne = ({
 const deleteOne = ({ reply, params: { id } }) => {
   const found = findByIdOrFail(id);
 
-  postsList = postsList.filter((post) => post.id === id);
+  postList = postList.filter((post) => post.id === id);
 
   reply({ data: found });
 };
@@ -125,4 +171,9 @@ export const posts = ({ router }) => {
   router.put('/posts/:id', updateOne);
   router.patch('/posts/:id', patchOne);
   router.delete('/posts/:id', deleteOne);
+
+  // for nested entities
+  // I don’t see the point in duplicating all routes, the meaning is already clear
+  router.get('/posts/:postId/langs', getAllLangs);
+  router.get('/posts/:postId/langs/:id', getOneLang);
 };
