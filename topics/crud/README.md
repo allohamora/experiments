@@ -9,8 +9,8 @@ create full restfull crud examples with html forms on front and vanilla nodejs o
 - to parial update one use PATCH:/entities/:id with partial body or [json patch](http://jsonpatch.com)
 - to delete one use DELETE:/entities/:id
 - to get nested entity you can use:
-  - GET:/nested-entities/?main-entity-id=:main-entity-id # not nested
-  - GET:/main-entities/:main-entity-id/nested-entities/:nested-entity-id # nested
+  - GET:/nested-entities/?main-entity-id=:main-entity-id # not nested approach
+  - GET:/main-entities/:main-entity-id/nested-entities/:nested-entity-id # nested approach
 - to crud nested entity i prefer use not nested approach where you crud nested-id/nested-ids entity field, but in some cases nested approach with crud entity directly can be useful
 - if entity is singular you can use /entity path instead of /entities
 
