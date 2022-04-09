@@ -38,7 +38,7 @@ export const BodyType = {
   Text: 'text/plain'
 };
 
-const bodyStringifiers = {
+const serializers = {
   [BodyType.Json]: (body) => JSON.stringify(body),
   [BodyType.Text]: (body) => new URLSearchParams(body).toString()
 }
@@ -87,10 +87,10 @@ const fillUrl = ({ route, data }) => {
   return { url, body };
 }
 
-const stringifyBody = ({ bodyType, body }) => {
-  const stringifier = bodyStringifiers[bodyType] ?? bodyStringifiers[BodyType.Text];
+const serializeBody = ({ bodyType, body }) => {
+  const serialize = serializers[bodyType] ?? serializers[BodyType.Text];
   
-  return stringifier(body);
+  return serialize(body);
 }
 
 const request = async ({ url, method, contentType, body }) => {
@@ -113,9 +113,9 @@ const submitHandler = ({ method, route, bodyType }) => async (e) => {
 
   const data = parseForm(e.target);
   const { url, body } = fillUrl({ route, data });
-  const stringifiedBody = stringifyBody({ bodyType, body });
+  const serializedBody = serializeBody({ bodyType, body });
 
-  const response = await request({ url, method, contentType: bodyType, body: stringifiedBody });
+  const response = await request({ url, method, contentType: bodyType, body: serializedBody });
   
   setResult(response);
 }
