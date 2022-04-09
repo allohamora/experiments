@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import findMyWay from 'find-my-way';
-import { ContentType, Message, StatusCode } from './utils/http.js';
+import { ContentType, HttpError, Message, StatusCode } from './utils/http.js';
 
 export class Server {
   #middlewares = [];
@@ -26,13 +26,13 @@ export class Server {
   }
 
   #replyFactory(res) {
-    return ({ status = StatusCode.Ok, data = Message.Ok, contentType = ContentType.Text }) => {
+    return ({ statusCode = StatusCode.Ok, data = Message.Ok, contentType = ContentType.Text }) => {
       if (typeof data === 'object' && data !== null) {
         data = JSON.stringify(data);
         contentType = ContentType.Json;
       }
 
-      res.statusCode = status;
+      res.statusCode = statusCode;
       res.setHeader('Content-Type', contentType);
       res.end(data);
     };
@@ -49,7 +49,17 @@ export class Server {
       const route = this.#router.find(req.method, req.url);
 
       if (route) {
-        await route.handler({ ...ctx, params: route.params });
+        try {
+          await route.handler({ ...ctx, params: route.params });
+        } catch (error) {
+          if (error instanceof HttpError) {
+            reply({ ...error.toResponse() });
+            return;
+          }
+
+          console.error(error);
+          reply({ statusCode: StatusCode.InternalServerError, data: Message.InternalServerError });
+        }
       }
     });
 

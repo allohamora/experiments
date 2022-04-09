@@ -1,4 +1,4 @@
-import { Message, StatusCode } from '../utils/http.js';
+import { HttpError, Message, StatusCode } from '../utils/http.js';
 
 let lastId = 1;
 let postsList = [
@@ -22,13 +22,24 @@ const getAll = ({ reply }) => {
   reply({ data: postsList });
 };
 
-const getOne = ({ reply, params: { id } }) => {
+const findByIdOrFail = (id) => {
   const found = postsList.find((post) => post.id === Number(id));
 
   if (!found) {
-    reply({ status: StatusCode.NotFound, data: Message.NotFound });
-    return;
+    throw new HttpError({ message: Message.NotFound, StatusCode: StatusCode.NotFound });
   }
+
+  return found;
+};
+
+const validateOrFail = (isInvalid) => {
+  if (isInvalid) {
+    throw new HttpError({ message: Message.BadRequest, StatusCode: StatusCode.BadRequest });
+  }
+};
+
+const getOne = ({ reply, params: { id } }) => {
+  const found = findByIdOrFail(id);
 
   reply({ data: found });
 };
@@ -42,10 +53,8 @@ const createOne = ({
     body: { title, content },
   },
 }) => {
-  if (!validateContent(content) || !validateTitle(title)) {
-    reply({ status: StatusCode.BadRequest, data: StatusCode.BadRequest });
-    return;
-  }
+  const isInvalid = !validateContent(content) || !validateTitle(title);
+  validateOrFail(isInvalid);
 
   const post = {
     id: nextId(),
@@ -55,7 +64,7 @@ const createOne = ({
 
   postsList.push(post);
 
-  reply({ status: StatusCode.Created, data: post });
+  reply({ statusCode: StatusCode.Created, data: post });
 };
 
 const updateOne = ({
@@ -65,17 +74,10 @@ const updateOne = ({
   },
   params: { id },
 }) => {
-  const found = postsList.find((post) => post.id === Number(id));
+  const found = findByIdOrFail(id);
 
-  if (!found) {
-    reply({ status: StatusCode.NotFound, data: Message.NotFound });
-    return;
-  }
-
-  if (!validateContent(content) || !validateTitle(title)) {
-    reply({ status: StatusCode.BadRequest, data: StatusCode.BadRequest });
-    return;
-  }
+  const isInvalid = !validateContent(content) || !validateTitle(title);
+  validateOrFail(isInvalid);
 
   found.title = title;
   found.content = content;
@@ -90,25 +92,17 @@ const patchOne = ({
   },
   params: { id },
 }) => {
-  const found = postsList.find((post) => post.id === Number(id));
+  const found = findByIdOrFail(id);
 
-  if (!found) {
-    reply({ status: StatusCode.NotFound, data: Message.NotFound });
-    return;
-  }
+  const isEmpty = !content && !title;
+  validateOrFail(isEmpty);
 
-  if (!content || !title) {
-    reply({ status: StatusCode.BadRequest, data: StatusCode.BadRequest });
-    return;
-  }
+  const newTitle = title || found.title;
+  const newContent = content || found.content;
 
-  const newTitle = title ?? found.title;
-  const newContent = content ?? found.content;
+  const isInvalid = !validateContent(newTitle) || !validateTitle(newContent);
 
-  if (!validateContent(newTitle) || !validateTitle(newContent)) {
-    reply({ status: StatusCode.BadRequest, data: StatusCode.BadRequest });
-    return;
-  }
+  validateOrFail(isInvalid);
 
   found.title = newTitle;
   found.content = newContent;
@@ -117,12 +111,7 @@ const patchOne = ({
 };
 
 const deleteOne = ({ reply, params: { id } }) => {
-  const found = postsList.find((post) => post.id === Number(id));
-
-  if (!found) {
-    reply({ status: StatusCode.NotFound, data: Message.NotFound });
-    return;
-  }
+  const found = findByIdOrFail(id);
 
   postsList = postsList.filter((post) => post.id === id);
 
