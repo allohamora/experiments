@@ -11,16 +11,25 @@ export const servePublic = ({ router }) => {
   router.get('/:filePath', async ({ res, params: { filePath } }) => {
     const file = filePath || 'index.html';
     const ext = path.extname(file).replace('.', '');
+
+    const notFound = () => {
+      res.statusCode = StatusCode.NotFound;
+      res.setHeader('Content-Type', ContentType.Text);
+      res.end(Message.NotFound);
+    };
+
+    if (!ext) {
+      notFound();
+      return;
+    }
+
     const contentTypeKey = capitalize(ext);
     const contentType = ContentType[contentTypeKey] ?? ContentType.Text;
 
     const fullFilePath = path.join(__dirname, '..', 'public', file);
 
     if (await isNotExists(fullFilePath)) {
-      res.statusCode = StatusCode.NotFound;
-      res.setHeader('Content-Type', ContentType.Text);
-      res.end(Message.NotFound);
-
+      notFound();
       return;
     }
 

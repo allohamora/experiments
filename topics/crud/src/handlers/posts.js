@@ -1,43 +1,15 @@
+import { postsLangs } from '../relations/posts-langs.js';
+import { postRepository } from '../repositories/post-repository.js';
 import { HttpError, Message, StatusCode } from '../utils/http.js';
 
-let lastId = 0;
-
-function* idGeneratorFactory() {
-  while (true) {
-    yield ++lastId;
-  }
-}
-
-const idGenerator = idGeneratorFactory();
-const nextId = () => idGenerator.next().value;
-
-let postList = [
-  {
-    id: nextId(),
-    title: 'first post',
-    content: 'post about war between cats and dogs',
-  },
-];
-
-let langList = [
-  {
-    id: nextId(),
-    text: 'English',
-    code: 'en',
-  },
-];
-
-const postsLangs = new Map();
-postsLangs.set(postList[0].id, [langList[0].id]);
-
 const getLangs = (postId) => {
-  const parsedId = Number(postId);
-  if (!postsLangs.has(parsedId)) {
+  const post = postRepository.getOneOrFail(postId);
+
+  if (!postsLangs.has(post)) {
     throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
   }
 
-  const langIds = postsLangs.get(parsedId);
-  return langIds.map((id) => langList.find((lang) => lang.id === id));
+  return postsLangs.get(post);
 };
 
 const findLangOrFail = ({ postId, id }) => {
@@ -52,30 +24,16 @@ const findLangOrFail = ({ postId, id }) => {
   return found;
 };
 
-const getAllLangs = ({ reply, params: { postId } }) => {
-  const langs = getLangs(postId);
-
-  reply({ data: langs });
+const getAllLangs = ({ params: { postId } }) => {
+  return getLangs(postId);
 };
 
-const getOneLang = ({ reply, params: { postId, id } }) => {
-  const lang = findLangOrFail({ postId, id });
-
-  reply({ data: lang });
+const getOneLang = ({ params: { postId, id } }) => {
+  return findLangOrFail({ postId, id });
 };
 
-const getAll = ({ reply }) => {
-  reply({ data: postList });
-};
-
-const findByIdOrFail = (id) => {
-  const found = postList.find((post) => post.id === Number(id));
-
-  if (!found) {
-    throw new HttpError({ message: Message.NotFound, StatusCode: StatusCode.NotFound });
-  }
-
-  return found;
+const getAll = () => {
+  return postRepository.getAll();
 };
 
 const validateOrFail = (isInvalid) => {
@@ -84,10 +42,8 @@ const validateOrFail = (isInvalid) => {
   }
 };
 
-const getOne = ({ reply, params: { id } }) => {
-  const found = findByIdOrFail(id);
-
-  reply({ data: found });
+const getOne = ({ params: { id } }) => {
+  return postRepository.getOneOrFail(id);
 };
 
 const validateTitle = (title) => typeof title === 'string';
@@ -102,43 +58,32 @@ const createOne = ({
   const isInvalid = !validateContent(content) || !validateTitle(title);
   validateOrFail(isInvalid);
 
-  const post = {
-    id: nextId(),
-    title,
-    content,
-  };
-
-  postList.push(post);
+  const post = postRepository.createOne({ title, content });
 
   reply({ statusCode: StatusCode.Created, data: post });
 };
 
 const updateOne = ({
-  reply,
   req: {
     body: { title, content },
   },
   params: { id },
 }) => {
-  const found = findByIdOrFail(id);
+  const post = postRepository.getOneOrFail(id);
 
   const isInvalid = !validateContent(content) || !validateTitle(title);
   validateOrFail(isInvalid);
 
-  found.title = title;
-  found.content = content;
-
-  reply({ data: found });
+  return postRepository.updateOne({ ...post, id, title, content });
 };
 
 const patchOne = ({
-  reply,
   req: {
     body: { title, content },
   },
   params: { id },
 }) => {
-  const found = findByIdOrFail(id);
+  const post = postRepository.getOneOrFail(id);
 
   const isEmpty = !content && !title;
   validateOrFail(isEmpty);
@@ -150,18 +95,11 @@ const patchOne = ({
 
   validateOrFail(isInvalid);
 
-  found.title = newTitle;
-  found.content = newContent;
-
-  reply({ data: found });
+  return postRepository.updateOne({ ...post, id, title: newTitle, content: newContent });
 };
 
-const deleteOne = ({ reply, params: { id } }) => {
-  const found = findByIdOrFail(id);
-
-  postList = postList.filter((post) => post.id === id);
-
-  reply({ data: found });
+const deleteOne = ({ params: { id } }) => {
+  return postRepository.deleteOne(id);
 };
 
 export const posts = ({ router }) => {
@@ -172,8 +110,7 @@ export const posts = ({ router }) => {
   router.patch('/posts/:id', patchOne);
   router.delete('/posts/:id', deleteOne);
 
-  // for nested entities
-  // I don’t see the point in duplicating all routes, the meaning is already clear
+  // nested routes approach
   router.get('/posts/:postId/langs', getAllLangs);
   router.get('/posts/:postId/langs/:id', getOneLang);
 };

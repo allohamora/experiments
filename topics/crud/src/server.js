@@ -50,7 +50,11 @@ export class Server {
 
       if (route) {
         try {
-          await route.handler({ ...ctx, params: route.params });
+          const returned = await route.handler({ ...ctx, params: route.params });
+
+          if (returned) {
+            reply({ data: returned });
+          }
         } catch (error) {
           if (error instanceof HttpError) {
             reply({ ...error.toResponse() });

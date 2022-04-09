@@ -98,6 +98,9 @@ const request = async ({ url, method, contentType, body }) => {
 
   if (method === Method.Get) {
     delete fetchOptions.body;
+
+    const searchParams = new URLSearchParams(body);
+    url = `${url}?${searchParams.toString()}`;
   }
 
   const res = await fetch(url, fetchOptions);
