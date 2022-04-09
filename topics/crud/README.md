@@ -1,6 +1,17 @@
-# crud 08.04.22
+# crud 09.04.22
 
-create full crud examples with html forms on front and vanilla nodejs on back
+create full restfull crud examples with html forms on front and vanilla nodejs on back
+
+- to get many use GET:/entities/ with filter in query params
+- to get one use GET:/entities/:id
+- to create one use POST:/entities with body
+- to update (replace) one use PUT:/entities/:id with body
+- to parial update one use PATCH:/entities/:id with partial body or [json patch](http://jsonpatch.com)
+- to delete one use DELETE:/entities/:id
+- to get nested entity you can use:
+  - GET:/nested-entities/?main-entity-id=:main-entity-id
+  - GET:/main-entities/:main-entity-id/nested-entities/:nested-entity-id
+- if entity is singular you can use /entity path instead of /entities
 
 ## form
 
