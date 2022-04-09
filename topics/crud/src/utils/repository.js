@@ -8,9 +8,14 @@ export class Repository {
     this.idGenerator = idGenerator;
   }
 
-  getOneOrFail(id) {
+  getOne(id) {
     const transformedId = this.transformId(id);
-    const found = this.dataSource.find((entity) => entity.id === transformedId);
+
+    return this.dataSource.find((entity) => entity.id === transformedId);
+  }
+
+  getOneOrFail(id) {
+    const found = this.getOne(id);
 
     if (!found) {
       throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });

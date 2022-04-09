@@ -1,7 +1,5 @@
-import { postsLangs } from '../relations/posts-langs.js';
 import { langRepository } from '../repositories/lang-repository.js';
 import { postRepository } from '../repositories/post-repository.js';
-import { HttpError, Message, StatusCode } from '../utils/http.js';
 
 const getAll = ({
   req: {
@@ -16,19 +14,10 @@ const getAll = ({
 
   const post = postRepository.getOneOrFail(postId);
 
-  if (!postsLangs.has(post)) {
-    throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
-  }
-
-  return postsLangs.get(post);
-};
-
-const getOne = ({ params: { id } }) => {
-  return langRepository.getOneOrFail(id);
+  return [postRepository.getOneOrFail(post.langId)];
 };
 
 export const langs = ({ router }) => {
   // not nested approach
   router.get('/langs', getAll);
-  router.get('/langs/:id', getOne);
 };

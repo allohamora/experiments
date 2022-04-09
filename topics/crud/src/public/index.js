@@ -24,10 +24,15 @@ const postId = {
   name: 'postId'
 };
 
+const langId = {
+  ...id,
+  name: 'langId'
+};
+
 const forms = [
   {
     fields: [],
-    name: 'Get All posts',
+    name: 'Get all posts',
     method: Method.Get,
     route: '/posts',
     bodyType: BodyType.Text
@@ -40,21 +45,21 @@ const forms = [
     bodyType: BodyType.Text
   },
   { 
-    fields: [required(title), required(content)],
+    fields: [required(title), required(content), langId],
     name: 'Create one post',
     method: Method.Post, 
     route: '/posts',
     bodyType: BodyType.Json
   },
   {
-    fields: [required(id), required(title), required(content)],
+    fields: [required(id), required(title), required(content), langId],
     name: 'Update (replace) one post',
     method: Method.Put,
     route: '/posts/:id',
     bodyType: BodyType.Json
   },
   {
-    fields: [required(id), title, content],
+    fields: [required(id), title, content, langId],
     name: 'Partial update one post',
     method: Method.Patch,
     route: '/posts/:id',
@@ -69,30 +74,16 @@ const forms = [
   },
   {
     fields: [required(postId)],
-    name: 'Get All langs nested',
+    name: 'Get nested lang',
     method: Method.Get,
-    route: '/posts/:postId/langs',
-    bodyType: BodyType.Text
-  },
-  {
-    fields: [required(postId), required(id)],
-    name: 'Get one langs nested',
-    method: Method.Get,
-    route: '/posts/:postId/langs/:id',
+    route: '/posts/:postId/lang',
     bodyType: BodyType.Text
   },
   {
     fields: [postId],
-    name: 'Get All langs not nested',
+    name: 'Get all langs not nested',
     method: Method.Get,
     route: '/langs',
-    bodyType: BodyType.Text
-  },
-  {
-    fields: [required(id)],
-    name: 'Get one lang not nested',
-    method: Method.Get,
-    route: '/langs/:id',
     bodyType: BodyType.Text
   }
 ];

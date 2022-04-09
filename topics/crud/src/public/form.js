@@ -82,6 +82,10 @@ const fillUrl = ({ route, data }) => {
       url = url.replace(`:${key}`, body[key]);
       delete body[key];
     }
+
+    if (body[key] === '') {
+      delete body[key];
+    }
   }
 
   return { url, body };

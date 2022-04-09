@@ -1,35 +1,15 @@
-import { postsLangs } from '../relations/posts-langs.js';
+import { langRepository } from '../repositories/lang-repository.js';
 import { postRepository } from '../repositories/post-repository.js';
 import { HttpError, Message, StatusCode } from '../utils/http.js';
 
-const getLangs = (postId) => {
+const getLang = ({ params: { postId } }) => {
   const post = postRepository.getOneOrFail(postId);
 
-  if (!postsLangs.has(post)) {
+  if (!post.langId) {
     throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
   }
 
-  return postsLangs.get(post);
-};
-
-const findLangOrFail = ({ postId, id }) => {
-  const langs = getLangs(postId);
-  const parsedId = Number(id);
-  const found = langs.find((lang) => lang.id === parsedId);
-
-  if (!found) {
-    throw new HttpError({ message: Message.NotFound, statusCode: StatusCode.NotFound });
-  }
-
-  return found;
-};
-
-const getAllLangs = ({ params: { postId } }) => {
-  return getLangs(postId);
-};
-
-const getOneLang = ({ params: { postId, id } }) => {
-  return findLangOrFail({ postId, id });
+  return langRepository.getOneOrFail(post.langId);
 };
 
 const getAll = () => {
@@ -48,30 +28,37 @@ const getOne = ({ params: { id } }) => {
 
 const validateTitle = (title) => typeof title === 'string';
 const validateContent = (content) => typeof content === 'string';
+const validateLangId = (langId) => {
+  if (!langId) {
+    return true;
+  }
+
+  return !!langRepository.getOne(langId);
+};
 
 const createOne = ({
   reply,
   req: {
-    body: { title, content },
+    body: { title, content, langId },
   },
 }) => {
-  const isInvalid = !validateContent(content) || !validateTitle(title);
+  const isInvalid = !validateContent(content) || !validateTitle(title) || !validateLangId(langId);
   validateOrFail(isInvalid);
 
-  const post = postRepository.createOne({ title, content });
+  const post = postRepository.createOne({ title, content, langId });
 
   reply({ statusCode: StatusCode.Created, data: post });
 };
 
 const updateOne = ({
   req: {
-    body: { title, content },
+    body: { title, content, langId },
   },
   params: { id },
 }) => {
   const post = postRepository.getOneOrFail(id);
 
-  const isInvalid = !validateContent(content) || !validateTitle(title);
+  const isInvalid = !validateContent(content) || !validateTitle(title) || !validateLangId(langId);
   validateOrFail(isInvalid);
 
   return postRepository.updateOne({ ...post, id, title, content });
@@ -79,19 +66,20 @@ const updateOne = ({
 
 const patchOne = ({
   req: {
-    body: { title, content },
+    body: { title, content, langId },
   },
   params: { id },
 }) => {
   const post = postRepository.getOneOrFail(id);
 
-  const isEmpty = !content && !title;
+  const isEmpty = !content && !title && !langId;
   validateOrFail(isEmpty);
 
-  const newTitle = title || found.title;
-  const newContent = content || found.content;
+  const newTitle = title || post.title;
+  const newContent = content || post.content;
+  const newLangId = langId || post.langId;
 
-  const isInvalid = !validateContent(newTitle) || !validateTitle(newContent);
+  const isInvalid = !validateContent(newTitle) || !validateTitle(newContent) || !validateLangId(newLangId);
 
   validateOrFail(isInvalid);
 
@@ -111,6 +99,5 @@ export const posts = ({ router }) => {
   router.delete('/posts/:id', deleteOne);
 
   // nested routes approach
-  router.get('/posts/:postId/langs', getAllLangs);
-  router.get('/posts/:postId/langs/:id', getOneLang);
+  router.get('/posts/:postId/lang', getLang);
 };
