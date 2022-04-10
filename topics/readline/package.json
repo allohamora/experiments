@@ -1,0 +1,8 @@
+{
+  "name": "readline.topic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}
