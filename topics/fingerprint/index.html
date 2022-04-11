@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fingerprint Experiment</title>
+  <style>
+    body > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    .container {
+      display: none;
+    }
+
+    .container--active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <button class="get-fingerprintjs">get FingerPrintJS fingerprint</button>
+    <button class="get-clientjs">get ClientJS fingerprint</button>
+  </div>
+
+  <div class="fingerprintjs container">
+    <div>FingerPrintJS result:</div>
+    <div class="fingerprintjs__result"></div>
+  </div>
+
+  <div class="clientjs container">
+    <div>ClientJS result:</div>
+    <div class="clientjs__result"></div>
+  </div>
+
+  <script src="./node_modules/clientjs/dist/client.min.js"></script>
+  <script src="./node_modules/@fingerprintjs/fingerprintjs/dist/fp.js"></script>
+
+  <script>
+    const activeContainer = (container) => {
+      if (!container.classList.contains('container--active')) {
+        container.classList.add('container--active');
+      }
+    }
+
+    const fingerPrintJS = async () => {
+      const container = document.querySelector('.fingerprintjs');
+      const result = document.querySelector('.fingerprintjs__result');
+
+      const client = await window.FingerprintJS.load();
+      const fingerprint = await client.get();
+
+      result.innerText = JSON.stringify(fingerprint);
+      activeContainer(container);
+    }
+
+    const clientJS = () => {
+      const container = document.querySelector('.clientjs');
+      const result = document.querySelector('.clientjs__result');
+
+      const client = new window.ClientJS();
+      const fingerprint = client.getFingerprint();
+
+      result.innerText = JSON.stringify(fingerprint);
+      activeContainer(container);
+    }
+
+    const getFingerprintJS = document.querySelector('.get-fingerprintjs');
+    const getClientJS = document.querySelector('.get-clientjs');
+
+    getFingerprintJS.addEventListener('click', fingerPrintJS);
+    getClientJS.addEventListener('click', clientJS);
+  </script>
+</body>
+</html>

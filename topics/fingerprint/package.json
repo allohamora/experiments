@@ -1,0 +1,8 @@
+{
+  "name": "fingerprint.topic",
+  "private": true,
+  "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^3.3.3",
+    "clientjs": "^0.2.1"
+  }
+}
