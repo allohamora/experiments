@@ -1,5 +1,4 @@
 import { URL, fileURLToPath } from 'node:url';
-import './test.js';
 
 // file://:base-path/index.js (current file path)
 const metaUrl = import.meta.url;
