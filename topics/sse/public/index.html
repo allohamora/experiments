@@ -4,9 +4,193 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>See topic</title>
+  <title>SSE topic</title>
+  <style>
+    *, *::after, *::before {
+      box-sizing: border-box;
+    }
+
+    body {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    main > *:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    textarea {
+      display: block;
+
+      resize: none;
+    }
+
+    label:not(:last-of-type) {
+      display: block;
+
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      display: block;
+      
+      margin-top: 10px;
+      margin-left: auto;
+    }
+
+    .toast.toast  {
+      background: white;
+      color: black;
+
+      border: 1px solid threedface;
+      box-shadow: none;
+    }
+
+    .display-none {
+      display: none;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css" integrity="sha512-UiKdzM5DL+I+2YFxK+7TDedVyVm7HMp/bN85NeWMJNYortoll+Nd6PU9ZDrZiaOsdarOyk9egQm6LOJZi36L2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js" integrity="sha512-79j1YQOJuI8mLseq9icSQKT6bLlLtWknKwj1OpJZMdPt2pFBry3vQTt+NZuJw7NSd1pHhZlu0s12Ngqfa371EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-  <h1>See topic</h1>
+  <h1>SSE topic</h1>
+
+  <main>
+    <form class="subscribe">
+      <fieldset>
+        <legend>Subscribe</legend>
+        
+        <label>
+          <div>Id</div>
+          <input name="id" type="text" required />
+        </label>
+  
+        <button type="submit">Send</button>
+      </fieldset>
+    </form>
+
+    <form class="unsubscribe">
+      <fieldset>
+        <legend>Unsubscribe</legend>
+        
+        <label>
+          <div>Id</div>
+          <input name="id" type="text" required />
+        </label>
+  
+        <button type="submit">Send</button>
+      </fieldset>
+    </form>
+  
+    <form class="notify">
+      <fieldset>
+        <legend>Notify</legend>
+        
+        <label>
+          <div>Id</div>
+          <input name="id" type="text" required />
+        </label>
+  
+        <label>
+          <div>Message</div>
+          <textarea name="message" minlength="3" required></textarea>
+        </label>
+  
+        <button type="submit">Send</button>
+      </fieldset>
+    </form>
+  
+    <div>
+      <fieldset>
+        <legend>Notifications</legend>
+        <div class="notifications">
+          <div class="notifications-empty">Notifications list is empty</div>
+        </div>
+      </fieldset>
+    </div>
+  </main>
+
+  <script>
+    const toast = (text) => window.Toastify({ 
+      text, 
+      duration: 3000,
+      className: "toast",
+    }).showToast();
+
+    const subscribeForm = document.querySelector('.subscribe');
+    const unsubscribeForm = document.querySelector('.unsubscribe');
+    const notifyForm = document.querySelector('.notify');
+    const notificationsContainer = document.querySelector('.notifications');
+    const notificationsEmpty = document.querySelector('.notifications-empty');
+
+    const subscriptions = {};
+
+    const subscriptionMessageHandler = ({ data }) => {
+      if (!notificationsEmpty.classList.contains('display-none')) {
+        notificationsEmpty.classList.add('display-none');
+      }
+
+      const notification = document.createElement('div');
+      notification.innerText = data;
+
+      notificationsContainer.append(notification);
+    }
+
+    subscribeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const id = formData.get('id');
+
+      if (subscriptions[id]) {
+        toast(`already subscribed to ${id} channel`);
+        return;
+      }
+
+      const subscription = new EventSource(`/notifications/${id}`);
+      subscriptions[id] = subscription;
+
+      subscription.addEventListener('message', subscriptionMessageHandler);
+      subscription.addEventListener('error', (e) => {
+        subscription.close();
+        delete subscriptions[id];
+        toast(`subscribe to ${id} channel has been crashed, please reconnect later`);
+      });
+
+      toast(`successfully subscribed to ${id} channel`);
+    });
+
+    unsubscribeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const id = formData.get('id');
+      const subscription = subscriptions[id];
+
+      if (subscription) {
+        subscription.close();
+        delete subscriptions[id];
+        toast(`you unsubscribed from ${id} channel`);
+      }
+    });
+
+    notifyForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const id = formData.get('id');
+      const message = formData.get('message');
+
+      await fetch(`/notifications/${id}`, { 
+        method: 'POST', 
+        body: JSON.stringify({ message }), 
+        headers: { ['Content-Type']: 'application/json' } 
+      });
+
+      toast(`you notified ${id} channel`);
+    });
+  </script>
 </body>
 </html>
