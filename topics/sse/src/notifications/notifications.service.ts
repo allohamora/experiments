@@ -14,6 +14,16 @@ export class NotificationsService {
     return fromEvent(this.ee, this.newNotificationKey(id)).pipe(
       map((value) => JSON.stringify(value)),
     );
+    // the same
+    // return new Observable((subscriber) => {
+    //   const handler = (message: unknown) => {
+    //     subscriber.next(JSON.stringify(message));
+    //   };
+
+    //   this.ee.on(event, handler);
+
+    //   return () => this.ee.off(event, handler);
+    // });
   }
 
   public notify(id: string, message: string) {
