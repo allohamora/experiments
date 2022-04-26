@@ -27,6 +27,17 @@
     ws.addEventListener('open', () => {
       ws.send(JSON.stringify({ event: 'hi', data: { userId: '1' } }))
     });
+
+    const wsPing = new WebSocket('ws://localhost:3000/ping');
+
+    eventListener(wsPing, 'message');
+    eventListener(wsPing, 'open');
+    eventListener(wsPing, 'close');
+    eventListener(wsPing, 'error');
+
+    wsPing.addEventListener('open', () => {
+      wsPing.send(JSON.stringify({ event: 'interval' }));
+    });
   </script>
 </body>
 </html>
