@@ -11,3 +11,5 @@
   - Before send event you check saved tokens in hash map
   - If token is expired generate { event: "unauthorized" } or similar and disconnect user
   - If tokes is ok just send event
+- To subscribe user to some events you can use @SubscribeMessage(event) with returned rxjs Observable. Example [here](/src/ping/ping.gateway.ts)
+- To split gateways for several connections you can use path (supported by ws) or namespace (supported only by socket.io). Examples [client](/public/index.html) and [server](/src/ping/ping.gateway.ts)
