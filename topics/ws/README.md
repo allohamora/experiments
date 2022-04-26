@@ -1,4 +1,11 @@
-# ws experiment
+# Ws experiment
+
+## Usage
+
+- To open playground move to /
+- To open asyncapi docs move to /async-api
+
+## Notes
 
 - Nest uses `{ event: string, data: any }` pattern. Where event passed to @SubscribeMessage(event) and data passed to @MessageBody(). Example [here](/src/hi/hi.gateway.ts)
 - By default Nest doesn't pass exception to client, just emit 'exception' event on client
@@ -15,3 +22,4 @@
 - To split gateways for several connections you can use path (supported by ws) or namespace (supported only by socket.io). Examples [client](/public/index.html) and [server](/src/ping/ping.gateway.ts)
 - To document your pub/sub events (only with received dtos) you can use [asyncapi](https://www.npmjs.com/package/nestjs-asyncapi) it is swagger for pub/sub
 - To test your web sockets events you can use [superwtest](https://www.npmjs.com/package/superwstest) it is supertest for websockets
+- You can use [validation pipe](https://docs.nestjs.com/websockets/pipes) for `@MessageBody(pipe) dto: Dto` to validate dto, but internal nestjs validation pipe throws bad request exception, for change error type you need to [extends and change createExceptionFactory](https://stackoverflow.com/a/71016349), after that you need to change exception filter because [default exception filter](https://docs.nestjs.com/websockets/exception-filters) just emit `exception` event on client
