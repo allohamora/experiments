@@ -13,3 +13,5 @@
   - If tokes is ok just send event
 - To subscribe user to some events you can use @SubscribeMessage(event) with returned rxjs Observable. Example [here](/src/ping/ping.gateway.ts)
 - To split gateways for several connections you can use path (supported by ws) or namespace (supported only by socket.io). Examples [client](/public/index.html) and [server](/src/ping/ping.gateway.ts)
+- To document your pub/sub events (only with received dtos) you can use [asyncapi](https://www.npmjs.com/package/nestjs-asyncapi) it is swagger for pub/sub
+- To test your web sockets events you can use [superwtest](https://www.npmjs.com/package/superwstest) it is supertest for websockets
