@@ -8,5 +8,25 @@
 </head>
 <body>
   <h1>Look to the console</h1>
+
+  <script>
+    const userId = 1;
+    const ws = new WebSocket(`ws://localhost:3000?userId=${userId}`);
+    
+    const eventListener = (ws, type) => {
+      ws.addEventListener(type, (event) => {
+        console.log({ type, event });
+      })
+    }
+
+    eventListener(ws, 'message');
+    eventListener(ws, 'open');
+    eventListener(ws, 'close');
+    eventListener(ws, 'error');
+
+    ws.addEventListener('open', () => {
+      ws.send(JSON.stringify({ event: 'hi', data: { userId: '1' } }))
+    });
+  </script>
 </body>
 </html>
