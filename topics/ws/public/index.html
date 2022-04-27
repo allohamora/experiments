@@ -25,7 +25,8 @@
     eventListener(ws, 'error');
 
     ws.addEventListener('open', () => {
-      ws.send(JSON.stringify({ event: 'hi', data: { userId: '1' } }))
+      ws.send(JSON.stringify({ event: 'hi', data: { userId: 1 } }));
+      ws.send(JSON.stringify({ event: 'hi', data: { userId: '1' } }));
     });
 
     const wsPing = new WebSocket('ws://localhost:3000/ping');

@@ -1,9 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { HiDto } from './hi.dto';
 
 export class HiPubDto {
   @ApiProperty({ example: 'hi' })
   event: 'hi';
 
-  @ApiProperty({ example: 'hi 123!' })
-  data: string;
+  @ApiProperty()
+  @Type(() => HiDto)
+  data: HiDto;
 }
