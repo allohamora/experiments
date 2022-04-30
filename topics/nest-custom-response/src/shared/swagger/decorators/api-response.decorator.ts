@@ -8,7 +8,6 @@ import {
 import { capitalize } from 'src/shared/utils/string.utils';
 import {
   ExceptionResponse,
-  Response,
   SuccessResponse,
 } from 'src/shared/swagger/response';
 
@@ -71,8 +70,13 @@ const getData = (type: Function | string, isArray: boolean = false) => {
   return item;
 };
 
-const getIsOk = (status: HttpStatus | 'default' = 'default') =>
-  status === 'default' || status < 400;
+const getIsOk = (status: HttpStatus | 'default' = 'default') => {
+  return status === 'default' || status < 400;
+};
+
+const isModel = (type: string | Function): type is Function => {
+  return typeof type === 'string' ? false : !isPrimitive(type);
+};
 
 export const ApiResponse = ({
   isArray,
@@ -84,10 +88,16 @@ export const ApiResponse = ({
   const isOk = getIsOk(options.status);
   const response = isOk ? SuccessResponse : ExceptionResponse;
 
+  const extraModels: Function[] = [response];
+
   if (type) {
     const name = typeof type === 'string' ? type : type.name;
     const data = getData(type, isArray);
     const title = isOk ? `ResponseOf${capitalize(name)}` : response.name;
+
+    if (isModel(type)) {
+      extraModels.push(type);
+    }
 
     schema = {
       title,
@@ -98,7 +108,7 @@ export const ApiResponse = ({
   }
 
   return applyDecorators(
-    ApiExtraModels(response),
+    ApiExtraModels(...extraModels),
     OriginalApiResponse({ ...options, schema }),
   );
 };
