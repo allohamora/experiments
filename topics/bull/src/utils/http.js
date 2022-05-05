@@ -65,7 +65,7 @@ export const logging = ({ req }) => {
     const finish = Date.now();
     const requestTime = `${finish - start}ms`;
 
-    console.log({ ip, userAgent, requestTime });
+    console.log({ ip, userAgent, requestTime, route: req.url });
   });
 };
 
