@@ -1,0 +1,8 @@
+{
+  "name": "async_hooks.topic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "storage:start": "node src/storage.js"
+  }
+}
