@@ -1,0 +1,5 @@
+dataset/**/*
+model/**/*
+
+!model/.gitkeep
+!dataset/.gitkeep
