@@ -5,7 +5,7 @@ import { dataset } from './dataset.js';
 const MODEL_OUTPUT_BASE_PATH = 'model';
 
 const main = async () => {
-  const filename = Date.now();
+  const filename = `${Date.now()}.model`;
 
   const model = tf.sequential({
     layers: [
