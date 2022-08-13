@@ -2,4 +2,6 @@ dataset/**/*
 model/**/*
 
 !model/.gitkeep
+!model/1659878758612.model
+!model/1659878758612.model/**/*
 !dataset/.gitkeep

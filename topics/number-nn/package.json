@@ -4,8 +4,8 @@
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "create": "node src/create.js",
+    "test": "node src/test.js"
   },
   "dependencies": {
     "@tensorflow/tfjs-node-gpu": "^3.19.0"
