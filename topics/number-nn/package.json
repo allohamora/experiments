@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "create": "node src/create.js",
-    "test": "node src/test.js"
+    "test": "node src/test.js",
+    "predict": "node src/predict.js"
   },
   "dependencies": {
-    "@tensorflow/tfjs-node-gpu": "^3.19.0"
+    "@tensorflow/tfjs-node-gpu": "^3.19.0",
+    "jimp": "^0.16.1"
   }
 }
