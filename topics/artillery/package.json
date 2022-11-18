@@ -1,0 +1,13 @@
+{
+  "name": "artillery.topic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "server:start": "node src/index.js",
+    "start": "artillery run --output temp/output.json artillery.yml",
+    "report": "artillery report --output temp/output.html temp/output.json"
+  },
+  "dependencies": {
+    "artillery": "^2.0.0-27"
+  }
+}

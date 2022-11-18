@@ -1,0 +1,39 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 5
+      rampTo: 50
+      name: Ramp up load
+    - duration: 600
+      arrivalRate: 50
+      name: Sustained load
+  plugins:
+    expect: {}
+
+scenarios:
+  - name: "Hello World"
+    flow:
+      - get:
+          url: "/hello-world"
+          capture:
+            - json: "$.message"
+              as: message
+            - json: "$.id"
+              as: "id"
+          expect:
+            - statusCode:
+                - 200
+            - hasProperty: "id"
+            - hasProperty: "message"
+            - notHasProperty: "password"
+            - contentType: json
+            - equals:
+                - "{{ message }}"
+                - "Hello World!"
+            - equals:
+                - "{{ id }}"
+                - 0
