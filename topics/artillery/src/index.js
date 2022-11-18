@@ -7,7 +7,9 @@ const ContentType = {
 };
 
 const server = createServer((req, res) => {
-  res.writeHead(200, 'OK', { ['Content-Type']: ContentType.JSON });
+  const trackId = req.headers['track-id'];
+
+  res.writeHead(200, 'OK', { ['Content-Type']: ContentType.JSON, ['track-id']: trackId });
   res.end(JSON.stringify({ id: 0, message: 'Hello World!' }));
 });
 

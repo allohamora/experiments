@@ -1,5 +1,6 @@
 config:
   target: "http://localhost:3000"
+  processor: "./src/processor.cjs"
   phases:
     - duration: 60
       arrivalRate: 5
@@ -16,6 +17,7 @@ config:
 
 scenarios:
   - name: "Hello World"
+    beforeRequest: "setTrackId"
     flow:
       - get:
           url: "/hello-world"
@@ -31,6 +33,7 @@ scenarios:
             - hasProperty: "message"
             - notHasProperty: "password"
             - contentType: json
+            - hasHeader: "track-id"
             - equals:
                 - "{{ message }}"
                 - "Hello World!"
