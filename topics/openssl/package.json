@@ -1,0 +1,8 @@
+{
+  "name": "openssl.topic",
+  "private": true,
+  "scripts": {
+    "encrypt": "sh src/encrypt.sh",
+    "decrypt": "sh src/decrypt.sh"
+  }
+}
