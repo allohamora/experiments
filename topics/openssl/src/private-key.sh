@@ -1,0 +1,1 @@
+openssl genrsa -out temp/private-key.pem 4096

@@ -3,6 +3,10 @@
   "private": true,
   "scripts": {
     "encrypt": "sh src/encrypt.sh",
-    "decrypt": "sh src/decrypt.sh"
+    "decrypt": "sh src/decrypt.sh",
+    "private-key": "sh src/private-key.sh",
+    "public-key": "sh src/public-key.sh",
+    "hash": "sh src/hash.sh",
+    "hash-verify": "sh src/hash-verify.sh"
   }
 }

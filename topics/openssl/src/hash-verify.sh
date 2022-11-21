@@ -1,0 +1,1 @@
+openssl dgst -sha512 -verify temp/public-key.pem -keyform PEM -signature temp/hashed.out data/secret.txt
