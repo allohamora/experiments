@@ -8,7 +8,11 @@ const options = {
 
 const PORT = 3000;
 
-createServer(options, (req, res) => {
+const server = createServer(options, (req, res) => {
   res.writeHead(200, 'OK');
   res.end('Hello World!');
-}).listen(PORT, () => console.log(`Server started at port: ${PORT}`));
+});
+
+// to fix self signed certificate issues you need to add ca.crt to
+// your browser security (ssl) authorities
+server.listen(PORT, () => console.log(`Server started at: https://localhost:${PORT}`));

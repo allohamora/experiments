@@ -1,5 +1,8 @@
 {
   "name": "openssl.topic",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js"
+  }
 }
