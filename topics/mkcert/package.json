@@ -1,0 +1,8 @@
+{
+  "name": "mkcert.topic",
+  "private": true,
+  "scripts": {
+    "localhost:cert": "cd temp && mkcert localhost",
+    "start": "node src/server.mjs"
+  }
+}
