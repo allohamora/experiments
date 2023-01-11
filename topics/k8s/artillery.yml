@@ -1,0 +1,12 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 600
+      arrivalRate: 50
+      name: highload
+
+scenarios:
+  - name: "GET root"
+    flow:
+      - get:
+          url: "/"

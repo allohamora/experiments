@@ -13,4 +13,5 @@ resources:
   - postgres.service.yml
   - hello-world.config-map.yml
   - hello-world.deployment.yml
+  - hello-world.hpa.yml
   - hello-world.service.yml

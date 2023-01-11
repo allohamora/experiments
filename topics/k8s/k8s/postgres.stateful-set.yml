@@ -33,7 +33,7 @@ spec:
         name: postgres-data
         labels:
           app: hello-world
-          tier: pv-claim
+          tier: postgres-pv
       spec:
         accessModes:
           - ReadWriteOnce

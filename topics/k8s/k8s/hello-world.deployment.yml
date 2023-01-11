@@ -5,7 +5,7 @@ metadata:
   labels:
     app: hello-world
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: hello-world
@@ -29,3 +29,12 @@ spec:
           env:
             - name: PORT
               value: "3000"
+              resources:
+          # needs for hpa, it is test values
+          resources:
+            requests:
+              memory: 50Mi
+              cpu: 30m
+            limits:
+              memory: 120Mi
+              cpu: 100m
