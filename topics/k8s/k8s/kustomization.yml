@@ -9,8 +9,8 @@ generatorOptions:
   annotations:
     note: generated
 resources:
-  - postgres.config-map.yml
   - postgres.stateful-set.yml
   - postgres.service.yml
+  - hello-world.config-map.yml
   - hello-world.deployment.yml
   - hello-world.service.yml
