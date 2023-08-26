@@ -1,0 +1,10 @@
+{
+  "name": "set-vs-array.topic",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.mjs"
+  },
+  "dependencies": {
+    "mitata": "^0.1.6"
+  }
+}
