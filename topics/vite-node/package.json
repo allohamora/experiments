@@ -1,0 +1,13 @@
+{
+  "name": "vite-node.topic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite-node --config vite.config.ts --watch src/index.ts"
+  },
+  "devDependencies": {
+    "vite": "^5.2.4",
+    "vite-node": "^1.4.0"
+  }
+}
