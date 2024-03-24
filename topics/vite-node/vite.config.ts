@@ -8,5 +8,6 @@ export default defineConfig({
   },
   build: {
     ssr: 'src/index.ts',
-  }
+    sourcemap: true,
+  },
 });
