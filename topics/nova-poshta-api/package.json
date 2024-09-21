@@ -1,0 +1,11 @@
+{
+  "name": "nova-poshta-api.topic",
+  "private": true,
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch --clear-screen=false src/index.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.1"
+  }
+}
