@@ -39,6 +39,8 @@ export class VoiceService {
       
       this.selectedVoice = this.usVoices[selectedIndex];
     });
+
+    this.voiceSelector.disabled = false;
   };
 
   private async setVoices() {
