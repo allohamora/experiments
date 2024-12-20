@@ -1,9 +1,11 @@
+import { querySelector } from "../utils/dom.utils";
+
 export class VoiceService {
   private voices: SpeechSynthesisVoice[] = [];
   private usVoices: SpeechSynthesisVoice[] = [];
   private selectedVoice: SpeechSynthesisVoice | null = null;
 
-  private voiceSelector = document.querySelector('.voice-selector');
+  private voiceSelector = querySelector<HTMLSelectElement>('.voice-selector');
 
   constructor() {
     this.setVoices();
@@ -29,10 +31,10 @@ export class VoiceService {
       option.value = i.toString();
       option.textContent = usVoice.name;
   
-      this.voiceSelector?.appendChild(option);
+      this.voiceSelector.appendChild(option);
     }
 
-    this.voiceSelector?.addEventListener('change', (event) => {
+    this.voiceSelector.addEventListener('change', (event) => {
       const selectedIndex = parseInt((event.target as HTMLSelectElement).value);
       
       this.selectedVoice = this.usVoices[selectedIndex];

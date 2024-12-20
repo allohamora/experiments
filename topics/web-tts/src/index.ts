@@ -1,17 +1,17 @@
+import { ControlService } from "./services/control.service";
 import { SpeechService } from "./services/speech.service";
 import { VoiceService } from "./services/voice.service";
+import { querySelector } from "./utils/dom.utils";
 
-const startButton = document.querySelector('.start-button');
-const stopButton = document.querySelector('.stop-button');
-
-const messages = document.querySelector('.messages');
+const messages = querySelector<HTMLDivElement>('.messages');
 
 const addMessage = (message: string) => {
   const messageElement = document.createElement('div');
   messageElement.textContent = message;
-  messages?.appendChild(messageElement);
+  messages.appendChild(messageElement);
 };
 
+const controlService = new ControlService();
 const voiceService = new VoiceService();
 const speechService = new SpeechService();
 
@@ -20,14 +20,10 @@ speechService.onRecognition((transcript) => {
   voiceService.voice(transcript);
 });
 
-startButton?.addEventListener('click', () => {
-  console.log('start clicked');
-
+controlService.onStartClick(() => {
   speechService.startRecognition();
 });
 
-stopButton?.addEventListener('click', () => {
-  console.log('stop clicked');
-
+controlService.onStopClick(() => {
   speechService.stopRecognition();
 });
