@@ -1,3 +1,5 @@
+import { VoiceManager } from "./voice-manager";
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const startButton = document.querySelector('.start-button');
@@ -20,12 +22,15 @@ const addMessage = (message: string) => {
   messages?.appendChild(messageElement);
 };
 
+const voiceManager = new VoiceManager();
+
 recognition.addEventListener('result', (event) => {
   console.log('result triggered', event);
 
   const { transcript } = event.results.item(event.results.length - 1).item(0);
 
   addMessage(transcript);
+  voiceManager.voice(transcript);
 });
 
 recognition.addEventListener('end', (event) => {
