@@ -1,5 +1,5 @@
-import { SpeechManager } from "./speech-manager";
-import { VoiceManager } from "./voice-manager";
+import { SpeechService } from "./services/speech.service";
+import { VoiceService } from "./services/voice.service";
 
 const startButton = document.querySelector('.start-button');
 const stopButton = document.querySelector('.stop-button');
@@ -12,22 +12,22 @@ const addMessage = (message: string) => {
   messages?.appendChild(messageElement);
 };
 
-const voiceManager = new VoiceManager();
-const speechManager = new SpeechManager();
+const voiceService = new VoiceService();
+const speechService = new SpeechService();
 
-speechManager.onRecognition((transcript) => {
+speechService.onRecognition((transcript) => {
   addMessage(transcript);
-  voiceManager.voice(transcript);
+  voiceService.voice(transcript);
 });
 
 startButton?.addEventListener('click', () => {
   console.log('start clicked');
 
-  speechManager.startRecognition();
+  speechService.startRecognition();
 });
 
 stopButton?.addEventListener('click', () => {
   console.log('stop clicked');
 
-  speechManager.stopRecognition();
+  speechService.stopRecognition();
 });

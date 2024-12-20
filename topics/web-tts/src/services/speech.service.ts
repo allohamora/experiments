@@ -1,6 +1,6 @@
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-export class SpeechManager {
+export class SpeechService {
   private recognition = new SpeechRecognition();
   private abort = new AbortController();
 

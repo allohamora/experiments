@@ -1,4 +1,4 @@
-export class VoiceManager {
+export class VoiceService {
   private voices: SpeechSynthesisVoice[] = [];
   private usVoices: SpeechSynthesisVoice[] = [];
   private selectedVoice: SpeechSynthesisVoice | null = null;
