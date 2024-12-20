@@ -1,22 +1,15 @@
 import { ControlService } from "./services/control.service";
+import { HistoryService } from "./services/history.service";
 import { SpeechService } from "./services/speech.service";
 import { VoiceService } from "./services/voice.service";
-import { querySelector } from "./utils/dom.utils";
-
-const messages = querySelector<HTMLDivElement>('.messages');
-
-const addMessage = (message: string) => {
-  const messageElement = document.createElement('div');
-  messageElement.textContent = message;
-  messages.appendChild(messageElement);
-};
 
 const controlService = new ControlService();
 const voiceService = new VoiceService();
 const speechService = new SpeechService();
+const historyService = new HistoryService();
 
 speechService.onRecognition((transcript) => {
-  addMessage(transcript);
+  historyService.addTranscript(transcript);
   voiceService.voice(transcript);
 });
 
