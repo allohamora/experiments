@@ -1,18 +1,8 @@
+import { SpeechManager } from "./speech-manager";
 import { VoiceManager } from "./voice-manager";
-
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const startButton = document.querySelector('.start-button');
 const stopButton = document.querySelector('.stop-button');
-
-const recognition = new SpeechRecognition();
-recognition.continuous = true;
-
-const recognitionAbort = new AbortController();
-const stopRecognition = () => {
-  recognitionAbort.abort();
-  recognition.stop();
-};
 
 const messages = document.querySelector('.messages');
 
@@ -23,30 +13,21 @@ const addMessage = (message: string) => {
 };
 
 const voiceManager = new VoiceManager();
+const speechManager = new SpeechManager();
 
-recognition.addEventListener('result', (event) => {
-  console.log('result triggered', event);
-
-  const { transcript } = event.results.item(event.results.length - 1).item(0);
-
+speechManager.onRecognition((transcript) => {
   addMessage(transcript);
   voiceManager.voice(transcript);
 });
 
-recognition.addEventListener('end', (event) => {
-  console.log('end triggered', event);
-
-  recognition.start();
-}, { signal: recognitionAbort.signal });
-
 startButton?.addEventListener('click', () => {
   console.log('start clicked');
 
-  recognition.start();
+  speechManager.startRecognition();
 });
 
 stopButton?.addEventListener('click', () => {
   console.log('stop clicked');
 
-  stopRecognition();
+  speechManager.stopRecognition();
 });
