@@ -1,0 +1,7 @@
+{
+  "name": "race-condition.topic",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.mjs"
+  }
+}
