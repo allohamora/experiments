@@ -23,6 +23,9 @@ for (let i = 0; i < 100; i++) {
     // the same, because not just promises are related to PromiseJobs queue, but all microtasks
     // queueMicrotask(fn);
 
+    // the same effect, because process.nextTick executed in the same phase at the end
+    // process.nextTick(fn);
+
     // without blocking, because setTimeout is a macrotask
     setTimeout(fn);
   }
