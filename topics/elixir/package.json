@@ -6,5 +6,8 @@
     "start:js": "node src/index.mjs",
     "test:elixir": "npx autocannon http://localhost:4000",
     "test:js": "npx autocannon http://localhost:3000"
+  },
+  "dependencies": {
+    "fastify": "^5.5.0"
   }
 }
