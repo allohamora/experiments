@@ -1,0 +1,10 @@
+{
+  "name": "elixir.topic",
+  "private": true,
+  "scripts": {
+    "start:elixir": "elixir src/index.ex",
+    "start:js": "node src/index.mjs",
+    "test:elixir": "npx autocannon http://localhost:4000",
+    "test:js": "npx autocannon http://localhost:3000"
+  }
+}
