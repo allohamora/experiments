@@ -1,6 +1,9 @@
 # elixir
 elixir does not have builtin http server, because of that we use [plug_cowboy](https://github.com/elixir-plug/plug_cowboy)
 
+## how http performance was captured
+I used [autocannon](https://github.com/mcollina/autocannon) to benchmark the HTTP performance of our applications. I run each test 3 times on the default options, and pick the middle result.
+
 ## elixir http performance
 
 ```bash
