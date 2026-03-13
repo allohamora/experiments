@@ -12,7 +12,7 @@
     "format:fix": "npm run format -- --write ."
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.4.3",
+    "@commitlint/cli": "^20.4.4",
     "@commitlint/config-conventional": "^20.4.3",
     "husky": "^7.0.4",
     "lint-staged": "^16.3.3",
