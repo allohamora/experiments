@@ -1,0 +1,16 @@
+services:
+  pg:
+    image: postgres:16.2
+    environment:
+      - POSTGRES_HOST=localhost
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=app
+    ports:
+      - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:
