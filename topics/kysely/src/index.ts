@@ -1,5 +1,6 @@
 import { Kysely, PostgresDialect, sql, type Generated, type Insertable, type Selectable } from 'kysely';
 import { Pool } from 'pg';
+import { randomInt } from 'node:crypto';
 
 const { POSTGRES_URL } = process.env;
 if (!POSTGRES_URL) {
@@ -59,6 +60,10 @@ const dropTables = async () => {
 
 const createUser = async (data: Insertable<User>) => {
   return await db.insertInto('user').values(data).returningAll().executeTakeFirstOrThrow();
+};
+
+const createUsers = async (data: Insertable<User>[]) => {
+  return await db.insertInto('user').values(data).execute();
 };
 
 const getUsers = async () => {
@@ -155,7 +160,34 @@ const raceCondition = async (transfer: (data: Insertable<Transfer>) => Promise<S
   console.log('Transfers:', transfers);
 };
 
+const analyze = async () => {
+  await createUser({ name: 'alice', balance: 999 });
+
+  for (let i = 0; i < 10_000; i++) {
+    await createUsers(
+      Array.from({ length: 100 }, () => ({ name: `user_${Math.random()}`, balance: randomInt(0, 1000) })),
+    );
+  }
+
+  const execute = async () => {
+    return await sql<{ 'QUERY PLAN': string }[]>`
+      EXPLAIN (ANALYZE, BUFFERS)
+      SELECT "name", balance
+      FROM "user"
+      WHERE balance >= 999
+      ORDER BY balance ASC
+      LIMIT 20
+    `.execute(db);
+  };
+  console.log(await execute());
+
+  await db.schema.createIndex('user_balance_idx').ifNotExists().on('user').columns(['balance']).execute();
+  console.log(await execute());
+  await db.schema.dropIndex('user_balance_idx').ifExists().execute();
+};
+
 await createTables();
-await raceCondition(transferWithForUpdate);
+// await raceCondition(transferWithForUpdate);
+await analyze();
 await dropTables();
 await db.destroy();
