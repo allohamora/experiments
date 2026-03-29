@@ -1,0 +1,15 @@
+{
+  "name": "codex.topic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/index.ts",
+    "dev": "node --watch --watch-preserve-output src/index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "@openai/codex-sdk": "^0.117.0"
+  }
+}
