@@ -1,18 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { createORPCClient } from '@orpc/client';
-import { RPCLink } from '@orpc/client/fetch';
-import type { RouterClient } from '@orpc/server';
-import { useEffect, useRef, useState } from 'react';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
-import type { router as appRouter } from '#/server/orpc/router';
+import { orpcClient as orpc } from '#/lib/orpc/client';
 
 export const Route = createFileRoute('/')({ component: Home });
-
-const orpc = createORPCClient(
-  new RPCLink({
-    url: 'http://localhost:3000/api',
-  }),
-) as RouterClient<typeof appRouter>;
 
 type ChatItem = {
   id: number;
@@ -34,7 +25,7 @@ function Home() {
   const [orpcStatus, setOrpcStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [orpcResult, setOrpcResult] = useState<string>('Not checked yet');
 
-  function pushHistory(kind: ChatItem['kind'], text: string) {
+  const pushHistory = useEffectEvent((kind: ChatItem['kind'], text: string) => {
     setHistory((current) => [
       ...current,
       {
@@ -43,7 +34,7 @@ function Home() {
         text,
       },
     ]);
-  }
+  });
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:3000/_ws');
@@ -193,13 +184,28 @@ function Home() {
 
               <div className="mt-4 space-y-3">
                 <a
-                  className="block w-full border-4 border-black bg-[#7dd3fc] px-4 py-3 text-center text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-                  href="/openapi/docs"
+                  className="button-link font-black block w-full border-4 border-black bg-[#7dd3fc] px-4 py-3 text-center text-black shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                  href="/api/swagger"
                   rel="noreferrer"
                   target="_blank"
                 >
-                  Open Swagger
+                  Swagger
                 </a>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Link
+                    className="button-link block w-full border-4 border-black bg-[#ffd84d] px-4 py-3 text-center text-sm font-black uppercase text-black shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                    to="/prerender"
+                  >
+                    Prerender
+                  </Link>
+                  <Link
+                    className="button-link block w-full border-4 border-black bg-[#c7f9cc] px-4 py-3 text-center text-sm font-black uppercase text-black shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                    to="/ssr"
+                  >
+                    SSR
+                  </Link>
+                </div>
 
                 <button
                   className="w-full border-4 border-black bg-[#ff8a65] px-4 py-3 text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none disabled:translate-x-0 disabled:translate-y-0 disabled:bg-[#f5b39f] disabled:shadow-[4px_4px_0_#000]"

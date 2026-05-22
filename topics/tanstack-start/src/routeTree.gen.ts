@@ -9,8 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SsrRouteImport } from './routes/ssr'
+import { Route as PrerenderRouteImport } from './routes/prerender'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SsrRoute = SsrRouteImport.update({
+  id: '/ssr',
+  path: '/ssr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrerenderRoute = PrerenderRouteImport.update({
+  id: '/prerender',
+  path: '/prerender',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +31,50 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/prerender': typeof PrerenderRoute
+  '/ssr': typeof SsrRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/prerender': typeof PrerenderRoute
+  '/ssr': typeof SsrRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/prerender': typeof PrerenderRoute
+  '/ssr': typeof SsrRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/prerender' | '/ssr'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/prerender' | '/ssr'
+  id: '__root__' | '/' | '/prerender' | '/ssr'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PrerenderRoute: typeof PrerenderRoute
+  SsrRoute: typeof SsrRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ssr': {
+      id: '/ssr'
+      path: '/ssr'
+      fullPath: '/ssr'
+      preLoaderRoute: typeof SsrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prerender': {
+      id: '/prerender'
+      path: '/prerender'
+      fullPath: '/prerender'
+      preLoaderRoute: typeof PrerenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PrerenderRoute: PrerenderRoute,
+  SsrRoute: SsrRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

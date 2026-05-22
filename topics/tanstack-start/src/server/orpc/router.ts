@@ -1,19 +1,9 @@
-import { os } from '@orpc/server';
-import { z } from 'zod';
+import { implement } from '@orpc/server';
 
-const health = os
-  .route({
-    method: 'GET',
-    path: '/health',
-    tags: ['Health'],
-  })
-  .output(
-    z.object({
-      ok: z.literal(true),
-    }),
-  )
-  .handler(async () => ({ ok: true }));
+import { contract } from '#/shared/orpc/contract';
+
+const os = implement(contract);
 
 export const router = {
-  health,
+  health: os.health.handler(async () => ({ ok: true })),
 };
