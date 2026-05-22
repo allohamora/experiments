@@ -18,6 +18,7 @@ const config = defineConfig({
           path: '/prerender',
           prerender: {
             enabled: true,
+            crawlLinks: false,
           },
         },
       ],
