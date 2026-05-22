@@ -16,6 +16,8 @@
     "check": "biome check"
   },
   "dependencies": {
+    "@orpc/client": "^1.14.3",
+    "@orpc/server": "^1.14.3",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
