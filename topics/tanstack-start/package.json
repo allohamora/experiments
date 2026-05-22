@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@orpc/client": "^1.14.3",
+    "@orpc/openapi": "^1.14.3",
     "@orpc/server": "^1.14.3",
+    "@orpc/zod": "^1.14.3",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
@@ -33,7 +35,8 @@
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.1.18",
-    "tw-animate-css": "^1.3.6"
+    "tw-animate-css": "^1.3.6",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.5",

@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({ component: Home });
 
 const orpc = createORPCClient(
   new RPCLink({
-    url: 'http://localhost:3000/rpc',
+    url: 'http://localhost:3000/api',
   }),
 ) as RouterClient<typeof appRouter>;
 
@@ -109,7 +109,7 @@ function Home() {
 
   async function checkOrpc() {
     setOrpcStatus('loading');
-    setOrpcResult('Checking /rpc/health...');
+    setOrpcResult('Checking /api/health...');
 
     try {
       const result = await orpc.health();
@@ -188,10 +188,19 @@ function Home() {
             <section className="border-4 border-black bg-white p-4">
               <div className="border-b-4 border-black pb-3">
                 <h2 className="text-lg font-black uppercase">oRPC</h2>
-                <p className="mt-2 text-sm font-black uppercase">endpoint: /rpc/health</p>
+                <p className="mt-2 text-sm font-black uppercase">endpoint: /api/health</p>
               </div>
 
               <div className="mt-4 space-y-3">
+                <a
+                  className="block w-full border-4 border-black bg-[#7dd3fc] px-4 py-3 text-center text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                  href="/openapi/docs"
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Open Swagger
+                </a>
+
                 <button
                   className="w-full border-4 border-black bg-[#ff8a65] px-4 py-3 text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none disabled:translate-x-0 disabled:translate-y-0 disabled:bg-[#f5b39f] disabled:shadow-[4px_4px_0_#000]"
                   disabled={orpcStatus === 'loading'}
