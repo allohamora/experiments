@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { getHealth } from '#/lib/api/client';
 
@@ -19,13 +19,13 @@ type SocketPayload = {
 function Home() {
   const socketRef = useRef<WebSocket | null>(null);
   const nextIdRef = useRef(0);
-  const [status, setStatus] = useState('connecting');
+  const [status, setStatus] = useState('disconnected');
   const [message, setMessage] = useState('ping');
   const [history, setHistory] = useState<ChatItem[]>([]);
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [apiResult, setApiResult] = useState<string>('Not checked yet');
 
-  const pushHistory = useEffectEvent((kind: ChatItem['kind'], text: string) => {
+  function pushHistory(kind: ChatItem['kind'], text: string) {
     setHistory((current) => [
       ...current,
       {
@@ -34,51 +34,70 @@ function Home() {
         text,
       },
     ]);
-  });
+  }
 
-  useEffect(() => {
+  function connectSocket() {
+    const currentSocket = socketRef.current;
+
+    if (currentSocket?.readyState === WebSocket.OPEN || currentSocket?.readyState === WebSocket.CONNECTING) {
+      return;
+    }
+
     const socket = new WebSocket('ws://localhost:3000/_ws');
-
     socketRef.current = socket;
-    console.log('[client] open:start');
+    setStatus('connecting');
     pushHistory('system', 'connecting...');
 
-    socket.addEventListener('open', () => {
-      console.log('[client] open');
+    socket.onopen = () => {
+      if (socketRef.current !== socket) {
+        return;
+      }
+
       setStatus('connected');
       pushHistory('system', 'connected');
-    });
+    };
 
-    socket.addEventListener('message', (event) => {
-      console.log('[client] message', event.data);
-
+    socket.onmessage = (event) => {
       try {
         const payload = JSON.parse(String(event.data)) as SocketPayload;
         pushHistory(payload.type ?? 'server', payload.text ?? String(event.data));
       } catch {
         pushHistory('server', String(event.data));
       }
-    });
+    };
 
-    socket.addEventListener('close', () => {
-      console.log('[client] close');
-      setStatus('closed');
-      pushHistory('system', 'closed');
-      socketRef.current = null;
-    });
+    socket.onerror = () => {
+      if (socketRef.current !== socket) {
+        return;
+      }
 
-    socket.addEventListener('error', () => {
-      console.log('[client] error');
       setStatus('error');
       pushHistory('system', 'error');
-    });
-
-    return () => {
-      console.log('[client] cleanup');
-      socket.close();
-      socketRef.current = null;
     };
-  }, []);
+
+    socket.onclose = () => {
+      if (socketRef.current !== socket) {
+        return;
+      }
+
+      socketRef.current = null;
+      setStatus('disconnected');
+      pushHistory('system', 'closed');
+    };
+  }
+
+  function disconnectSocket() {
+    const socket = socketRef.current;
+
+    if (!socket) {
+      return;
+    }
+
+    socketRef.current = null;
+    setStatus('disconnected');
+    pushHistory('system', 'closed');
+    socket.close();
+  }
 
   function sendText(text: string) {
     const socket = socketRef.current;
@@ -124,7 +143,16 @@ function Home() {
             <section className="border-4 border-black bg-white p-4">
               <div className="border-b-4 border-black pb-3">
                 <h2 className="text-lg font-black uppercase">ws</h2>
-                <p className="mt-2 text-sm font-black uppercase">status: {status}</p>
+                <div className="mt-2 flex items-center justify-between gap-4">
+                  <p className="text-sm font-black uppercase">status: {status}</p>
+                  <button
+                    className="border-4 border-black bg-[#cde7ff] px-4 py-2 text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                    onClick={status === 'connected' || status === 'connecting' ? disconnectSocket : connectSocket}
+                    type="button"
+                  >
+                    {status === 'connected' || status === 'connecting' ? 'Disconnect' : 'Connect'}
+                  </button>
+                </div>
               </div>
 
               <div className="mt-4 space-y-3">
