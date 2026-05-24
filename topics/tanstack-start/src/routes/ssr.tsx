@@ -1,18 +1,17 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { getApi } from '#/shared/orpc/api';
+import { getHealth } from '#/shared/api/health';
 
 async function loader() {
-  const api = await getApi();
-  const health = await api.health();
+  const health = await getHealth();
 
   return {
     title: 'SSR route',
     description:
-      'This page renders per request and uses direct oRPC on the server and OpenAPI over HTTP on the client.',
+      'This page renders per request and uses a direct server function on the server and Hono over HTTP on the client.',
     health,
     renderedAt: new Date().toISOString(),
     requestMarker: Math.random().toString(36).slice(2, 10),
-    transport: 'server: direct oRPC, client: /api OpenAPI',
+    transport: 'server: direct function, client: Hono /api',
   };
 }
 

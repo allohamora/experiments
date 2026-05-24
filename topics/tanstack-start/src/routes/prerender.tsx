@@ -1,17 +1,16 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { getApi } from '#/shared/orpc/api';
+import { getHealth } from '#/shared/api/health';
 
 async function loader() {
-  const api = await getApi();
-  const health = await api.health();
+  const health = await getHealth();
 
   return {
     title: 'Prerender route',
     description:
-      'This page is rendered at build time and uses direct oRPC on the server and OpenAPI over HTTP on the client.',
+      'This page is rendered at build time and uses a direct server function on the server and Hono over HTTP on the client.',
     health,
     generatedAt: new Date().toISOString(),
-    transport: 'server: direct oRPC, client: /api OpenAPI',
+    transport: 'server: direct function, client: Hono /api',
   };
 }
 

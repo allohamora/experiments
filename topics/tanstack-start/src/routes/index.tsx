@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
-import { orpcClient as orpc } from '#/lib/orpc/client';
+import { getHealth } from '#/lib/api/client';
 
 export const Route = createFileRoute('/')({ component: Home });
 
@@ -22,8 +22,8 @@ function Home() {
   const [status, setStatus] = useState('connecting');
   const [message, setMessage] = useState('ping');
   const [history, setHistory] = useState<ChatItem[]>([]);
-  const [orpcStatus, setOrpcStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [orpcResult, setOrpcResult] = useState<string>('Not checked yet');
+  const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [apiResult, setApiResult] = useState<string>('Not checked yet');
 
   const pushHistory = useEffectEvent((kind: ChatItem['kind'], text: string) => {
     setHistory((current) => [
@@ -98,17 +98,17 @@ function Home() {
     setMessage('');
   }
 
-  async function checkOrpc() {
-    setOrpcStatus('loading');
-    setOrpcResult('Checking /api/health...');
+  async function checkApi() {
+    setApiStatus('loading');
+    setApiResult('Checking /api/health...');
 
     try {
-      const result = await orpc.health();
-      setOrpcStatus('success');
-      setOrpcResult(JSON.stringify(result));
+      const result = await getHealth();
+      setApiStatus('success');
+      setApiResult(JSON.stringify(result));
     } catch (error) {
-      setOrpcStatus('error');
-      setOrpcResult(error instanceof Error ? error.message : 'Unknown error');
+      setApiStatus('error');
+      setApiResult(error instanceof Error ? error.message : 'Unknown error');
     }
   }
 
@@ -178,7 +178,7 @@ function Home() {
 
             <section className="border-4 border-black bg-white p-4">
               <div className="border-b-4 border-black pb-3">
-                <h2 className="text-lg font-black uppercase">oRPC</h2>
+                <h2 className="text-lg font-black uppercase">Hono</h2>
                 <p className="mt-2 text-sm font-black uppercase">endpoint: /api/health</p>
               </div>
 
@@ -209,24 +209,24 @@ function Home() {
 
                 <button
                   className="w-full border-4 border-black bg-[#ff8a65] px-4 py-3 text-sm font-black uppercase shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none disabled:translate-x-0 disabled:translate-y-0 disabled:bg-[#f5b39f] disabled:shadow-[4px_4px_0_#000]"
-                  disabled={orpcStatus === 'loading'}
-                  onClick={checkOrpc}
+                  disabled={apiStatus === 'loading'}
+                  onClick={checkApi}
                   type="button"
                 >
-                  {orpcStatus === 'loading' ? 'Checking...' : 'Check oRPC'}
+                  {apiStatus === 'loading' ? 'Checking...' : 'Check Hono'}
                 </button>
 
                 <div
                   className={
-                    orpcStatus === 'success'
+                    apiStatus === 'success'
                       ? 'border-4 border-black bg-[#c7f9cc] p-3'
-                      : orpcStatus === 'error'
+                      : apiStatus === 'error'
                         ? 'border-4 border-black bg-[#ffb3b3] p-3'
                         : 'border-4 border-black bg-[#fff4cc] p-3'
                   }
                 >
-                  <p className="text-xs font-black uppercase">status: {orpcStatus}</p>
-                  <p className="mt-2 break-words font-bold">{orpcResult}</p>
+                  <p className="text-xs font-black uppercase">status: {apiStatus}</p>
+                  <p className="mt-2 break-words font-bold">{apiResult}</p>
                 </div>
               </div>
             </section>

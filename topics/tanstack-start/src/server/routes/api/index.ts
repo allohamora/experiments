@@ -1,1 +1,1 @@
-export { default } from '#/server/orpc/handler';
+export { default } from '#/server/api/handler';
