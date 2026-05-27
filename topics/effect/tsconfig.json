@@ -19,7 +19,12 @@
     "module": "NodeNext",
     "noEmit": true,
     "lib": ["ESNext"],
-    "types": ["node"]
+    "types": ["node"],
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
   },
   "exclude": ["node_modules", "dist"]
 }
