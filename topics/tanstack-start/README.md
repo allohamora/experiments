@@ -1,6 +1,7 @@
 # TanStack Start
 
 - Nitro is the part that was really missing in the Vite community. It enables server-side development with WebSockets on Vite, which is unbelievable.
+- Nitro also lets me use any HTTP fetch-based server, which is a really cool idea.
 - Nitro v3 is in beta now, and it still lacks documentation for important things. For example, custom presets seem to be supported according to [this issue comment](https://github.com/nitrojs/nitro/issues/2973#issuecomment-3681174855), but there is not enough information about them in the docs.
 - Nitro does not have a clear startup option for things like migrations. There is an issue about [async plugins](https://github.com/nitrojs/nitro/issues/915), and another one about using the [Tasks API](https://github.com/nitrojs/nitro/issues/1974) instead of bootstrap logic in plugins, but for now this part still feels unfinished.
 - Graceful shutdown does not work properly right now. `srvx` starts the server, but it does not trigger Nitro close hooks. There is an issue about this here: [nitrojs/nitro#4015](https://github.com/nitrojs/nitro/issues/4015).
