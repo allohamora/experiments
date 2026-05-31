@@ -233,6 +233,12 @@ function Home() {
                   >
                     SSR
                   </Link>
+                  <Link
+                    className="button-link block w-full border-4 border-black bg-[#fff4cc] px-4 py-3 text-center text-sm font-black uppercase text-black shadow-[4px_4px_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                    to="/logs"
+                  >
+                    Logs
+                  </Link>
                 </div>
 
                 <button

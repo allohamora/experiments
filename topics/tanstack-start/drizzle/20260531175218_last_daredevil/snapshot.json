@@ -1,0 +1,80 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "1c8e1034-8ed4-442f-a51c-71f8c68399a2",
+  "prevIds": ["00000000-0000-0000-0000-000000000000"],
+  "ddl": [
+    {
+      "name": "request_logs",
+      "entityType": "tables"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "method",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "path",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "status",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "duration_ms",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "table": "request_logs"
+    },
+    {
+      "columns": ["id"],
+      "nameExplicit": false,
+      "name": "request_logs_pk",
+      "table": "request_logs",
+      "entityType": "pks"
+    }
+  ],
+  "renames": []
+}

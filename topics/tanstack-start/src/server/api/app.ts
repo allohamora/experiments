@@ -1,30 +1,82 @@
 import { swaggerUI } from '@hono/swagger-ui';
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-import { getHealth } from '#/server/api/service';
+import { createRequestLog, getHealth, getLogs } from '#/server/api/service';
 
-const app = new OpenAPIHono().basePath('/api').openapi(
-  createRoute({
-    method: 'get',
-    path: '/health',
-    tags: ['Health'],
-    responses: {
-      200: {
-        description: 'Health check',
-        content: {
-          'application/json': {
-            schema: z.object({
-              ok: z.literal(true),
-            }),
+const api = new OpenAPIHono().basePath('/api');
+
+api.use('*', async (c, next) => {
+  const startedAt = Date.now();
+
+  await next();
+
+  try {
+    await createRequestLog({
+      method: c.req.method,
+      path: new URL(c.req.url).pathname,
+      status: c.res.status,
+      durationMs: Date.now() - startedAt,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Failed to write request log', error);
+  }
+});
+
+const app = api
+  .openapi(
+    createRoute({
+      method: 'get',
+      path: '/health',
+      tags: ['Health'],
+      responses: {
+        200: {
+          description: 'Health check',
+          content: {
+            'application/json': {
+              schema: z.object({
+                ok: z.literal(true),
+              }),
+            },
           },
         },
       },
+    }),
+    async (c) => {
+      return c.json(await getHealth(), 200);
     },
-  }),
-  async (c) => {
-    return c.json(await getHealth(), 200);
-  },
-);
+  )
+  .openapi(
+    createRoute({
+      method: 'get',
+      path: '/logs',
+      tags: ['Logs'],
+      responses: {
+        200: {
+          description: 'Recent API request logs',
+          content: {
+            'application/json': {
+              schema: z.object({
+                logs: z.array(
+                  z.object({
+                    id: z.string(),
+                    method: z.string(),
+                    path: z.string(),
+                    status: z.number(),
+                    durationMs: z.number(),
+                    createdAt: z.string(),
+                  }),
+                ),
+              }),
+            },
+          },
+        },
+      },
+    }),
+    async (c) => {
+      return c.json(await getLogs(), 200);
+    },
+  );
 
 app.doc('/swagger.json', {
   openapi: '3.1.0',

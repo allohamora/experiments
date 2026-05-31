@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SsrRouteImport } from './routes/ssr'
 import { Route as PrerenderRouteImport } from './routes/prerender'
+import { Route as LogsRouteImport } from './routes/logs'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SsrRoute = SsrRouteImport.update({
@@ -23,6 +24,11 @@ const PrerenderRoute = PrerenderRouteImport.update({
   path: '/prerender',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LogsRoute = LogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,30 +37,34 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
   '/prerender': typeof PrerenderRoute
   '/ssr': typeof SsrRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
   '/prerender': typeof PrerenderRoute
   '/ssr': typeof SsrRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/logs': typeof LogsRoute
   '/prerender': typeof PrerenderRoute
   '/ssr': typeof SsrRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/prerender' | '/ssr'
+  fullPaths: '/' | '/logs' | '/prerender' | '/ssr'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/prerender' | '/ssr'
-  id: '__root__' | '/' | '/prerender' | '/ssr'
+  to: '/' | '/logs' | '/prerender' | '/ssr'
+  id: '__root__' | '/' | '/logs' | '/prerender' | '/ssr'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LogsRoute: typeof LogsRoute
   PrerenderRoute: typeof PrerenderRoute
   SsrRoute: typeof SsrRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrerenderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/logs': {
+      id: '/logs'
+      path: '/logs'
+      fullPath: '/logs'
+      preLoaderRoute: typeof LogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LogsRoute: LogsRoute,
   PrerenderRoute: PrerenderRoute,
   SsrRoute: SsrRoute,
 }
