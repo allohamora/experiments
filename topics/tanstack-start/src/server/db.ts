@@ -8,6 +8,7 @@ import * as schema from '#/server/db.schema';
 
 // Drizzle Kit defaults `out` to "./drizzle".
 // import.meta.dirname has other value in the prerender step
+// https://github.com/TanStack/router/discussions/7518
 const MIGRATIONS_DIR = path.join(process.cwd(), 'drizzle');
 
 export const db = drizzle(DB_FILE_NAME, { casing: 'snake_case', schema });
