@@ -36,6 +36,7 @@ const app = api
             'application/json': {
               schema: z.object({
                 ok: z.literal(true),
+                serverSideMessage: z.string(),
               }),
             },
           },

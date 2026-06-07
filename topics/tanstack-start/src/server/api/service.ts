@@ -1,12 +1,16 @@
 import { desc } from 'drizzle-orm';
 
+import { SERVER_SIDE_MESSAGE } from '#/server/config';
 import { db } from '#/server/db';
 import { requestLogs } from '#/server/db.schema';
 import type { HealthResponse } from '#/shared/api/health';
 import type { LogsResponse } from '#/shared/api/logs';
 
 export async function getHealth(): Promise<HealthResponse> {
-  return { ok: true };
+  return {
+    ok: true,
+    serverSideMessage: SERVER_SIDE_MESSAGE,
+  };
 }
 
 type CreateRequestLogInput = {

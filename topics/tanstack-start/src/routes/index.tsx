@@ -25,6 +25,8 @@ function Home() {
   const [apiStatus, setApiStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [apiResult, setApiResult] = useState<string>('Not checked yet');
 
+  const clientSideMessage = import.meta.env.VITE_CLIENT_SIDE_MESSAGE ?? 'Not set';
+
   function pushHistory(kind: ChatItem['kind'], text: string) {
     setHistory((current) => [
       ...current,
@@ -261,6 +263,11 @@ function Home() {
                 >
                   <p className="text-xs font-black uppercase">status: {apiStatus}</p>
                   <p className="mt-2 break-words font-bold">{apiResult}</p>
+                </div>
+
+                <div className="border-4 border-black bg-[#f7f3ea] p-3">
+                  <p className="text-xs font-black uppercase">client env</p>
+                  <p className="mt-2 break-words font-bold">{clientSideMessage}</p>
                 </div>
               </div>
             </section>

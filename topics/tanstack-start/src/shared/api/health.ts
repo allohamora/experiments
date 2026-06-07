@@ -2,6 +2,7 @@ import { createIsomorphicFn } from '@tanstack/react-start';
 
 export type HealthResponse = {
   ok: true;
+  serverSideMessage: string;
 };
 
 export const getHealth = createIsomorphicFn()
