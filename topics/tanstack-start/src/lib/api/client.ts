@@ -22,3 +22,13 @@ export async function getLogs() {
 
   return response.json();
 }
+
+export async function getCurrentUser() {
+  const response = await honoClient.api.users.me.$get();
+
+  if (!response.ok) {
+    throw new Error(`GET /api/users/me failed with ${response.status}`);
+  }
+
+  return response.json();
+}

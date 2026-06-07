@@ -2,6 +2,7 @@ import { swaggerUI } from '@hono/swagger-ui';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 import { createRequestLog, getHealth, getLogs } from '#/server/api/service';
+import { getSessionFromHeaders } from '#/server/auth-session';
 
 const api = new OpenAPIHono().basePath('/api');
 
@@ -76,6 +77,50 @@ const app = api
     }),
     async (c) => {
       return c.json(await getLogs(), 200);
+    },
+  )
+  .openapi(
+    createRoute({
+      method: 'get',
+      path: '/users/me',
+      tags: ['Users'],
+      responses: {
+        200: {
+          description: 'Current authenticated user',
+          content: {
+            'application/json': {
+              schema: z.object({
+                user: z.object({
+                  id: z.string(),
+                  name: z.string(),
+                  email: z.string(),
+                  emailVerified: z.boolean(),
+                  image: z.string().nullable().optional(),
+                }),
+              }),
+            },
+          },
+        },
+        401: {
+          description: 'Unauthorized',
+          content: {
+            'application/json': {
+              schema: z.object({
+                error: z.literal('Unauthorized'),
+              }),
+            },
+          },
+        },
+      },
+    }),
+    async (c) => {
+      const session = await getSessionFromHeaders(c.req.raw.headers);
+
+      if (!session) {
+        return c.json({ error: 'Unauthorized' as const }, 401);
+      }
+
+      return c.json({ user: session.user }, 200);
     },
   );
 

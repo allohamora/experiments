@@ -1,7 +1,7 @@
 import path from 'node:path';
 
-import { drizzle } from 'drizzle-orm/node-sqlite';
-import { migrate } from 'drizzle-orm/node-sqlite/migrator';
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 
 import { DB_FILE_NAME } from '#/server/config';
 import * as schema from '#/server/db.schema';
