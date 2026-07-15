@@ -26,6 +26,10 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
   },
+  "overrides": {
+    "@asyncapi/generator": "1.9.2",
+    "@asyncapi/specs": "2.13.2"
+  },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
